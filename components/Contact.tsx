@@ -10,60 +10,73 @@ const links = [
 
 export default function Contact() {
   return (
-    <section id="contact" className="bg-[#0a0a0a] px-[6%] pt-20 pb-16 relative z-[2]">
-      <div className="max-w-[1300px] mx-auto">
+    <section id="contact" style={{ background: '#0a0a0a', padding: '80px 6% 64px', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: 1300, margin: '0 auto' }}>
 
-        {/* label */}
-        <p className="text-[11px] uppercase tracking-[.14em] text-[#a78bfa] font-medium mb-6">
+        <p style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '.14em', color: '#a78bfa', fontWeight: 500, marginBottom: 24 }}>
           Let&apos;s Connect
         </p>
 
-        {/* flowing headline */}
         <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-[clamp(22px,3vw,42px)] font-medium tracking-[-0.03em] leading-[1.2] text-white mb-12"
-          style={{ maxWidth: 900 }}
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+          style={{ fontSize: 'clamp(18px,3vw,42px)', fontWeight: 500, letterSpacing: '-0.03em', lineHeight: 1.2, color: '#fff', marginBottom: 48, maxWidth: 900 }}
         >
           I design products that help people{' '}
-          <span className="text-[#555]">simplify complex</span>{' '}
+          <span style={{ color: '#555' }}>simplify complex</span>{' '}
           experiences. If you think we might be a good fit, lets connect.
         </motion.p>
 
-        {/* divider */}
-        <div className="border-t border-[#1c1c1c] mb-10" />
+        <div style={{ borderTop: '1px solid #1c1c1c', marginBottom: 40 }} />
 
-        {/* 4 col links */}
-        <div className="grid grid-cols-4 gap-8">
+        {/* 4 col on desktop, 2 col on mobile */}
+        <div className="contact-grid">
           {links.map((l, i) => (
             <motion.a
               key={l.label}
               href={l.href}
               target={l.href.startsWith('http') ? '_blank' : undefined}
               rel="noreferrer"
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.06 }}
-              className="no-underline group"
+              style={{ textDecoration: 'none' }}
+              className="contact-link-item"
             >
-              <div className="flex items-center gap-1.5 text-white text-[18px] font-bold mb-1.5 group-hover:text-[#a78bfa] transition-colors duration-200">
+              <div className="contact-label" style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 18, fontWeight: 700, marginBottom: 6, transition: 'color 0.2s' }}>
                 {l.label}
-                <span className="text-[15px] font-normal opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 inline-block">›</span>
+                <span style={{ fontSize: 15, fontWeight: 400, opacity: 0.5 }}>›</span>
               </div>
-              <div className="text-[13px] text-[#555] group-hover:text-[#888] transition-colors duration-200">{l.sub}</div>
+              <div style={{ fontSize: 13, color: '#555' }}>{l.sub}</div>
             </motion.a>
           ))}
         </div>
 
-        {/* bottom */}
-        <div className="mt-14 text-center">
-          <span className="text-[12px] text-[#2a2a2a]">God Bless the White Monster Energy.</span>
+        <div style={{ marginTop: 56, textAlign: 'center' }}>
+          <span style={{ fontSize: 12, color: '#2a2a2a' }}>God Bless the White Monster Energy.</span>
         </div>
 
       </div>
+
+      <style>{`
+        .contact-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 32px;
+        }
+        .contact-link-item:hover .contact-label {
+          color: #a78bfa !important;
+        }
+        @media (max-width: 768px) {
+          .contact-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 28px !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .contact-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   )
 }

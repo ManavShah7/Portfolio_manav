@@ -12,27 +12,33 @@ export default function CustomCursor() {
   const [linkHovered, setLinkHovered] = useState(false)
   const [clicked, setClicked] = useState(false)
   const [color, setColor] = useState('#111')
+  const [isTouch, setIsTouch] = useState(false)
 
   const ALWAYS_DARK = ['hero', 'principle', 'work']
+
+  useEffect(() => {
+    // Hide custom cursor on touch devices
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      setIsTouch(true)
+      return
+    }
+  }, [])
 
   const getBgColor = (x: number, y: number): string => {
     const el = document.elementFromPoint(x, y) as HTMLElement | null
     let node: HTMLElement | null = el
 
-    // 1. predefined section IDs → white cursor
     while (node && node !== document.body) {
       if (node.id && ALWAYS_DARK.includes(node.id)) return '#ffffff'
       node = node.parentElement
     }
 
-    // 2. data-cursor-color attribute override (walks up DOM)
     node = el
     while (node && node !== document.body) {
       if (node.dataset?.cursorColor) return node.dataset.cursorColor
       node = node.parentElement
     }
 
-    // 3. luminance fallback
     node = el
     while (node && node !== document.body) {
       const bg = window.getComputedStyle(node).backgroundColor
@@ -49,6 +55,8 @@ export default function CustomCursor() {
   }
 
   useEffect(() => {
+    if (isTouch) return
+
     const style = document.createElement('style')
     style.innerHTML = '* { cursor: none !important; }'
     document.head.appendChild(style)
@@ -102,7 +110,10 @@ export default function CustomCursor() {
       style.remove()
       if (raf.current) cancelAnimationFrame(raf.current)
     }
-  }, [linkHovered, clicked])
+  }, [linkHovered, clicked, isTouch])
+
+  // Don't render on touch devices at all
+  if (isTouch) return null
 
   const ringSize = linkHovered ? 52 : 38
   const dotSize = clicked ? 5 : 8
