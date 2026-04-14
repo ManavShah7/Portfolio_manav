@@ -11,8 +11,7 @@ const css = `
   body{font-family:'DM Sans',system-ui,sans-serif;background:#fff;color:var(--text);line-height:1.6;overflow-x:hidden}
   .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:999;transition:width .1s linear}
 `
-
-const SLabel = ({ children }) => (
+const SLabel = ({ children }: { children: React.ReactNode }) => (  
   <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'.12em',color:'var(--accent)',fontWeight:500,marginBottom:16}}>{children}</div>
 )
 

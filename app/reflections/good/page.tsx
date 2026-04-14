@@ -23,7 +23,7 @@ const Tag = ({ label, v }) => (
   }}>{label}</span>
 )
 
-const SLabel = ({ children }) => (
+const SLabel = ({ children }: { children: React.ReactNode }) => (
   <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'.12em',color:'var(--accent)',fontWeight:500,marginBottom:16}}>{children}</div>
 )
 

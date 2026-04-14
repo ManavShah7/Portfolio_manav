@@ -12,7 +12,7 @@ const css = `
   .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:999;transition:width .1s linear}
 `
 
-const SLabel = ({ children }) => (
+const SLabel = ({ children }: { children: React.ReactNode }) => (
   <div style={{fontSize:11,textTransform:'uppercase',letterSpacing:'.12em',color:'var(--accent)',fontWeight:500,marginBottom:16}}>{children}</div>
 )
 const Divider = () => <hr style={{border:'none',borderTop:'1px solid var(--border)',margin:'0 6%'}} />
