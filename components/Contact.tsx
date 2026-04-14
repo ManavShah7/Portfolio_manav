@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion'
 
 const links = [
-  { label: 'Resume', sub: 'View & Download', href: '/resume.pdf' },
+  { label: 'Resume', sub: 'View & Download', href: 'https://drive.google.com/file/d/197l8zAaKT5aITuIwkchxA6RplGA859eX/view?usp=sharing' },
   { label: 'Email', sub: 'shah.manavd@northeastern.edu', href: 'mailto:shah.manavd@northeastern.edu' },
   { label: 'Contact', sub: '(617) 749-8140', href: 'tel:+16177498140' },
   { label: 'LinkedIn', sub: "Let's connect!", href: 'https://linkedin.com/in/manavshah177' },
