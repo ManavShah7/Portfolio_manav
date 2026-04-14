@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #7C3AED;
+  --green: #3B6D11;
+  --green-light: #EAF3DE;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* overflow-x hidden goes here — on html, not body */
+  overflow-x: clip;
+}
+
+body {
+  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  background: #fff;
+  color: #111;
+  /* do NOT put overflow-x: hidden here — it breaks sticky */
+  min-height: 100vh;
+}
+
+/* dot grid used in hero */
+.dot-grid {
+  background-image: radial-gradient(circle, #ddd 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* subtle grid used in reflections */
+.subtle-grid {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.torn-edge {
+  display: block;
+  width: 100%;
+}
+
+/* hide scrollbar visually but keep scroll context intact */
+html::-webkit-scrollbar { width: 0px; }
+html { scrollbar-width: none; }
