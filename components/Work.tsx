@@ -38,13 +38,13 @@ const projects = [
 
 const visuals = [
   { src: '/work/more/1.jpg', label: 'Ford F-150 Raptor' },
-  { src: '/work/more/2.jpg', label: 'Meridian Architecture' },
-  { src: '/work/more/3.jpg', label: 'Forca Portugal' },
-  { src: '/work/more/4.jpg', label: 'Decorus VR' },
-  { src: '/work/more/5.jpg', label: 'Café Rosette' },
-  { src: '/work/more/6.jpg', label: "Ancelloti's Ristorante" },
-  { src: '/work/more/7.jpg', label: 'Meridian Projects' },
-  { src: '/work/more/8.jpg', label: 'Decorus Login' },
+  { src: '/work/more/2.jpg', label: 'Ford F-150 Raptor (02)' },
+  { src: '/work/more/3.jpg', label: 'Meridian' },
+  { src: '/work/more/4.jpg', label: 'Meridian (02)' },
+  { src: '/work/more/5.jpg', label: 'Portugal National Team' },
+  { src: '/work/more/6.jpg', label: "Decorus" },
+  { src: '/work/more/7.jpg', label: 'Cafe Rosette' },
+  
 ]
 
 const fadeUp = {
@@ -60,9 +60,9 @@ function ScrollStrip() {
   const x = useMotionValue(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const [paused, setPaused] = useState(false)
-  const speed = 0.5 // px per frame — slow and cinematic
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const speed = 2
 
-  // Duplicate for seamless loop
   const items = [...visuals, ...visuals]
 
   useAnimationFrame(() => {
@@ -70,54 +70,67 @@ function ScrollStrip() {
     const container = containerRef.current
     if (!container) return
     const halfWidth = container.scrollWidth / 2
-    const current = x.get()
-    const next = current - speed
+    const next = x.get() - speed
     x.set(next <= -halfWidth ? 0 : next)
   })
 
   return (
     <div
-      style={{ overflow: 'hidden', width: '100%', cursor: 'grab' }}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
+      style={{ overflow: 'hidden', width: '100%', cursor: 'default' }}
+      onMouseLeave={() => { setPaused(false); setHoveredIdx(null) }}
     >
       <motion.div
         ref={containerRef}
-        style={{ x, display: 'flex', gap: 12, width: 'max-content' }}
+        style={{ x, display: 'flex', gap: 12, width: 'max-content', alignItems: 'center' }}
       >
-        {items.map((v, i) => (
-          <motion.div
-            key={i}
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              position: 'relative',
-              width: 240,
-              height: 320,
-              borderRadius: 14,
-              overflow: 'hidden',
-              flexShrink: 0,
-              background: '#111',
-              border: '0.5px solid rgba(255,255,255,0.07)',
-            }}
-          >
-            <img
-              src={v.src}
-              alt={v.label}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-            />
-            {/* subtle label on hover via CSS — clean, no forced text */}
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)',
-            }} />
-            <p style={{
-              position: 'absolute', bottom: 14, left: 14,
-              fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.6)',
-              letterSpacing: '.04em', margin: 0,
-            }}>{v.label}</p>
-          </motion.div>
-        ))}
+        {items.map((v, i) => {
+          const isHovered = hoveredIdx === i
+          return (
+            <motion.div
+              key={i}
+              onMouseEnter={() => { setPaused(true); setHoveredIdx(i) }}
+              animate={{
+                width: isHovered ? 400 : 340,
+                height: isHovered ? 260 : 220,
+              }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                position: 'relative',
+                borderRadius: 14,
+                overflow: 'hidden',
+                flexShrink: 0,
+                background: '#111',
+                border: `0.5px solid ${isHovered ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)'}`,
+                cursor: 'pointer',
+              }}
+            >
+              <img
+                src={v.src}
+                alt={v.label}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+              />
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: isHovered
+                  ? 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 50%)'
+                  : 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)',
+                transition: 'background 0.3s ease',
+              }} />
+              <motion.p
+                animate={{ opacity: isHovered ? 1 : 0.6, y: isHovered ? 0 : 4 }}
+                transition={{ duration: 0.3 }}
+                style={{
+                  position: 'absolute', bottom: 14, left: 16,
+                  fontSize: isHovered ? 13 : 11,
+                  fontWeight: isHovered ? 600 : 500,
+                  color: '#fff',
+                  letterSpacing: '.04em', margin: 0,
+                  fontFamily: "-apple-system,'SF Pro Display',sans-serif",
+                }}
+              >{v.label}</motion.p>
+            </motion.div>
+          )
+        })}
       </motion.div>
     </div>
   )

@@ -26,6 +26,110 @@ function clearCtaStars(el: HTMLElement) {
   el.querySelectorAll('.cta-star').forEach(s => s.remove())
 }
 
+function GrainOverlay() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const rafRef = useRef<number>(0)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const draw = () => {
+      const { width, height } = canvas
+      const imageData = ctx.createImageData(width, height)
+      const data = imageData.data
+      for (let i = 0; i < data.length; i += 4) {
+        const val = Math.random() * 255
+        data[i] = val
+        data[i + 1] = val
+        data[i + 2] = val
+        data[i + 3] = 22
+      }
+      ctx.putImageData(imageData, 0, 0)
+      rafRef.current = requestAnimationFrame(draw)
+    }
+    draw()
+
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      window.removeEventListener('resize', resize)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'absolute', inset: 0, zIndex: 0,
+        width: '100%', height: '100%',
+        pointerEvents: 'none', opacity: 0.7,
+      }}
+    />
+  )
+}
+
+// floating star particles
+function StarField() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const rafRef = useRef<number>(0)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    const stars = Array.from({ length: 120 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2,
+      o: Math.random(),
+      speed: 0.002 + Math.random() * 0.004,
+      phase: Math.random() * Math.PI * 2,
+    }))
+
+    let t = 0
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      t += 0.012
+      stars.forEach(s => {
+        const opacity = 0.15 + 0.35 * Math.abs(Math.sin(t * s.speed * 60 + s.phase))
+        ctx.beginPath()
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(200,180,255,${opacity})`
+        ctx.fill()
+      })
+      rafRef.current = requestAnimationFrame(draw)
+    }
+    draw()
+
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'absolute', inset: 0, zIndex: 0,
+        width: '100%', height: '100%',
+        pointerEvents: 'none',
+      }}
+    />
+  )
+}
+
 export default function HeroAndAbout() {
   const [wordIdx, setWordIdx] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
@@ -47,7 +151,6 @@ export default function HeroAndAbout() {
 
   const heroScale   = useTransform(scrollYProgress, [0, 0.55], [1, 0.82])
   const heroOpacity = useTransform(scrollYProgress, [0.25, 0.55], [1, 0])
-  // On mobile, about panel slides up less aggressively
   const aboutY      = useTransform(scrollYProgress, [0.3, 0.72], ['100%', '0%'])
   const springAboutY = useSpring(aboutY, { stiffness: 60, damping: 22 })
   const rawReveal   = useTransform(scrollYProgress, [0.5, 0.88], [0, PARA_WORDS.length])
@@ -69,7 +172,7 @@ export default function HeroAndAbout() {
             position: 'absolute', inset: 0,
             width: '100%', height: '100%', objectFit: 'cover',
           }}>
-            <source src="/hero-bg.mp4" type="video/mp4" />
+            <source src="/videos/hero.mp4" type="video/mp4" />
           </video>
           <div style={{
             position: 'absolute', inset: 0,
@@ -118,7 +221,6 @@ export default function HeroAndAbout() {
               </span>
             </h1>
 
-            {/* tagline — hidden on mobile to avoid overlap */}
             {!isMobile && (
               <p style={{
                 position: 'absolute', right: '5%', bottom: 58,
@@ -137,33 +239,37 @@ export default function HeroAndAbout() {
           background: '#000',
           borderRadius: '20px 20px 0 0',
           display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          alignItems: 'center', justifyContent: 'center',
-          padding: isMobile ? '40px 6% 40px' : '0 5%',
-          gap: isMobile ? '28px' : '4%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: isMobile ? '40px 6%' : '0 5%',
           overflow: isMobile ? 'auto' : 'hidden',
         }}>
 
-          {/* photos — hidden on mobile */}
-          {!isMobile && (
-            <div style={{ position: 'relative', width: 185, height: 430, flexShrink: 0 }}>
-              <img src="/about/1.jpg" alt="" style={{ position: 'absolute', top: 0, left: 0, width: 150, height: 200, objectFit: 'cover', borderRadius: 14, transform: 'rotate(-7deg)', border: '0.5px solid rgba(255,255,255,0.1)' }} />
-              <img src="/about/2.jpg" alt="" style={{ position: 'absolute', bottom: 0, left: 18, width: 150, height: 200, objectFit: 'cover', borderRadius: 14, transform: 'rotate(4deg)', border: '0.5px solid rgba(255,255,255,0.1)' }} />
-            </div>
-          )}
+          {/* deep space purple atmosphere */}
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
+            background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(88,28,135,0.18) 0%, rgba(109,40,217,0.08) 40%, transparent 70%)',
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
+            background: 'radial-gradient(ellipse 40% 40% at 20% 80%, rgba(139,92,246,0.08) 0%, transparent 60%)',
+          }} />
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
+            background: 'radial-gradient(ellipse 35% 35% at 80% 20%, rgba(167,139,250,0.06) 0%, transparent 60%)',
+          }} />
 
-          {/* center */}
-          <div style={{ textAlign: 'center', maxWidth: isMobile ? '100%' : 560 }}>
+          {/* animated film grain */}
+          <GrainOverlay />
+          {/* twinkling stars */}
+          <StarField />
 
-            {/* mobile: show 2 photos in a row instead */}
-            {isMobile && (
-              <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 28 }}>
-                <img src="/about/1.jpg" alt="" style={{ width: '42%', aspectRatio: '3/4', objectFit: 'cover', borderRadius: 14, transform: 'rotate(-4deg)', border: '0.5px solid rgba(255,255,255,0.1)' }} />
-                <img src="/about/3.jpg" alt="" style={{ width: '42%', aspectRatio: '3/4', objectFit: 'cover', borderRadius: 14, transform: 'rotate(4deg)', marginTop: 20, border: '0.5px solid rgba(255,255,255,0.1)' }} />
-              </div>
-            )}
-
-            <p style={{ fontSize: isMobile ? 'clamp(16px,4.5vw,22px)' : 'clamp(18px,2.2vw,28px)', fontWeight: 500, letterSpacing: '-0.025em', lineHeight: 1.45, marginBottom: 28 }}>
+          {/* content — centered, no photos */}
+          <div style={{ textAlign: 'center', maxWidth: 560, position: 'relative', zIndex: 1 }}>
+            <p style={{
+              fontSize: isMobile ? 'clamp(16px,4.5vw,22px)' : 'clamp(18px,2.2vw,28px)',
+              fontWeight: 500, letterSpacing: '-0.025em', lineHeight: 1.45, marginBottom: 28,
+            }}>
               {PARA_WORDS.map((w, i) => (
                 <motion.span key={i}
                   animate={{ color: revealCount >= i + 1 ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.13)' }}
@@ -216,14 +322,6 @@ export default function HeroAndAbout() {
               }}>Let&apos;s talk →</a>
             </div>
           </div>
-
-          {/* photos right — hidden on mobile */}
-          {!isMobile && (
-            <div style={{ position: 'relative', width: 185, height: 430, flexShrink: 0 }}>
-              <img src="/about/3.jpg" alt="" style={{ position: 'absolute', top: 0, right: 0, width: 150, height: 200, objectFit: 'cover', borderRadius: 14, transform: 'rotate(6deg)', border: '0.5px solid rgba(255,255,255,0.1)' }} />
-              <img src="/about/4.jpg" alt="" style={{ position: 'absolute', bottom: 0, right: 18, width: 150, height: 200, objectFit: 'cover', borderRadius: 14, transform: 'rotate(-5deg)', border: '0.5px solid rgba(255,255,255,0.1)' }} />
-            </div>
-          )}
         </motion.div>
 
       </div>
