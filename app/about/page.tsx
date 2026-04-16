@@ -135,7 +135,7 @@ export default function AboutPage() {
             <a href="/#contact" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 26px', borderRadius: 50, background: '#fff', color: '#111', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>
               Let&apos;s talk →
             </a>
-            <a href="https://drive.google.com/file/d/1jmGjn3858ooM6HNLLYsU8XeQ03L9_hOA/view?usp=sharing" target="_blank" rel="noreferrer"
+            <a href="https://drive.google.com/file/d/1Bneu5ppCT5F5ZHQEG9HwyMUUr-eZdCsZ/view?usp=sharing" target="_blank" rel="noreferrer"
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 26px', borderRadius: 50, background: 'rgba(255,255,255,0.06)', border: '0.5px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.75)', fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>
               Resume ↗
             </a>
