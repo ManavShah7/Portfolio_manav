@@ -150,11 +150,11 @@ export default function LiveasyCaseStudy() {
             <div key={label} style={{ marginBottom:52 }}>
               <div style={{ fontSize:11, fontWeight:700, color:"rgba(255,255,255,.3)", textTransform:"uppercase", letterSpacing:".1em", marginBottom:20 }}>{label}</div>
               <div className="before-row" style={{ display:"grid", gridTemplateColumns:"1.1fr 1fr", gap:36, alignItems:"start" }}>
-                <div style={{ position:"relative" }}>
-                  <div style={{ position:"absolute", top:0, left:0, right:0, padding:"8px 14px", background:"rgba(239,68,68,.85)", borderRadius:"10px 10px 0 0", zIndex:2 }}>
-                    <span style={{ fontSize:10, fontWeight:700, color:"#fff", letterSpacing:".1em", textTransform:"uppercase" }}>⚠ Before</span>
+                <div>
+                  <div style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 12px", background:"rgba(239,68,68,.15)", border:"1px solid rgba(239,68,68,.3)", borderRadius:6, marginBottom:10 }}>
+                    <span style={{ fontSize:10, fontWeight:700, color:"#ef4444", letterSpacing:".1em", textTransform:"uppercase" }}>⚠ Before</span>
                   </div>
-                  <img src={src} alt={label} style={{ width:"100%", borderRadius:10, border:"2px solid rgba(239,68,68,.3)", display:"block" }} />
+                  <img src={src} alt={label} style={{ width:"100%", borderRadius:10, border:"2px solid rgba(239,68,68,.2)", display:"block" }} />
                 </div>
                 <div>
                   <div style={{ fontSize:13, fontWeight:700, color:"#ef4444", marginBottom:14, display:"flex", alignItems:"center", gap:6 }}>✗ What&apos;s wrong here</div>
@@ -220,11 +220,11 @@ export default function LiveasyCaseStudy() {
           <div style={{ maxWidth:1200, margin:"0 auto" }}>
             <div style={{ fontSize:11, fontWeight:700, color: dark ? "rgba(255,255,255,.3)" : "var(--light-muted)", textTransform:"uppercase", letterSpacing:".1em", marginBottom:20 }}>{label}</div>
             <div className="after-row" style={{ display:"grid", gridTemplateColumns:"1.1fr 1fr", gap:36, alignItems:"start", marginBottom:0 }}>
-              <div style={{ position:"relative" }}>
-                <div style={{ position:"absolute", top:0, left:0, right:0, padding:"8px 14px", background:"rgba(194,137,58,.85)", borderRadius:"10px 10px 0 0", zIndex:2 }}>
-                  <span style={{ fontSize:10, fontWeight:700, color:"#fff", letterSpacing:".1em", textTransform:"uppercase" }}>✓ After</span>
+              <div>
+                <div style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 12px", background:"rgba(194,137,58,.15)", border:"1px solid rgba(194,137,58,.3)", borderRadius:6, marginBottom:10 }}>
+                  <span style={{ fontSize:10, fontWeight:700, color:"var(--accent)", letterSpacing:".1em", textTransform:"uppercase" }}>✓ After</span>
                 </div>
-                <img src={src} alt={label} style={{ width:"100%", borderRadius:10, border:`2px solid rgba(194,137,58,.3)`, display:"block" }} />
+                <img src={src} alt={label} style={{ width:"100%", borderRadius:10, border:`2px solid rgba(194,137,58,.2)`, display:"block" }} />
               </div>
               <div>
                 <div style={{ fontSize:13, fontWeight:700, color:"var(--accent)", marginBottom:14, display:"flex", alignItems:"center", gap:6 }}>✓ What changed &amp; why</div>
