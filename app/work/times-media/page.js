@@ -153,7 +153,7 @@ export default function TimesMedia() {
 
       {/* ---- solution ---- */}
       <T x={G.C} y={4623.5} w={1500} align="center" s="tmBigHead"
-         lines={C.solution.headline} rv="lines" block="sol" />
+         lines={C.solution.headline} rv="lines" block="sol" sv="drift" />
 
       <T x={G.L} y={ADM_HEAD} s="tmHeadW" lines={C.solution.admin.head} rv="lines" block="adm" />
       <T x={G.L} y={ADM_BODY} s="tmBodyW" lines={C.solution.admin.body}
@@ -178,13 +178,13 @@ export default function TimesMedia() {
          rv="rise" block="fld" at={300} />
       {/* 1px outline, #A30707 - the field-agent screen goes inside */}
       <Rect x={G.L} y={7950} w={G.W} h={784} fill="transparent"
-            style={{ border: '1px solid #A30707' }} rv="card" block="fld" at={420} />
+            style={{ border: '1px solid #A30707' }} sv="tilt" />
       <T x={G.L} y={8815} s="tmBodyD" lines={C.solution.field.caption}
          rv="rise" block="fld2" />
 
       {/* ---- impact ---- */}
       <T x={G.C} y={IMP_HEAD} w={1400} align="center" s="tmImpact"
-         lines={C.impact.headline} rv="lines" block="imp" />
+         lines={C.impact.headline} rv="lines" block="imp" sv="punch" />
       <T x={G.C} y={IMP_SUB} w={1500} align="center" s="tmImpactSub"
          lines={C.impact.sub} rv="rise" block="imp" at={320} />
 

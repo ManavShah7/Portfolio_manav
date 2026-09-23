@@ -150,7 +150,7 @@ export default function Lighthouse() {
       {/* ---- solution (green ramp) ---- */}
       {C.solution.headline.map((l, i) => (
         <T key={i} x={G.C} y={4635 + i * S.lhBigHead.lh} w={1500} align="center" s="lhBigHead"
-           lines={l} rv="lines" block="sol" at={i * 110} />
+           lines={l} rv="lines" block="sol" at={i * 110} sv="drift" />
       ))}
 
       <T x={G.L} y={NAVI_HEAD} lines={C.solution.navi.head}
@@ -166,17 +166,18 @@ export default function Lighthouse() {
          lines={C.solution.playbook.head} rv="lines" block="pbk" />
       <T x={G.C} y={PBK_BODY} w={1400} align="center" s="lhBig" lines={C.solution.playbook.body}
          rv="rise" block="pbk" at={300} />
+      {/* scroll-driven rather than triggered - see data-sv in globals.css */}
       <Shot x={G.C - 438} y={7073.5} w={876} h={559} src="/figma/lh-tablet-big.png"
-            clip={V('playbook')} alt="" rv="card" block="pbk" at={420} />
+            clip={V('playbook')} alt="" sv="tilt" />
 
       <T x={G.L} y={EXT_HEAD} s="lhHeadGrey" lines={C.solution.ext.head} rv="lines" block="ext" />
       <T x={G.L} y={EXT_BODY} s="lhBig" lines={C.solution.ext.body} rv="rise" block="ext" at={300} />
       <Shot x={G.C - 438} y={8230.5} w={876} h={559} src="/figma/lh-tablet-big.png"
-            clip={V('extension')} alt="" rv="card" block="ext" at={420} />
+            clip={V('extension')} alt="" sv="tilt" />
 
       {/* ---- impact ---- */}
       <T x={G.C} y={9021.5} w={1400} align="center" s="lhImpact" lines={C.impact.headline}
-         rv="lines" block="imp" />
+         rv="lines" block="imp" sv="punch" />
 
       {/* ---- end of the case study (not in the Figma) ---- */}
       <T x={G.L} y={10400} s="footLink" lines="View next project"

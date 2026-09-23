@@ -93,6 +93,21 @@ Rules that are easy to break by accident:
     Browsers without it get the finished state, which is just the iPad sitting
     there, and `prefers-reduced-motion` gets the same.
 
+20. **There are two motion systems and they must not overlap on one element.**
+    `data-rv` is trigger-based (IntersectionObserver, one-shot with rewind);
+    `data-sv` is scroll-driven, tied to scroll position with
+    `animation-timeline: view()`. A CSS animation beats a normal declaration, so
+    `data-sv` on an element that also has `data-rv="rise"` or `"card"` silently
+    kills the entrance - those set a transform on the element itself.
+    `data-rv="lines"` is safe and composes well: it transforms the inner spans,
+    so the outer element is free to drift while its lines swing up.
+    `scripts/sv-check.mjs` asserts all of this, and that reduced motion leaves
+    every one of them alone.
+21. **`sv="tilt"` replaces `rv`, it does not join it.** The standalone showcase
+    frames use it, so they leave their block. Anything printed ON a card still
+    has to share the card's `rv` and `at` (rule 8) - which is why the tablet on
+    the Navi card did not get one.
+
 The section rail, the scroll-triggered motion, the progressive-blur scrim, the
 seam softeners, the paddle chevrons, the card icons, the integrations row and
 the footer are deliberate departures from the Figma, at Manav's request. See

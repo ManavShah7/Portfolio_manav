@@ -9,15 +9,19 @@ import { inkOffset, sideBearing } from '@/lib/type'
 //   rv     'lines' | 'rise' | 'card'  - which entrance this part performs
 //   block  parts sharing a block share one trigger and perform together
 //   at     this part's delay, in ms, within its block
-function rvProps(rv, block, at) {
-  if (!rv) return {}
-  return { 'data-rv': rv,
-           ...(block ? { 'data-rv-block': block } : {}),
-           ...(at ? { 'data-at': at } : {}) }
+function rvProps(rv, block, at, sv) {
+  return {
+    ...(rv ? { 'data-rv': rv,
+               ...(block ? { 'data-rv-block': block } : {}),
+               ...(at ? { 'data-at': at } : {}) } : {}),
+    // scroll-driven, see data-sv in app/globals.css. Safe alongside
+    // data-rv="lines" - which transforms the inner spans - and nothing else.
+    ...(sv ? { 'data-sv': sv } : {}),
+  }
 }
 
 export function T({ x, y, lines, s, align = 'left', w, color, className, style,
-                    as: Tag = 'div', rv, block, at, ref, ...rest }) {
+                    as: Tag = 'div', rv, block, at, sv, ref, ...rest }) {
   const st = typeof s === 'string' ? S[s] : s
   const first = Array.isArray(lines) ? lines[0] : lines
   const rows = Array.isArray(lines) ? lines : [lines]
@@ -37,7 +41,7 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
   }
   return (
     <Tag ref={ref} className={`node${className ? ' ' + className : ''}`} style={box}
-         {...rvProps(rv, block, at)} {...rest}>
+         {...rvProps(rv, block, at, sv)} {...rest}>
       {rows.map((l, i) => rv === 'lines'
         // .ln clips, .w slides up from under it. The padding/margin pair keeps
         // the clip box off the glyphs without moving the layout by a hair.
@@ -47,15 +51,15 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
   )
 }
 
-export function Rect({ x, y, w, h, r = 20, fill, style, rv, block, at, children, ...rest }) {
+export function Rect({ x, y, w, h, r = 20, fill, style, rv, block, at, sv, children, ...rest }) {
   return (
-    <div {...rvProps(rv, block, at)} {...rest}
+    <div {...rvProps(rv, block, at, sv)} {...rest}
          style={{ position: 'absolute', left: x, top: y, width: w, height: h,
                   borderRadius: r, background: fill, ...style }}>{children}</div>
   )
 }
 
-export function Img({ x, y, w, h, src, alt = '', href, label, rv, block, at, className, ...rest }) {
+export function Img({ x, y, w, h, src, alt = '', href, label, rv, block, at, sv, className, ...rest }) {
   // Deliberately a raw <img>: these are slices cut straight out of the 2x Figma
   // export at exact design-px sizes, and next/image would re-encode and pick its
   // own widths, which is the one thing this page cannot tolerate.
@@ -67,7 +71,7 @@ export function Img({ x, y, w, h, src, alt = '', href, label, rv, block, at, cla
   // the block picks it as a zero-sized trigger.
   if (href) {
     return (
-      <a href={href} aria-label={label} {...rvProps(rv, block, at)} style={box}>
+      <a href={href} aria-label={label} {...rvProps(rv, block, at, sv)} style={box}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt={alt} className={className} {...rest}
              style={{ display: 'block', width: '100%', height: '100%' }} />
@@ -76,7 +80,7 @@ export function Img({ x, y, w, h, src, alt = '', href, label, rv, block, at, cla
   }
   // eslint-disable-next-line @next/next/no-img-element
   return <img src={src} alt={alt} className={className}
-              {...rvProps(rv, block, at)} {...rest} style={box} />
+              {...rvProps(rv, block, at, sv)} {...rest} style={box} />
 }
 
 // A device frame, or the clip that replaces it.
@@ -90,13 +94,13 @@ export function Img({ x, y, w, h, src, alt = '', href, label, rv, block, at, cla
 //
 // `clip` is resolved at build time by the page, which is a server component and
 // can touch the filesystem; until the file exists this is just the <img>.
-export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, className, ...rest }) {
+export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, sv, className, ...rest }) {
   const box = { position: 'absolute', left: x, top: y, width: w, height: h }
   // nothing dropped, or a still dropped: either way it is one <img>
   if (!clip || !clip.video) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={clip ? clip.src : src} alt={alt} className={className}
-                {...rvProps(rv, block, at)} {...rest}
+                {...rvProps(rv, block, at, sv)} {...rest}
                 style={{ ...box, objectFit: 'contain' }} />
   }
   // The wrapper carries the box, the reveal AND the still as its background, so
@@ -104,7 +108,7 @@ export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, className
   // something behind it rather than a hole. Putting the reveal on the <video>
   // instead would work, but then reduced motion has no fallback frame.
   return (
-    <div className={className} {...rvProps(rv, block, at)} {...rest}
+    <div className={className} {...rvProps(rv, block, at, sv)} {...rest}
          role={alt ? 'img' : undefined} aria-label={alt || undefined}
          style={{ ...box, background: `url(${src}) center/100% 100% no-repeat` }}>
       <video className="shotVideo" src={clip.src} poster={src}
@@ -131,6 +135,23 @@ export function Cover({ y, h, clip, poster }) {
                autoPlay muted loop playsInline preload="auto" />
       )}
     </div>
+  )
+}
+
+// A real button - the one on the home page is the resume download.
+// The <a> carries the box, for the same reason <Img href> does: an anchor
+// wrapped round an absolutely positioned child collapses to nothing.
+export function Btn({ x, y, w, h, href, download, label, size = 24, rv, block, at, sv }) {
+  return (
+    <a className="btn" href={href} download={download}
+       {...rvProps(rv, block, at, sv)}
+       style={{ position: 'absolute', left: x, top: y, width: w, height: h,
+                fontSize: size, lineHeight: `${h}px` }}>
+      <span>{label}</span>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+        <path d="M10 3v10M5.5 9l4.5 4.5L14.5 9M4 16.5h12" />
+      </svg>
+    </a>
   )
 }
 

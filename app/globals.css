@@ -95,6 +95,24 @@ a{color:inherit;text-decoration:none}
     animation-range:entry 10% cover 40%;
   }
 }
+/* The resume button. Set in the About block's own pink so the one thing on the
+   page you can actually click reads as the thing you can click. */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  border-radius:999px;color:#FFFFFF;text-decoration:none;white-space:nowrap;
+  font-family:inherit;font-weight:600;letter-spacing:-.01em;
+  background:linear-gradient(90deg,#EE0B53 0%,#FE4E96 100%);
+  box-shadow:0 12px 30px rgba(238,11,83,.26);
+  transition:transform .35s var(--e-out),box-shadow .35s var(--e-out);
+}
+.btn svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;
+  stroke-linejoin:round;transition:transform .35s var(--e-out)}
+.btn:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(238,11,83,.34)}
+.btn:hover svg{transform:translateY(2px)}
+.btn:active{transform:translateY(-1px)}
+.btn:focus-visible{outline:3px solid #1C1C1E;outline-offset:4px}
+html.reduced-motion .btn,html.reduced-motion .btn svg{transition:none}
+
 /* the resume link. The underline sweeps in in the same pink the About block is
    set in, so the one clickable thing down there reads as clickable. */
 .cv{position:relative;display:inline-block;transition:color .3s ease}
@@ -186,6 +204,51 @@ html.js.no-reduced-motion [data-rv="lines"] .w{
 html.js.no-reduced-motion [data-rv="lines"].in .w{
   transform:none;
   transition:transform 1s var(--e-out);
+}
+
+/* --- scroll-driven motion (data-sv) ---------------------------------------
+   The trigger-based choreography above fires once and settles. This layer is
+   tied to scroll position instead, so the thing keeps moving the whole time it
+   crosses the viewport - which is what gives Apple's product pages their depth,
+   and what the iPad on the home page does.
+
+   Driven by `animation-timeline`, so it runs off the compositor and cannot jank
+   the way a scroll listener would (CLAUDE.md rule 7). Anything without support
+   gets the element at its final state.
+
+   ONE RULE: never put data-sv on an element that also carries data-rv="rise" or
+   "card". Those set a transform on the element itself and a CSS animation wins
+   over it, so the entrance would silently stop working. `data-rv="lines"` is
+   safe and composes beautifully - it transforms the inner spans, so the outer
+   element is free to drift while its lines swing up out of their clip boxes.
+   scripts/sv-check.mjs asserts this. */
+
+@keyframes svTilt{
+  from{transform:perspective(1600px) translateY(80px) scale(.88) rotateX(11deg);opacity:.25}
+  to  {transform:perspective(1600px) translateY(0) scale(1) rotateX(0deg);opacity:1}
+}
+/* a slow parallax: still moving as it leaves, not just as it arrives */
+@keyframes svDrift{
+  from{transform:translateY(30px) scale(.99)}
+  to  {transform:translateY(-20px) scale(1.008)}
+}
+@keyframes svPunch{
+  from{transform:scale(.9);opacity:.15}
+  to  {transform:scale(1);opacity:1}
+}
+
+@supports (animation-timeline: view()){
+  html.no-reduced-motion [data-sv]{animation:linear both;animation-timeline:view()}
+  html.no-reduced-motion [data-sv="tilt"]{
+    animation-name:svTilt;animation-range:entry 4% cover 38%;
+    transform-origin:50% 100%;will-change:transform;
+  }
+  html.no-reduced-motion [data-sv="drift"]{
+    animation-name:svDrift;animation-range:entry 0% exit 100%;will-change:transform;
+  }
+  html.no-reduced-motion [data-sv="punch"]{
+    animation-name:svPunch;animation-range:entry 10% cover 34%;will-change:transform;
+  }
 }
 
 /* Progressive blur: Apple's recipe. backdrop-filter plus a 16-stop mask whose

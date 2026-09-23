@@ -155,7 +155,7 @@ export default function Liveasy() {
       {/* ---- solution (bronze ramp) ---- */}
       {C.solution.headline.map((l, i) => (
         <T key={i} x={G.C} y={4700 + i * S.lvBigHead.lh} w={1500} align="center" s="lvBigHead"
-           lines={l} rv="lines" block="sol" at={i * 110} />
+           lines={l} rv="lines" block="sol" at={i * 110} sv="drift" />
       ))}
 
       <T x={G.L} y={PIL_HEAD} s="lvHeadW" lines={C.solution.pillars.head} rv="lines" block="pil" />
@@ -171,17 +171,18 @@ export default function Liveasy() {
          lines={C.solution.hero.head} rv="lines" block="hro" />
       <T x={G.C} y={HRO_BODY} w={1400} align="center" s="lvBig" lines={C.solution.hero.body}
          rv="rise" block="hro" at={300} />
+      {/* scroll-driven rather than triggered - see data-sv in globals.css */}
       <Shot x={G.C - 438} y={7073.5} w={876} h={528.5} src="/figma/lv-macbook-white.png"
-            clip={V('hero-screen')} alt="" rv="card" block="hro" at={420} />
+            clip={V('hero-screen')} alt="" sv="tilt" />
 
       <T x={G.L} y={PRF_HEAD} s="lvHeadGrey" lines={C.solution.proof.head} rv="lines" block="prf" />
       <T x={G.L} y={PRF_BODY} s="lvBig" lines={C.solution.proof.body} rv="rise" block="prf" at={300} />
       <Shot x={G.C - 438} y={8230.5} w={876} h={528.5} src="/figma/lv-macbook-white.png"
-            clip={V('proof')} alt="" rv="card" block="prf" at={420} />
+            clip={V('proof')} alt="" sv="tilt" />
 
       {/* ---- impact ---- */}
       <T x={G.C} y={9021.5} w={1400} align="center" s="lvImpact" lines={C.impact.headline}
-         rv="lines" block="imp" />
+         rv="lines" block="imp" sv="punch" />
 
       {/* ---- reflection ---- */}
       <T x={G.L} y={REF_HEAD} s="lvHeadGrey" lines={C.reflection.head} rv="lines" block="ref" />

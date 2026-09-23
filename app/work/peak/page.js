@@ -181,7 +181,7 @@ export default function Peak() {
       {C.solution.headline.map((l, i) => (
         <T key={i} x={G.C} y={SOL_HEAD + i * S.headlineLime.lh} w={1300} align="center"
            s="headlineLime" color={i === 0 ? '#FFFFFF' : undefined} lines={[l]}
-           rv="lines" block="sol" at={i * 110} />
+           rv="lines" block="sol" at={i * 110} sv="drift" />
       ))}
 
       <Rect x={G.L} y={6775} w={G.W} h={755} fill="#C7D13D" rv="card" block="lime" />
@@ -196,10 +196,11 @@ export default function Peak() {
            s="headlineW" lines={[l]} rv="lines" block="lift" at={i * 110} />
       ))}
       <T x={G.C} y={LIFT_BODY} w={1300} align="center" s="bodyW" lines={C.solution.liftBody} rv="rise" block="lift" at={330} />
+      {/* scroll-driven rather than triggered - see data-sv in globals.css */}
       {[0, 1].map(i => (
         <Shot key={i} x={G.colC(i, 2) - 135} y={8128} w={270} h={549}
               src="/figma/cs-phone-dark-big.png" clip={V(['lift-left', 'lift-right'][i])}
-              alt="" rv="card" block="lift" at={420 + i * 120} />
+              alt="" sv="tilt" />
       ))}
 
       {C.solution.catalogHead.map((l, i) => (
@@ -245,7 +246,7 @@ export default function Peak() {
 
       {/* ---- adapts (purple gradient) ---- */}
       <T x={G.C} y={AD_HEAD} w={1300} align="center" lines={C.adapts.headline}
-         s={{ size: 50, weight: 700, lh: AD_LH, color: '#FFFFFF' }} rv="lines" block="ad" />
+         s={{ size: 50, weight: 700, lh: AD_LH, color: '#FFFFFF' }} rv="lines" block="ad" sv="drift" />
       <T x={G.C} y={AD_BODY}   w={1300} align="center" s="bodyW"     lines={C.adapts.body} rv="rise" block="ad" at={340} />
 
       {/* ---- what it connects to (not in the Figma; Manav's ask) ---- */}
