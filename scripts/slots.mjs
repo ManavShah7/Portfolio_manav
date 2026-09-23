@@ -1,7 +1,8 @@
 import fs from 'node:fs'
 
-// Lists every video slot: where to drop the file and what size to export it at.
-// Sizes are given at 2x, which is what the page renders at on a retina screen.
+// Lists every media slot: where to drop the file and what size to export it at.
+// Sizes are at 2x, which is what the page renders at on a retina screen. Either a
+// clip (.mp4/.webm) or a still (.png/.webp/.jpg) works in any slot.
 const PAGES = {
   peak:      'app/work/peak/page.js',
   times:     'app/work/times-media/page.js',
@@ -29,16 +30,19 @@ for (const [page, file] of Object.entries(PAGES)) {
   }
 }
 const pad = (s, n) => String(s).padEnd(n)
-console.log(pad('DROP THE FILE AT', 42) + pad('EXPORT AT (2x)', 16) + pad('ASPECT', 9) + 'REPLACES')
+console.log(pad('DROP THE FILE AT  (.mp4 or .png)', 42) + pad('EXPORT AT (2x)', 16) + pad('ASPECT', 9) + 'REPLACES')
 console.log('-'.repeat(96))
 let last = null
 for (const r of rows) {
   if (last && last !== r.page) console.log('')
   last = r.page
-  const have = fs.existsSync(`public/videos/${r.page}-${r.name}.mp4`) ? '  <- present' : ''
-  console.log(pad(`public/videos/${r.page}-${r.name}.mp4`, 42) +
+  const found = ['mp4','webm','png','webp','jpg','jpeg']
+    .find(e => fs.existsSync(`public/media/${r.page}-${r.name}.${e}`))
+  const have = found ? `  <- ${r.page}-${r.name}.${found} is in place` : ''
+  console.log(pad(`public/media/${r.page}-${r.name}.*`, 42) +
               pad(`${Math.round(r.w * 2)} x ${Math.round(r.h * 2)}`, 16) +
               pad((r.w / r.h).toFixed(2) + ':1', 9) + r.kind + have)
 }
-console.log(`\n${rows.length} slots. Anything not dropped stays the still it is now.`)
+console.log(`\n${rows.length} slots, all under ${process.cwd()}/public/media/`)
+console.log('Anything not dropped stays the placeholder frame it is now.')
 console.log('Peak also still takes public/figma/cs-purple.mp4 for the purple photo band (1900x1395 -> 3800x2790).')

@@ -68,10 +68,10 @@ Rules that are easy to break by accident:
     `-white` ones only on white. Put the wrong one down and you get a visible
     rectangle around the device.
 
-16. **Video goes in as a whole-frame replacement.** `<Shot>` and `<Cover>` take
+16. **Media goes in as a whole-frame replacement.** `<Shot>` and `<Cover>` take
     a `clip` resolved by `lib/clips.js` at build time; drop
-    `public/videos/<page>-<slot>.mp4` and the frame plays it, drop nothing and
-    it is the still. `scripts/slots.mjs` prints the list with export sizes. Do
+    `public/media/<page>-<slot>.mp4` (or `.png`, `.webp`, `.jpg`) and the frame
+    uses it, drop nothing and it is the placeholder. `scripts/slots.mjs` prints the list with export sizes. Do
     not try to composite a clip inside a bezel - the screen rectangles in these
     PNGs defeat every edge test (the macbook wallpaper and the dark phone
     screens especially), and a few px out looks broken. Both components put the

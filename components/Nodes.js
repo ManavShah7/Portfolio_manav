@@ -92,10 +92,12 @@ export function Img({ x, y, w, h, src, alt = '', href, label, rv, block, at, cla
 // can touch the filesystem; until the file exists this is just the <img>.
 export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, className, ...rest }) {
   const box = { position: 'absolute', left: x, top: y, width: w, height: h }
-  if (!clip) {
+  // nothing dropped, or a still dropped: either way it is one <img>
+  if (!clip || !clip.video) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} className={className}
-                {...rvProps(rv, block, at)} {...rest} style={box} />
+    return <img src={clip ? clip.src : src} alt={alt} className={className}
+                {...rvProps(rv, block, at)} {...rest}
+                style={{ ...box, objectFit: 'contain' }} />
   }
   // The wrapper carries the box, the reveal AND the still as its background, so
   // that when `.shotVideo` is switched off for prefers-reduced-motion there is
@@ -105,7 +107,7 @@ export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, className
     <div className={className} {...rvProps(rv, block, at)} {...rest}
          role={alt ? 'img' : undefined} aria-label={alt || undefined}
          style={{ ...box, background: `url(${src}) center/100% 100% no-repeat` }}>
-      <video className="shotVideo" src={clip} poster={src}
+      <video className="shotVideo" src={clip.src} poster={src}
              autoPlay muted loop playsInline preload="metadata" />
     </div>
   )
@@ -116,14 +118,18 @@ export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, className
 // until a cover clip is dropped in.
 export function Cover({ y, h, clip, poster }) {
   if (!clip) return <div className="band checker" style={{ top: y, height: h }} />
-  // the poster is the band's own background, not just the <video poster>, so
-  // reduced motion - which hides .bandVideo - still has the frame behind it
+  // A still dropped in is simply the band's background. For a clip the still
+  // stays as the background too, rather than only being the <video poster>,
+  // because reduced motion hides .bandVideo and would otherwise leave a hole.
+  const still = clip.video ? poster : clip.src
   return (
     <div className="band"
          style={{ top: y, height: h,
-                  background: `url(${poster}) center/1900px ${h}px no-repeat` }}>
-      <video className="bandVideo" src={clip} poster={poster}
-             autoPlay muted loop playsInline preload="auto" />
+                  background: `url(${still}) center/1900px ${h}px no-repeat` }}>
+      {clip.video && (
+        <video className="bandVideo" src={clip.src} poster={poster}
+               autoPlay muted loop playsInline preload="auto" />
+      )}
     </div>
   )
 }
