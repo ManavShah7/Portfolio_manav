@@ -83,7 +83,10 @@ export default function Peak() {
       <MotionDriver />
 
       {/* ---- bands ---- */}
-      <Cover y={0} h={832} clip={V('hero')} poster="/figma/cs-purple-photo.webp" />
+      {/* The hero clip is Manav's own - a triptych montage. Its poster is a
+          frame lifted from the clip itself rather than the purple photo, so
+          reduced motion gets the same picture and not a different one. */}
+      <Cover y={0} h={832} clip={V('hero')} poster="/media/peak-hero-poster.webp" />
       <Band y={832}   h={2662} fill="#FFFFFF" />
       <Band y={3494}  h={1374} fill={CORAL} />
       <Band y={4868}  h={1163} fill="#FFFFFF" />
