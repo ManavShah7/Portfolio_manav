@@ -145,7 +145,7 @@ export default function Lighthouse() {
 
       {/* ---- end of the case study (not in the Figma) ---- */}
       <T x={450} y={10400} s="footLink" lines="View next project"
-         as="a" href="/work/peak" rv="lines" block="end" />
+         as="a" href="/work/liveasy" rv="lines" block="end" />
       <T x={450} y={10500} s="footLinkAlt" lines="Contact"
          as="a" href="mailto:shah.manavd@northeastern.edu" rv="lines" block="end" at={140} />
       <T x={950} y={11500} w={900} align="center" s="egg" className="egg"

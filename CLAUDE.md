@@ -45,6 +45,17 @@ Rules that are easy to break by accident:
     get a doubled headline that no static screenshot diff will catch — the
     reduced-motion capture looks identical either way.
 
+13. **`/work/liveasy` is composed, not reproduced.** There is no Figma frame
+    for it, so there is nothing to diff it against and `scripts/align.py` and
+    `scripts/diff.py` do not apply. It borrows the Lighthouse frame's band
+    stops, grid and vertical rhythm so it reads as one of the set. Its guard is
+    `scripts/fit-check.mjs`, which asserts nothing runs past the frame and
+    nothing printed on a card leaves it.
+14. **A device frame has its background baked into the PNG.** There is no alpha
+    in any of them, so `-grey` cutouts (#F5F5F7) only work on grey cards and
+    `-white` ones only on white. Put the wrong one down and you get a visible
+    rectangle around the device.
+
 The section rail, the scroll-triggered motion, the progressive-blur scrim, the
 seam softeners, the paddle chevrons, the card icons, the integrations row and
 the footer are deliberate departures from the Figma, at Manav's request. See
