@@ -4,10 +4,17 @@ import Frame from '@/components/Frame'
 import Carousel from '@/components/Carousel'
 import SectionRail from '@/components/SectionRail'
 import MotionDriver from '@/components/MotionDriver'
-import { T, Rect, Img, Band, Seam } from '@/components/Nodes'
+import { T, Rect, Img, Shot, Cover, Band, Seam } from '@/components/Nodes'
+import { slots } from '@/lib/clips'
+import S from '@/lib/styles'
+import { TIMES as G, PAD_LG, HEAD_GAP, PARA_GAP, CARD_GAP, META_GAP, META_VAL, FOOT_GAP, under }
+  from '@/lib/grid'
 import * as C from '@/lib/times-copy'
 
 const H = 11737
+
+// drop a clip at public/videos/times-<name>.mp4 - see lib/clips.js
+const V = slots('times')
 
 // 21 stops sampled down the band; horizontally uniform, so a vertical ramp
 // reproduces it exactly.
@@ -18,10 +25,10 @@ const PINK = 'linear-gradient(180deg,#FF336E 0%,#FD3E74 5%,#FB487A 10%,#FA527F 1
 const RAIL = {
   items: [
     { label: 'Overview',     x: 242.5, y: 1062.5, to: 839 },
-    { label: 'Problem',      x: 243.5, y: 1116,   to: 3030 },
-    { label: 'Research',     x: 243.5, y: 1169,   to: 1900 },
+    { label: 'Problem',      x: 242.5, y: 1116,   to: 3030 },
+    { label: 'Research',     x: 242.5, y: 1169,   to: 1900 },
     { label: 'Solution',     x: 242.5, y: 1218.5, to: 4326 },
-    { label: 'Impact',       x: 243.5, y: 1262,   to: 9280 },
+    { label: 'Impact',       x: 242.5, y: 1262,   to: 9280 },
     { label: "What's Next?", x: 242.5, y: 1306,   to: 10996 },
   ],
   natural: 1020, stick: 300, height: 300, end: H,
@@ -30,18 +37,44 @@ const RAIL = {
   light: '#5A5A5A', darkInk: '#FFFFFF',
 }
 
-const QUOTE_X = [474, 877, 1326]
-// the dash sits well clear of the name; both are placed, not spaced
-const DASH_X  = [475, 876.5, 1332.5]
-const NAME_X  = [499, 900.5, 1358]
-// the third name is set a size larger than the other two, by hand
-const NAME_SZ = [28, 28, 30]
-const ROLE_X  = [496.5, 899.5, 1331.5]
+// Both quote rows now sit on the grid's three-up columns. The frames placed
+// them by hand at steps of 403 and 449 in one row and 403 and 449 in the other,
+// which is the most visible thing on this page. The longest line of the third
+// research quote runs 19px past the nominal measure - it is text, not a card
+// edge, so it is left long rather than re-broken into an eleventh line that
+// would drop its attribution below the other two.
+const COL      = i => G.col(i, 3)
+const NAME_DX  = 25          // the dash sits clear of the name; both are placed
+const NAME_SZ  = 28          // the frame sets the third of these at 30, by hand
+const ATTR_GAP = 65.5        // last line of a quote -> its attribution
+const ROLE_GAP = 35          // attribution -> the role under it
 
-const FQ_X   = [470, 873, 1322]
-const FQ_N   = [{ y: 10322, x: 469.5, n: 495,   r: 492,   ry: 10355.5 },
-                { y: 10141, x: 872.5, n: 898,   r: 895,   ry: 10175.5 },
-                { y: 10137, x: 1321.5, n: 1347, r: 1322,  ry: 10167.5 }]
+// y of the attribution under a quote of `n` lines set at `lh`
+const attrY = (top, n, lh) => top + (n - 1) * lh + ATTR_GAP
+
+// two 80px paddles and the 46 between them, ending on the content right edge
+const PADDLE_X = G.R - 206
+
+// --- vertical anchors, each derived from the block above it --------------
+const OV_HEAD = 1026.5
+const OV_P1   = under(OV_HEAD, S.tmHead, C.overview.headline.length)
+const OV_P2   = under(OV_P1, S.tmBody, C.overview.p1.length, PARA_GAP)
+const OV_META = under(OV_P2, S.tmBody, C.overview.p2.length, META_GAP)
+
+const RS_HEAD  = 1960.5
+const RS_BODY  = under(RS_HEAD, S.tmHead, C.research.headline.length)
+const RS_QUOTE = 2318
+
+const ADM_HEAD = 4997.5
+const ADM_BODY = under(ADM_HEAD, S.tmHeadW, 1)
+const CLI_HEAD = 6363.5
+const CLI_BODY = under(CLI_HEAD, S.tmHeadD, 1)
+const FLD_HEAD = 7681.5
+const FLD_BODY = under(FLD_HEAD, S.tmHeadD, C.solution.field.head.length)
+
+const IMP_HEAD  = 9349.5
+const IMP_SUB   = under(IMP_HEAD, S.tmImpact, C.impact.headline.length)
+const IMP_QUOTE = 9788.5
 
 export default function TimesMedia() {
   return (
@@ -49,7 +82,7 @@ export default function TimesMedia() {
       <MotionDriver />
 
       {/* ---- bands ---- */}
-      <Band y={0}     h={832}  className="checker" />
+      <Cover y={0} h={832} clip={V('hero')} poster="/figma/tm-mesh.webp" />
       <Band y={832}   h={7}    fill="#FFFFFF" />
       <Band y={839}   h={2191} fill="#111111" />
       <Band y={3030}  h={1296} fill="url(/figma/tm-mesh.webp) center/1900px 1296px no-repeat" />
@@ -61,125 +94,118 @@ export default function TimesMedia() {
       <Seam y={4206} h={120} to={[255, 51, 110]} />
 
       {/* ---- overview ---- */}
-      <T x={470.5} y={1026.5} s="tmHead" lines={C.overview.headline} rv="lines" block="ov" />
-      <T x={474.5} y={1172} s="tmBody" lines={C.overview.p1} rv="rise" block="ov" at={240} />
-      <T x={474.5} y={1389} s="tmBody" lines={C.overview.p2} rv="rise" block="ov" at={330} />
+      <T x={G.L} y={OV_HEAD} s="tmHead" lines={C.overview.headline} rv="lines" block="ov" />
+      <T x={G.L} y={OV_P1} s="tmBody" lines={C.overview.p1} rv="rise" block="ov" at={240} />
+      <T x={G.L} y={OV_P2} s="tmBody" lines={C.overview.p2} rv="rise" block="ov" at={330} />
 
-      {/* each column starts at its own y and Skills leads by half a pixel per
-          line - the three were set by hand */}
-      {C.overview.meta.map((m, i) => {
-        const lx = [474, 857, 1238][i]
-        const vx = [474, 856.5, 1236.5][i]
-        const vy = [1652, 1660, 1658.5][i]
-        const lh = i === 2 ? 31 : 31.5
+      {C.overview.meta.map((m, i) => (
+        <Fragment key={m.label}>
+          <T x={COL(i)} y={OV_META} s="tmMetaLabel" lines={m.label}
+             rv="rise" block="ov" at={420 + i * 50} />
+          <T x={COL(i)} y={OV_META + META_VAL} s="tmMetaValue" lines={m.values}
+             rv="rise" block="ov" at={420 + i * 50} />
+        </Fragment>
+      ))}
+
+      {/* ---- research ---- */}
+      {C.research.headline.map((l, i) => (
+        <T key={i} x={G.C} y={RS_HEAD + i * S.tmHead.lh}
+           w={1400} align="center" lines={l} s="tmHead"
+           rv="lines" block="rs" at={i * 110} />
+      ))}
+      <T x={G.C} y={RS_BODY} w={1400} align="center" s="tmBody" lines={C.research.body}
+         rv="rise" block="rs" at={300} />
+
+      {C.research.quotes.map((q, i) => {
+        const ny = attrY(RS_QUOTE, q.lines.length, S.tmQuote.lh)
+        const attr = { size: NAME_SZ, weight: 600, lh: NAME_SZ * 1.2, color: '#CCCCCC' }
         return (
-          <Fragment key={m.label}>
-            <T x={lx} y={[1606.5, 1605.5, 1605.5][i]} s="tmMetaLabel" lines={m.label}
-               rv="rise" block="ov" at={420 + i * 50} />
-            <T x={vx} y={vy} lines={m.values}
-               s={{ size: 26, weight: 500, lh, color: '#CCCCCC' }}
-               rv="rise" block="ov" at={420 + i * 50} />
+          <Fragment key={q.name}>
+            <T x={COL(i)} y={RS_QUOTE} s="tmQuote" lines={q.lines}
+               rv="rise" block="rq" at={i * 110} />
+            <T x={COL(i)} y={ny} s={attr} lines="-" rv="rise" block="rq" at={i * 110 + 80} />
+            <T x={COL(i) + NAME_DX} y={ny} s={attr} lines={q.name}
+               rv="rise" block="rq" at={i * 110 + 80} />
+            <T x={COL(i) + NAME_DX} y={ny + ROLE_GAP} s="tmQuoteRole"
+               lines={q.role} rv="rise" block="rq" at={i * 110 + 120} />
           </Fragment>
         )
       })}
 
-      {/* ---- research ---- */}
-      {/* the middle line is centred 6px right of the other two */}
-      {C.research.headline.map((l, i) => (
-        <T key={i} x={[1039.5, 1045.5, 1039.5][i]} y={[1960.5, 2021, 2081.5][i]}
-           w={1400} align="center" lines={l}
-           s={{ size: 50, weight: 700, lh: 60, color: '#CCCCCC' }}
-           rv="lines" block="rs" at={i * 110} />
-      ))}
-      <T x={1063.9} y={2172} w={1400} align="center" s="tmBody" lines={C.research.body}
-         rv="rise" block="rs" at={300} />
-
-      {C.research.quotes.map((q, i) => (
-        <Fragment key={q.name}>
-          <T x={QUOTE_X[i]} y={2318} s="tmQuote" lines={q.lines}
-             rv="rise" block="rq" at={i * 110} />
-          <T x={DASH_X[i]} y={[2671.5, 2669.5, 2673][i]}
-             s={{ size: NAME_SZ[i], weight: 600, lh: NAME_SZ[i] * 1.2, color: '#CCCCCC' }}
-             lines="-" rv="rise" block="rq" at={i * 110 + 80} />
-          <T x={NAME_X[i]} y={[2671.5, 2669.5, 2673][i]}
-             s={{ size: NAME_SZ[i], weight: 600, lh: NAME_SZ[i] * 1.2, color: '#CCCCCC' }}
-             lines={q.name} rv="rise" block="rq" at={i * 110 + 80} />
-          <T x={ROLE_X[i]} y={[2706.5, 2705.5, 2709.5][i]} s="tmQuoteRole"
-             lines={q.role} rv="rise" block="rq" at={i * 110 + 120} />
-        </Fragment>
-      ))}
-
       {/* ---- problem (over the mesh) ---- */}
-      <T x={471.5} y={3191.5} s="tmHeadW" lines={C.problem.headline} rv="lines" block="pb" />
+      <T x={G.L} y={3191.5} s="tmHeadW" lines={C.problem.headline} rv="lines" block="pb" />
       {/* the Figma draws paddles but no second card - unlike Peak there is no
           faint card queued behind this one, so the track does not overflow */}
-      <Carousel x={470} y={3365} w={1430} h={755} inner={1217} step={1251}
-                paddleY={4169} paddleX={1481}>
-        <Rect x={0} y={0} w={1217} h={755} fill="#FFFFFF" rv="card" block="pb" at={260} />
-        <T x={115} y={94} s="tmCardHead" lines={C.problem.cardHead}
+      <Carousel x={G.L} y={3365} w={G.W} h={755} inner={G.W} step={G.W + G.GUT}
+                paddleY={4169} paddleX={PADDLE_X}>
+        <Rect x={0} y={0} w={G.W} h={755} fill="#FFFFFF" rv="card" block="pb" at={260} />
+        <T x={PAD_LG} y={94} s="tmCardHead" lines={C.problem.cardHead}
            rv="card" block="pb" at={260} />
-        <T x={115.5} y={210} s="tmCardBody" lines={C.problem.cardBody}
-           rv="card" block="pb" at={260} />
-        <Img x={358} y={357} w={456} h={275} src="/figma/tm-macbook.png" alt=""
-             rv="card" block="pb" at={260} />
+        <T x={PAD_LG} y={under(94, S.tmCardHead, C.problem.cardHead.length, CARD_GAP)}
+           s="tmCardBody" lines={C.problem.cardBody} rv="card" block="pb" at={260} />
+        <Shot x={(G.W - 456) / 2} y={357} w={456} h={275} src="/figma/tm-macbook.png"
+              clip={V('problem')} alt="" rv="card" block="pb" at={260} />
       </Carousel>
 
       {/* ---- solution ---- */}
-      <T x={1064.9} y={4623.5} w={1500} align="center" s="tmBigHead"
+      <T x={G.C} y={4623.5} w={1500} align="center" s="tmBigHead"
          lines={C.solution.headline} rv="lines" block="sol" />
 
-      <T x={470} y={4997.5} s="tmHeadW" lines={C.solution.admin.head} rv="lines" block="adm" />
-      <T x={470} y={5070.5} s="tmBodyW" lines={C.solution.admin.body}
+      <T x={G.L} y={ADM_HEAD} s="tmHeadW" lines={C.solution.admin.head} rv="lines" block="adm" />
+      <T x={G.L} y={ADM_BODY} s="tmBodyW" lines={C.solution.admin.body}
          rv="rise" block="adm" at={300} />
-      <Carousel x={470} y={5243} w={1430} h={784} inner={1238} step={1272}
-                paddleY={6072} paddleX={1502}>
-        <Rect x={0} y={0} w={1238} h={784} fill="#FFFFFF" rv="card" block="adm" at={420} />
+      <Carousel x={G.L} y={5243} w={G.W} h={784} inner={G.W} step={G.W + G.GUT}
+                paddleY={6072} paddleX={PADDLE_X}>
+        <Rect x={0} y={0} w={G.W} h={784} fill="#FFFFFF" rv="card" block="adm" at={420} />
       </Carousel>
-      <T x={483} y={6083} s="tmBodyD" lines={C.solution.admin.caption}
+      <T x={G.L} y={6083} s="tmBodyD" lines={C.solution.admin.caption}
          rv="rise" block="adm2" />
 
-      <T x={470} y={6363.5} s="tmHeadD" lines={C.solution.client.head}
+      <T x={G.L} y={CLI_HEAD} s="tmHeadD" lines={C.solution.client.head}
          rv="lines" block="cli" />
-      <T x={470} y={6436} s="tmBodyD" lines={C.solution.client.body}
+      <T x={G.L} y={CLI_BODY} s="tmBodyD" lines={C.solution.client.body}
          rv="rise" block="cli" at={280} />
-      <T x={470} y={7353} s="tmBodyD" lines={C.solution.client.caption}
+      <T x={G.L} y={7353} s="tmBodyD" lines={C.solution.client.caption}
          rv="rise" block="cli2" />
 
-      <T x={470} y={7681.5} s="tmHeadD" lines={C.solution.field.head}
+      <T x={G.L} y={FLD_HEAD} s="tmHeadD" lines={C.solution.field.head}
          rv="lines" block="fld" />
-      <T x={470} y={7816} s="tmBodyD" lines={C.solution.field.body}
+      <T x={G.L} y={FLD_BODY} s="tmBodyD" lines={C.solution.field.body}
          rv="rise" block="fld" at={300} />
       {/* 1px outline, #A30707 - the field-agent screen goes inside */}
-      <Rect x={470} y={7950} w={1238} h={784} fill="transparent"
+      <Rect x={G.L} y={7950} w={G.W} h={784} fill="transparent"
             style={{ border: '1px solid #A30707' }} rv="card" block="fld" at={420} />
-      <T x={470} y={8815} s="tmBodyD" lines={C.solution.field.caption}
+      <T x={G.L} y={8815} s="tmBodyD" lines={C.solution.field.caption}
          rv="rise" block="fld2" />
 
       {/* ---- impact ---- */}
-      <T x={1037} y={9349.5} w={1400} align="center" s="tmImpact"
+      <T x={G.C} y={IMP_HEAD} w={1400} align="center" s="tmImpact"
          lines={C.impact.headline} rv="lines" block="imp" />
-      <T x={1059.5} y={9617} w={1500} align="center" s="tmImpactSub"
+      <T x={G.C} y={IMP_SUB} w={1500} align="center" s="tmImpactSub"
          lines={C.impact.sub} rv="rise" block="imp" at={320} />
 
-      {C.impact.quotes.map((q, i) => (
-        <Fragment key={q.name}>
-          <T x={FQ_X[i]} y={9788.5} s="tmFQ" lines={q.lines}
-             rv="rise" block="iq" at={i * 110} />
-          <T x={FQ_N[i].x} y={FQ_N[i].y} s="tmFQName" color={q.colour}
-             lines="-" rv="rise" block="iq" at={i * 110 + 80} />
-          <T x={FQ_N[i].n} y={FQ_N[i].y} s="tmFQName" color={q.colour}
-             lines={q.name} rv="rise" block="iq" at={i * 110 + 80} />
-          <T x={FQ_N[i].r} y={FQ_N[i].ry} s="tmFQRole" lines={q.role}
-             rv="rise" block="iq" at={i * 110 + 120} />
-        </Fragment>
-      ))}
+      {C.impact.quotes.map((q, i) => {
+        const ny = attrY(IMP_QUOTE, q.lines.length, S.tmFQ.lh)
+        return (
+          <Fragment key={q.name}>
+            <T x={COL(i)} y={IMP_QUOTE} s="tmFQ" lines={q.lines}
+               rv="rise" block="iq" at={i * 110} />
+            <T x={COL(i)} y={ny} s="tmFQName" color={q.colour}
+               lines="-" rv="rise" block="iq" at={i * 110 + 80} />
+            <T x={COL(i) + NAME_DX} y={ny} s="tmFQName" color={q.colour}
+               lines={q.name} rv="rise" block="iq" at={i * 110 + 80} />
+            <T x={COL(i) + NAME_DX} y={ny + ROLE_GAP} s="tmFQRole" lines={q.role}
+               rv="rise" block="iq" at={i * 110 + 120} />
+          </Fragment>
+        )
+      })}
 
       {/* ---- end of the case study (not in the Figma) ---- */}
-      <T x={472} y={11200} s="footLink" lines="View next project"
+      <T x={G.L} y={11200} s="footLink" lines="View next project"
          as="a" href="/work/lighthouse" rv="lines" block="end" />
-      <T x={472} y={11300} s="footLinkAlt" lines="Contact"
+      <T x={G.L} y={11200 + FOOT_GAP} s="footLinkAlt" lines="Contact"
          as="a" href="mailto:shah.manavd@northeastern.edu" rv="lines" block="end" at={140} />
-      <T x={950} y={11640} w={900} align="center" s="egg" className="egg"
+      <T x={G.C} y={11640} w={900} align="center" s="egg" className="egg"
          lines="god bless the white monster" rv="rise" block="end" at={520} />
     </Frame>
   )

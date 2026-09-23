@@ -149,8 +149,14 @@ html.js.no-reduced-motion [data-rv="lines"].in .w{
 .seam{position:absolute;left:0;width:1900px;pointer-events:none}
 
 .bandVideo{display:block;width:100%;height:100%;object-fit:cover}
-/* reduced motion keeps the still rather than a looping clip */
-html.reduced-motion .bandVideo{display:none}
+/* a clip dropped into a device frame; `contain`, not `cover`, so a mockup
+   exported at a slightly different aspect letterboxes rather than crops */
+.shotVideo{display:block;width:100%;height:100%;object-fit:contain}
+/* reduced motion keeps the still rather than a looping clip. Both of these sit
+   on a parent that carries the still as its background, so hiding them leaves
+   the frame, not a hole. */
+html.reduced-motion .bandVideo,
+html.reduced-motion .shotVideo{display:none}
 
 /* depth of field inside a carousel - eased so a paddle press racks focus */
 .track [data-depth]{transition:filter .28s ease}

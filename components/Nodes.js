@@ -79,6 +79,55 @@ export function Img({ x, y, w, h, src, alt = '', href, label, rv, block, at, cla
               {...rvProps(rv, block, at)} {...rest} style={box} />
 }
 
+// A device frame, or the clip that replaces it.
+//
+// Video goes in as a whole-frame replacement, not composited inside the bezel:
+// the screen rectangles in these PNGs cannot be detected reliably (the macbook
+// wallpaper and the dark phone screens defeat every edge test), and a clip
+// misaligned by a few px inside a bezel looks broken. So a slot is one file
+// occupying exactly the box the still occupied - which is also what a device
+// mockup exports from Figma or Rotato already looks like.
+//
+// `clip` is resolved at build time by the page, which is a server component and
+// can touch the filesystem; until the file exists this is just the <img>.
+export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, className, ...rest }) {
+  const box = { position: 'absolute', left: x, top: y, width: w, height: h }
+  if (!clip) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={src} alt={alt} className={className}
+                {...rvProps(rv, block, at)} {...rest} style={box} />
+  }
+  // The wrapper carries the box, the reveal AND the still as its background, so
+  // that when `.shotVideo` is switched off for prefers-reduced-motion there is
+  // something behind it rather than a hole. Putting the reveal on the <video>
+  // instead would work, but then reduced motion has no fallback frame.
+  return (
+    <div className={className} {...rvProps(rv, block, at)} {...rest}
+         role={alt ? 'img' : undefined} aria-label={alt || undefined}
+         style={{ ...box, background: `url(${src}) center/100% 100% no-repeat` }}>
+      <video className="shotVideo" src={clip} poster={src}
+             autoPlay muted loop playsInline preload="metadata" />
+    </div>
+  )
+}
+
+// The band at the top of every case study. The frames draw a checkerboard
+// there, which is Figma for "artwork goes here" - so it stays a checkerboard
+// until a cover clip is dropped in.
+export function Cover({ y, h, clip, poster }) {
+  if (!clip) return <div className="band checker" style={{ top: y, height: h }} />
+  // the poster is the band's own background, not just the <video poster>, so
+  // reduced motion - which hides .bandVideo - still has the frame behind it
+  return (
+    <div className="band"
+         style={{ top: y, height: h,
+                  background: `url(${poster}) center/1900px ${h}px no-repeat` }}>
+      <video className="bandVideo" src={clip} poster={poster}
+             autoPlay muted loop playsInline preload="auto" />
+    </div>
+  )
+}
+
 export function Band({ y, h, fill, className, style }) {
   return <div className={`band${className ? ' ' + className : ''}`}
               style={{ top: y, height: h, background: fill, ...style }} />

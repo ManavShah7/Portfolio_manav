@@ -6,10 +6,18 @@ read `README.md` — especially *How the layout works* and *Motion*.
 
 Rules that are easy to break by accident:
 
-1. **Do not "fix" the inconsistencies.** The source frame is hand-placed. Cards
-   that should line up don't; column margins change between bands. Those are
-   reproduced on purpose. If something looks wrong, check the export before
-   changing it.
+1. **Do not "fix" the inconsistencies - except spacing, which Manav asked to be
+   fixed.** The source frames are hand-placed: cards that should line up don't,
+   column margins change between bands, and Peak centres twenty "centred" blocks
+   on twenty different axes. Everything else about them is still reproduced on
+   purpose, so if something looks wrong, check the export before changing it -
+   but **position comes from `lib/grid.js` now, not from the export**. One grid
+   per page: `L` left column, `W` measure, `C` centre axis, `GUT` gutter, plus a
+   set of vertical gaps. `scripts/grid-check.mjs` measures the rendered page and
+   fails if a card row does not span exactly L..R, or if the dominant left edge
+   or centre axis is not L or C. Multi-column rows are fine - it checks the row,
+   not each card. Because of this the pages no longer diff clean against the
+   exports; `align.py`/`diff.py`/`sweep.py` are for checking type, not position.
 2. **Never join a line array into a single string.** Line breaks are manual in
    the Figma; letting the browser wrap moves everything below.
 3. **Coordinates are ink positions**, not CSS box positions. Pass the measured
@@ -51,10 +59,24 @@ Rules that are easy to break by accident:
     stops, grid and vertical rhythm so it reads as one of the set. Its guard is
     `scripts/fit-check.mjs`, which asserts nothing runs past the frame and
     nothing printed on a card leaves it.
-14. **A device frame has its background baked into the PNG.** There is no alpha
+14. **Never hand-place a second column.** If two things sit side by side, they
+    come from `G.col(i, n)`, and if they are printed ON a card they come from
+    `G.inset(pad).col(i, n)` so they land inside its padding rather than flush
+    to its edge. Hand-placed columns are what made the frames ragged.
+15. **A device frame has its background baked into the PNG.** There is no alpha
     in any of them, so `-grey` cutouts (#F5F5F7) only work on grey cards and
     `-white` ones only on white. Put the wrong one down and you get a visible
     rectangle around the device.
+
+16. **Video goes in as a whole-frame replacement.** `<Shot>` and `<Cover>` take
+    a `clip` resolved by `lib/clips.js` at build time; drop
+    `public/videos/<page>-<slot>.mp4` and the frame plays it, drop nothing and
+    it is the still. `scripts/slots.mjs` prints the list with export sizes. Do
+    not try to composite a clip inside a bezel - the screen rectangles in these
+    PNGs defeat every edge test (the macbook wallpaper and the dark phone
+    screens especially), and a few px out looks broken. Both components put the
+    still on the PARENT as a background, because `prefers-reduced-motion` hides
+    the `<video>` and without that there would be a hole where the frame was.
 
 The section rail, the scroll-triggered motion, the progressive-blur scrim, the
 seam softeners, the paddle chevrons, the card icons, the integrations row and
