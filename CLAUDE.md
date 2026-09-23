@@ -78,6 +78,21 @@ Rules that are easy to break by accident:
     still on the PARENT as a background, because `prefers-reduced-motion` hides
     the `<video>` and without that there would be a hole where the frame was.
 
+17. **The home page has two measures and that is deliberate.** The About block
+    is on `HOME` in `lib/grid.js` (L 390, 856 across, 17 gutter - the only
+    gutter that gives the three 274-wide cards the frame draws), but the hero
+    above it is still on the frame's own numbers, text at 238 and devices at
+    193, because Manav redrew the page and left them there. `grid-check.mjs`
+    takes a `fromY` for exactly this. Card radius there is **14**, not 20.
+18. **The iPad is the one device whose screen is composited, not replaced.** Its
+    screen really is a flat white rect inside a near-black bezel, so it measures
+    cleanly: 1044.5x651 at (58, 51.5), radius 20. Everything else still uses
+    `<Shot>`.
+19. **The iPad's reveal is scroll-driven with `animation-timeline: view()`**, not
+    a scroll listener - so it runs off the main thread and rule 7 still holds.
+    Browsers without it get the finished state, which is just the iPad sitting
+    there, and `prefers-reduced-motion` gets the same.
+
 The section rail, the scroll-triggered motion, the progressive-blur scrim, the
 seam softeners, the paddle chevrons, the card icons, the integrations row and
 the footer are deliberate departures from the Figma, at Manav's request. See

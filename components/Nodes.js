@@ -134,6 +134,39 @@ export function Cover({ y, h, clip, poster }) {
   )
 }
 
+// The iPad on the home page, and the collage inside it.
+//
+// This is the one device on the site whose screen rectangle IS reliably
+// detectable - a big flat white rect inside a near-black bezel - so unlike
+// <Shot> the media goes INSIDE the frame rather than replacing it. The rect was
+// measured off the export: 1044.5x651 at (58, 51.5) in the frame's own
+// coordinates, radius 20.
+//
+// The stage/rig split exists for the scroll-driven animation: the stage holds
+// the perspective and stays put, the rig is what tilts. See .ipadStage in
+// app/globals.css.
+export function IPad({ x, y, w, h, src, screen, clip, alt = '' }) {
+  return (
+    <div className="ipadStage" style={{ left: x, top: y, width: w, height: h }}>
+      <div className="ipadGlow"
+           style={{ left: w * 0.08, top: h * 0.3, width: w * 0.84, height: h * 0.9 }} />
+      <div className="ipadRig">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="ipadShell" src={src} alt="" />
+        <div className="ipadScreen"
+             style={{ left: screen.x, top: screen.y, width: screen.w, height: screen.h,
+                      borderRadius: screen.r }}>
+          {clip && (clip.video
+            ? <video src={clip.src} autoPlay muted loop playsInline preload="metadata"
+                     aria-label={alt || undefined} />
+            // eslint-disable-next-line @next/next/no-img-element
+            : <img src={clip.src} alt={alt} />)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // A band whose background is a clip rather than a fill.
 //
 // The CSS fill stays underneath as the reduced-motion fallback - globals.css

@@ -43,6 +43,77 @@ a{color:inherit;text-decoration:none}
   -webkit-background-clip:text;background-clip:text;color:transparent;
   width:max-content;
 }
+/* The About block's pink. Sampled across the heading and all four lines of the
+   principle: every one of them runs #EE0B53 to #FE4E96 across its OWN width,
+   which is what `width:max-content` gives you. */
+.gradPink{
+  background:linear-gradient(90deg,#EE0B53 0%,#FE4E96 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  width:max-content;
+}
+.gradPink.ctr{margin-inline:auto}
+
+/* ---- the iPad -------------------------------------------------------------
+   The one showpiece on the page, and the thing Manav pointed at Apple's iPad
+   Air page for. Scroll-driven rather than triggered: the frame tilts up out of
+   the page and settles as it comes into view, and the screen inside it resolves
+   a beat later, which is what gives the depth.
+
+   Done with animation-timeline, so it runs off the main thread and cannot jank
+   the way a scroll listener would (CLAUDE.md rule 7). Browsers without it get
+   the finished state, which is just the iPad sitting there. */
+.ipadStage{position:absolute;perspective:1600px;perspective-origin:50% 40%}
+.ipadRig{position:absolute;inset:0;transform-origin:50% 100%;will-change:transform}
+.ipadShell{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ipadScreen{position:absolute;overflow:hidden;background:#FFFFFF}
+.ipadScreen > *{display:block;width:100%;height:100%;object-fit:cover}
+
+@keyframes ipadRise{
+  from{transform:translateY(90px) scale(.82) rotateX(18deg)}
+  to  {transform:none}
+}
+@keyframes ipadGlow{ from{opacity:0} to{opacity:1} }
+@keyframes screenIn{
+  from{opacity:0;transform:scale(1.14)}
+  to  {opacity:1;transform:none}
+}
+
+@supports (animation-timeline: view()){
+  html.no-reduced-motion .ipadRig{
+    animation:ipadRise linear both;
+    animation-timeline:view();
+    animation-range:entry 5% cover 42%;
+  }
+  html.no-reduced-motion .ipadScreen > *{
+    animation:screenIn linear both;
+    animation-timeline:view();
+    animation-range:entry 22% cover 55%;
+  }
+  html.no-reduced-motion .ipadGlow{
+    animation:ipadGlow linear both;
+    animation-timeline:view();
+    animation-range:entry 10% cover 40%;
+  }
+}
+/* the resume link. The underline sweeps in in the same pink the About block is
+   set in, so the one clickable thing down there reads as clickable. */
+.cv{position:relative;display:inline-block;transition:color .3s ease}
+.cv::after{
+  content:'';position:absolute;left:0;right:0;bottom:-8px;height:4px;border-radius:2px;
+  background:linear-gradient(90deg,#EE0B53,#FE4E96);
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .5s var(--e-out);
+}
+.cv:hover{color:#EE0B53}
+.cv:hover::after{transform:scaleX(1)}
+html.reduced-motion .cv::after{transition:none}
+
+/* the wash of colour under the iPad, so it does not float on flat white */
+.ipadGlow{
+  position:absolute;pointer-events:none;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(246,54,122,.22),rgba(246,54,122,0) 70%);
+  filter:blur(40px);
+}
 
 .track{position:absolute;display:flex;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth}
 .track::-webkit-scrollbar{display:none}

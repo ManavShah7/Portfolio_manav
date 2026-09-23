@@ -20,6 +20,12 @@ for (const [page, file] of Object.entries(PAGES)) {
   // a coloured band whose background is a clip
   for (const m of src.matchAll(new RegExp(`<MediaBand\\b[^>]*?h=\\{(${N})\\}[^>]*?clip=\\{V\\('([\\w-]+)'\\)\\}`, 'gs')))
     rows.push({ page, name: m[2], w: 1900, h: Number(m[1]), kind: 'band background' })
+  // the iPad on the home page, whose media goes inside the screen
+  for (const m of src.matchAll(new RegExp(`<IPad\\b([\\s\\S]*?)/>`, 'g'))) {
+    const b = m[1]
+    const one = b.match(/clip=\{V\('([\w-]+)'\)\}/)
+    if (one) rows.push({ page, name: one[1], w: 1044.5, h: 651, kind: 'inside the iPad screen' })
+  }
   // device frames
   for (const m of src.matchAll(new RegExp(`<Shot\\b([\\s\\S]*?)/>`, 'g'))) {
     const b = m[1]
