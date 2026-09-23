@@ -2,13 +2,11 @@ import Frame from '@/components/Frame'
 import Carousel from '@/components/Carousel'
 import SectionRail from '@/components/SectionRail'
 import MotionDriver from '@/components/MotionDriver'
-import { T, Rect, Img, Shot, Cover, Band, Scrim, Seam, Icon, BrandIcon, VideoBand } from '@/components/Nodes'
+import { T, Rect, Img, Shot, Cover, Band, MediaBand, Scrim, Seam, Icon, BrandIcon } from '@/components/Nodes'
 import { slots } from '@/lib/clips'
 import S from '@/lib/styles'
 import { PEAK as G, PAD_LG, PAD_SM, PARA_GAP, CARD_GAP, META_GAP, META_VAL, FOOT_GAP, under }
   from '@/lib/grid'
-import fs from 'node:fs'
-import path from 'node:path'
 
 import { Fragment } from 'react'
 import * as C from '@/lib/peak-copy'
@@ -16,11 +14,8 @@ import * as C from '@/lib/peak-copy'
 const H = 14866
 const SCRIM = true
 
-// Drop a clip in and it plays; until then the band is just the still.
-const hasAsset = f => fs.existsSync(path.join(process.cwd(), 'public', f))
-const PURPLE_VIDEO = hasAsset('figma/cs-purple.mp4')
 
-// drop a clip at public/videos/peak-<name>.mp4 - see lib/clips.js
+// drop a clip or a still at public/media/peak-<name>.* - see lib/clips.js
 const V = slots('peak')
 
 // Real marks, from lib/brand-icons.js. Health Connect rather than Google Fit:
@@ -93,10 +88,8 @@ export default function Peak() {
       <Band y={3494}  h={1374} fill={CORAL} />
       <Band y={4868}  h={1163} fill="#FFFFFF" />
       <Band y={6031}  h={4120} fill="#101010" />
-      {/* drop the clip at public/figma/cs-purple.mp4 - the still stays as the
-          poster and is used on its own until the file is there */}
-      <VideoBand y={10151} h={1395} src="/figma/cs-purple.mp4"
-                 poster="/figma/cs-purple-photo.webp" on={PURPLE_VIDEO} />
+      <MediaBand y={10151} h={1395} clip={V('purple')}
+                 fill="url(/figma/cs-purple-photo.webp) center/1900px 1395px no-repeat" />
       <Band y={11546} h={1343} fill={PURPLE} />
       {/* the photo ends on #4A0381 and the ramp below starts on #6B00A8 - a
           39-level step you can see. Dissolve the last 140px into the ramp's

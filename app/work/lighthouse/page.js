@@ -4,7 +4,7 @@ import Frame from '@/components/Frame'
 import Carousel from '@/components/Carousel'
 import SectionRail from '@/components/SectionRail'
 import MotionDriver from '@/components/MotionDriver'
-import { T, Rect, Img, Shot, Cover, Band, Seam } from '@/components/Nodes'
+import { T, Rect, Img, Shot, Cover, Band, MediaBand, Seam } from '@/components/Nodes'
 import { slots } from '@/lib/clips'
 import S from '@/lib/styles'
 import { LH as G, PAD_LG, PAD_SM, HEAD_GAP, PARA_GAP, CARD_GAP, META_GAP, META_VAL, FOOT_GAP, under }
@@ -13,13 +13,18 @@ import * as C from '@/lib/lighthouse-copy'
 
 const H = 11737
 
-// drop a clip at public/videos/lighthouse-<name>.mp4 - see lib/clips.js
+// drop a clip or a still at public/media/lighthouse-<name>.* - see lib/clips.js
 const V = slots('lighthouse')
 
 // 21 stops down the band; horizontally uniform, so a vertical ramp is exact.
 const GREEN = 'linear-gradient(180deg,#0DA31C 0%,#12A625 5%,#18A92E 10%,#1FAB38 15%,#24AD41 20%,#2AB04A 25%,#30B354 30%,#36B65E 35%,#3BB866 40%,#3BC166 45%,#3AC964 50%,#3AD263 55%,#39DA62 60%,#52DF75 65%,#6AE389 70%,#83E89C 75%,#9BECB0 80%,#B4F1C3 85%,#CCF5D7 90%,#E5FAEA 95%,#FDFEFE 100%)'
 
 // Carousel cards are the full measure now, on the same gutter as everything else.
+// Washes the clip out to the colour the CSS ramp reaches by its end, so the
+// dark caption at y 6176 - which the frame puts on the near-white tail of the
+// ramp - still has something to sit on.
+const GREEN_WASH = 'linear-gradient(180deg,rgba(253,254,254,0) 0%,rgba(253,254,254,0.0) 60%,rgba(253,254,254,0.013) 62.69%,rgba(253,254,254,0.041) 65.38%,rgba(253,254,254,0.083) 68.08%,rgba(253,254,254,0.135) 70.77%,rgba(253,254,254,0.197) 73.46%,rgba(253,254,254,0.269) 76.15%,rgba(253,254,254,0.349) 78.85%,rgba(253,254,254,0.438) 81.54%,rgba(253,254,254,0.535) 84.23%,rgba(253,254,254,0.64) 86.92%,rgba(253,254,254,0.753) 89.62%,rgba(253,254,254,0.873) 92.31%,rgba(253,254,254,1.0) 95%,rgba(253,254,254,1) 100%)'
+
 const RS_STEP = G.W + G.GUT
 
 // two 80px paddles and the 46 between them, ending on the content right edge
@@ -74,11 +79,12 @@ export default function Lighthouse() {
       <Cover y={0} h={832} clip={V('hero')} poster="/figma/lh-mesh.webp" />
       <Band y={832}  h={2412} fill="#FFFFFF" />
       <Band y={3244} h={1264} fill="url(/figma/lh-mesh.webp) center/1900px 1264px no-repeat" />
-      <Band y={4508} h={1739} fill={GREEN} />
+      <MediaBand y={4508} h={1739} clip={V('green')} fill={GREEN} over={GREEN_WASH} />
       <Band y={6247} h={5490} fill="#FFFFFF" />
-      {/* the mesh ends pale and the ramp opens on #0DA31C - up to 152 levels
-          of step across the width */}
-      <Seam y={4388} h={120} to={[13, 163, 28]} />
+      {/* the mesh ends pale and the ramp opens on #0DA31C - up to 152 levels of
+          step across the width. The clip opens on #57C859 instead, sampled over
+          the whole clip (it drifts by under 2 levels), so the seam carries both. */}
+      <Seam y={4388} h={120} to={[13, 163, 28]} over={V('green') && [87, 200, 89]} />
 
       {/* ---- overview ---- */}
       <T x={G.L} y={OV_HEAD} s="lhHead" lines={C.overview.headline} rv="lines" block="ov" />

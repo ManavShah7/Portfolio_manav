@@ -155,8 +155,20 @@ html.js.no-reduced-motion [data-rv="lines"].in .w{
 /* reduced motion keeps the still rather than a looping clip. Both of these sit
    on a parent that carries the still as its background, so hiding them leaves
    the frame, not a hole. */
+/* the wash drawn over a clip band; see MediaBand in components/Nodes.js */
+.bandWash{position:absolute;inset:0;pointer-events:none}
 html.reduced-motion .bandVideo,
 html.reduced-motion .shotVideo{display:none}
+/* with the clip hidden the CSS ramp is showing, and it already fades - washing
+   it again would wash it twice */
+html.reduced-motion .bandWash{display:none}
+
+/* A seam over a clip band has two layers; show the one that matches whichever
+   background is actually visible. Default is the clip's, because without JS
+   the <video> still autoplays - only prefers-reduced-motion swaps in the ramp. */
+.seamStill{display:none}
+html.reduced-motion .seamMotion{display:none}
+html.reduced-motion .seamStill{display:block}
 
 /* depth of field inside a carousel - eased so a paddle press racks focus */
 .track [data-depth]{transition:filter .28s ease}

@@ -3,3 +3,7 @@ node_modules
 out
 .DS_Store
 *.log
+
+# the untouched 4K/8K band clips Manav exported; public/media holds the
+# cropped, compressed versions that actually ship
+media-src

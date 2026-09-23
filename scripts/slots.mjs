@@ -4,6 +4,7 @@ import fs from 'node:fs'
 // Sizes are at 2x, which is what the page renders at on a retina screen. Either a
 // clip (.mp4/.webm) or a still (.png/.webp/.jpg) works in any slot.
 const PAGES = {
+  home:      'app/page.js',
   peak:      'app/work/peak/page.js',
   times:     'app/work/times-media/page.js',
   lighthouse:'app/work/lighthouse/page.js',
@@ -16,6 +17,9 @@ for (const [page, file] of Object.entries(PAGES)) {
   // full-bleed cover band
   for (const m of src.matchAll(new RegExp(`<Cover\\b[^>]*?h=\\{(${N})\\}[^>]*?clip=\\{V\\('([\\w-]+)'\\)\\}`, 'gs')))
     rows.push({ page, name: m[2], w: 1900, h: Number(m[1]), kind: 'full-bleed band' })
+  // a coloured band whose background is a clip
+  for (const m of src.matchAll(new RegExp(`<MediaBand\\b[^>]*?h=\\{(${N})\\}[^>]*?clip=\\{V\\('([\\w-]+)'\\)\\}`, 'gs')))
+    rows.push({ page, name: m[2], w: 1900, h: Number(m[1]), kind: 'band background' })
   // device frames
   for (const m of src.matchAll(new RegExp(`<Shot\\b([\\s\\S]*?)/>`, 'g'))) {
     const b = m[1]
@@ -45,4 +49,3 @@ for (const r of rows) {
 }
 console.log(`\n${rows.length} slots, all under ${process.cwd()}/public/media/`)
 console.log('Anything not dropped stays the placeholder frame it is now.')
-console.log('Peak also still takes public/figma/cs-purple.mp4 for the purple photo band (1900x1395 -> 3800x2790).')

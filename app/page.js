@@ -1,13 +1,18 @@
 import Frame from '@/components/Frame'
-import { T, Img, Band } from '@/components/Nodes'
+import { T, Img, Band, MediaBand } from '@/components/Nodes'
+import { slots } from '@/lib/clips'
 
 const H = 2701
+
+// drop a clip or a still at public/media/home-<slot>.* - see lib/clips.js
+const V = slots('home')
 
 export default function Home() {
   return (
     <Frame height={H}>
       <Band y={0}    h={1157} fill="#F5F5F7" />
-      <Band y={1157} h={744}  fill="url(/figma/home-gradient.webp) center/1900px 744px no-repeat" />
+      <MediaBand y={1157} h={744} clip={V('kanye')}
+                 fill="url(/figma/home-gradient.webp) center/1900px 744px no-repeat" />
       <Band y={1901} h={800}  fill="#D9D9D9" />
 
       <T x={238} y={343} s="heroEyebrow" lines="Product Designer" />

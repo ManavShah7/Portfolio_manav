@@ -4,7 +4,7 @@ import Frame from '@/components/Frame'
 import Carousel from '@/components/Carousel'
 import SectionRail from '@/components/SectionRail'
 import MotionDriver from '@/components/MotionDriver'
-import { T, Rect, Img, Shot, Cover, Band, Seam } from '@/components/Nodes'
+import { T, Rect, Img, Shot, Cover, Band, MediaBand, Seam } from '@/components/Nodes'
 import { slots } from '@/lib/clips'
 import S from '@/lib/styles'
 import { TIMES as G, PAD_LG, HEAD_GAP, PARA_GAP, CARD_GAP, META_GAP, META_VAL, FOOT_GAP, under }
@@ -13,7 +13,7 @@ import * as C from '@/lib/times-copy'
 
 const H = 11737
 
-// drop a clip at public/videos/times-<name>.mp4 - see lib/clips.js
+// drop a clip or a still at public/media/times-<name>.* - see lib/clips.js
 const V = slots('times')
 
 // 21 stops sampled down the band; horizontally uniform, so a vertical ramp
@@ -36,6 +36,10 @@ const RAIL = {
   dark: [[839, 3030], [3030, 6070]],
   light: '#5A5A5A', darkInk: '#FFFFFF',
 }
+
+// Washes the clip out to white by the foot of the band, which is where it meets
+// the white band below - without it the clip cuts off at a hard edge.
+const PINK_WASH = 'linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,0.0) 70%,rgba(255,255,255,0.013) 72.31%,rgba(255,255,255,0.041) 74.62%,rgba(255,255,255,0.083) 76.92%,rgba(255,255,255,0.135) 79.23%,rgba(255,255,255,0.197) 81.54%,rgba(255,255,255,0.269) 83.85%,rgba(255,255,255,0.349) 86.15%,rgba(255,255,255,0.438) 88.46%,rgba(255,255,255,0.535) 90.77%,rgba(255,255,255,0.64) 93.08%,rgba(255,255,255,0.753) 95.38%,rgba(255,255,255,0.873) 97.69%,rgba(255,255,255,1.0) 100%)'
 
 // Both quote rows now sit on the grid's three-up columns. The frames placed
 // them by hand at steps of 403 and 449 in one row and 403 and 449 in the other,
@@ -86,12 +90,12 @@ export default function TimesMedia() {
       <Band y={832}   h={7}    fill="#FFFFFF" />
       <Band y={839}   h={2191} fill="#111111" />
       <Band y={3030}  h={1296} fill="url(/figma/tm-mesh.webp) center/1900px 1296px no-repeat" />
-      <Band y={4326}  h={1744} fill={PINK} />
+      <MediaBand y={4326} h={1744} clip={V('pink')} fill={PINK} over={PINK_WASH} />
       <Band y={6070}  h={4926} fill="#FFFFFF" />
       <Band y={10996} h={741}  fill="#F5F5F7" />
       {/* the mesh ends on #FF3F72 and the ramp opens on #FF336E - close, but a
-          step you can see across 1900px */}
-      <Seam y={4206} h={120} to={[255, 51, 110]} />
+          step you can see across 1900px. The clip opens on #E17F96. */}
+      <Seam y={4206} h={120} to={[255, 51, 110]} over={V('pink') && [225, 127, 150]} />
 
       {/* ---- overview ---- */}
       <T x={G.L} y={OV_HEAD} s="tmHead" lines={C.overview.headline} rv="lines" block="ov" />

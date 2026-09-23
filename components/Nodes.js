@@ -134,6 +134,30 @@ export function Cover({ y, h, clip, poster }) {
   )
 }
 
+// A band whose background is a clip rather than a fill.
+//
+// The CSS fill stays underneath as the reduced-motion fallback - globals.css
+// hides .bandVideo for prefers-reduced-motion, which leaves exactly the ramp
+// the frames were drawn with. `over` is a wash drawn on top of the clip, for
+// the bands whose ramps have to reach a particular colour by the bottom: the
+// green one ends near-white under a dark caption and the pink one has to meet
+// the white band below without a step. The wash is hidden under reduced motion
+// too, or it would fade a ramp that already fades.
+export function MediaBand({ y, h, clip, fill, over, className }) {
+  if (!clip) return <Band y={y} h={h} fill={fill} className={className} />
+  return (
+    <div className={`band${className ? ' ' + className : ''}`}
+         style={{ top: y, height: h, background: fill }}>
+      {clip.video
+        ? <video className="bandVideo" src={clip.src}
+                 autoPlay muted loop playsInline preload="auto" />
+        : <div className="bandVideo"
+               style={{ background: `url(${clip.src}) center/cover no-repeat` }} />}
+      {over && <div className="bandWash" style={{ background: over }} />}
+    </div>
+  )
+}
+
 export function Band({ y, h, fill, className, style }) {
   return <div className={`band${className ? ' ' + className : ''}`}
               style={{ top: y, height: h, background: fill, ...style }} />
@@ -167,8 +191,25 @@ const RAMP = (r, g, bl) => 'linear-gradient(to bottom,' +
     return `rgba(${r},${g},${bl},${+(t ** 1.7).toFixed(3)}) ${(t * 100).toFixed(1)}%`
   }).join(',') + ')'
 
-export function Seam({ y, h, to }) {
-  return <div className="seam" style={{ top: y, height: h, background: RAMP(...to) }} />
+// `to` is the colour the band below opens on. When that band is a clip the
+// opening colour is the clip's, not the CSS ramp's - and the two differ enough
+// to show (the green band's ramp opens on #0DA31C and its clip on #57C859, a
+// 182-level step across 1900px). So `over` gives the clip's colour and both
+// layers are rendered, with CSS picking one: the still for anyone who asked for
+// less motion, since that is who sees the CSS ramp.
+export function Seam({ y, h, to, over }) {
+  const still = (
+    <div className={`seam${over ? ' seamStill' : ''}`}
+         style={{ top: y, height: h, background: RAMP(...to) }} />
+  )
+  if (!over) return still
+  return (
+    <>
+      <div className="seam seamMotion"
+           style={{ top: y, height: h, background: RAMP(...over) }} />
+      {still}
+    </>
+  )
 }
 
 // A band whose fill is a looping video, with the still as its poster.

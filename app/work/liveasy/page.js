@@ -4,7 +4,7 @@ import Frame from '@/components/Frame'
 import Carousel from '@/components/Carousel'
 import SectionRail from '@/components/SectionRail'
 import MotionDriver from '@/components/MotionDriver'
-import { T, Rect, Img, Shot, Cover, Band } from '@/components/Nodes'
+import { T, Rect, Img, Shot, Cover, Band, MediaBand } from '@/components/Nodes'
 import { slots } from '@/lib/clips'
 import S from '@/lib/styles'
 import { LV as G, PAD_LG, PAD_SM, PARA_GAP, CARD_GAP, META_GAP, META_VAL, FOOT_GAP, under }
@@ -13,7 +13,7 @@ import * as C from '@/lib/liveasy-copy'
 
 const H = 11737
 
-// drop a clip at public/videos/liveasy-<name>.mp4 - see lib/clips.js
+// drop a clip or a still at public/media/liveasy-<name>.* - see lib/clips.js
 const V = slots('liveasy')
 
 // This page has no Figma frame behind it - see lib/liveasy-copy.js. The band
@@ -23,6 +23,10 @@ const V = slots('liveasy')
 // 21 stops, deep bronze into lit bronze at the midpoint and then washing out to
 // the same near-white the other ramps end on, so the join below needs no seam.
 const BRONZE = 'linear-gradient(180deg,#A8702A 0%,#AC752F 5%,#B17933 10%,#B57E38 15%,#BA823C 20%,#BE8741 25%,#C38B45 30%,#C7904A 35%,#CC944E 40%,#D09953 45%,#D59D57 50%,#D9A25C 55%,#DDAC6E 60%,#E1B680 65%,#E5C192 70%,#E9CBA4 75%,#EDD5B6 80%,#F1DFC8 85%,#F5EADA 90%,#F9F4EC 95%,#FDFEFE 100%)'
+
+// Same job as Lighthouse's: washes a clip out to the colour the ramp reaches,
+// so the dark caption at y 6236 still has something to sit on.
+const BRONZE_WASH = 'linear-gradient(180deg,rgba(253,254,254,0) 0%,rgba(253,254,254,0.0) 55%,rgba(253,254,254,0.013) 57.69%,rgba(253,254,254,0.041) 60.38%,rgba(253,254,254,0.083) 63.08%,rgba(253,254,254,0.135) 65.77%,rgba(253,254,254,0.197) 68.46%,rgba(253,254,254,0.269) 71.15%,rgba(253,254,254,0.349) 73.85%,rgba(253,254,254,0.438) 76.54%,rgba(253,254,254,0.535) 79.23%,rgba(253,254,254,0.64) 81.92%,rgba(253,254,254,0.753) 84.62%,rgba(253,254,254,0.873) 87.31%,rgba(253,254,254,1.0) 90%,rgba(253,254,254,1) 100%)'
 
 const RS_STEP = G.W + G.GUT
 const PADDLE_X = G.R - 206
@@ -84,7 +88,7 @@ export default function Liveasy() {
       <Cover y={0} h={832} clip={V('hero')} poster="/figma/lv-macbook-white.png" />
       <Band y={832}  h={2468} fill="#FFFFFF" />
       <Band y={3300} h={1300} fill="#0A0A0A" />
-      <Band y={4600} h={1800} fill={BRONZE} />
+      <MediaBand y={4600} h={1800} clip={V('bronze')} fill={BRONZE} over={BRONZE_WASH} />
       <Band y={6400} h={5337} fill="#FFFFFF" />
 
       {/* ---- overview ---- */}
