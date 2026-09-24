@@ -48,6 +48,12 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
   return (
     <Tag ref={ref} className={`node${className ? ' ' + className : ''}`} style={box}
          {...rvProps(rv, block, at, sv)} {...rest}>
+      {lead && lead.lines.slice(0, -1).map((l, i) => (
+        rv === 'lines'
+          ? <span className="ln" key={`ld${i}`}><span className="w"
+              style={{ color: lead.color, fontWeight: lead.weight }}>{l}</span></span>
+          : <span key={`ld${i}`} style={{ color: lead.color, fontWeight: lead.weight }}>{l}</span>
+      ))}
       {rows.map((l, i) => {
         // `accent` colours a trailing phrase on the LAST line - "Push your
         // friend and grow together." Appending it cannot move anything: ink
@@ -55,9 +61,12 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
         // text it follows rather than being positioned.
         // `lead` runs a differently-weighted sentence INTO the first line -
         // the catalog captions read "Type it however you want. Peak gets it..."
-        // as one paragraph with only the opening sentence in white.
+        // as one paragraph with only the opening sentence in white. Its last
+        // line joins line 0 of the body; any earlier ones are bold lines of
+        // their own, so a two-line lead breaks where the frame breaks it.
+        const leadStyle = lead && { color: lead.color, fontWeight: lead.weight, display: 'inline' }
         const withLead = lead && i === 0
-          ? <><span style={{ color: lead.color, fontWeight: lead.weight, display: 'inline' }}>{lead.text}</span>{l}</>
+          ? <><span style={leadStyle}>{lead.lines[lead.lines.length - 1]}</span>{l}</>
           : l
         const body = accent && i === rows.length - 1
           // display:inline is not optional - globals.css sets `.node span
@@ -176,7 +185,7 @@ export function PhoneOutline({ x, y, w, h, stroke = 'rgba(255,255,255,.9)' }) {
                   border: `${Math.max(2, w * 0.011)}px solid ${stroke}`,
                   borderRadius: r, pointerEvents: 'none' }}>
       <div style={{ position: 'absolute', top: h * 0.018, left: '50%',
-                    transform: 'translateX(-50%)', width: w * 0.42, height: h * 0.022,
+                    transform: 'translateX(-50%)', width: w * 0.30, height: h * 0.016,
                     borderRadius: 99, background: stroke }} />
     </div>
   )

@@ -21,7 +21,7 @@ a{color:inherit;text-decoration:none}
 
 /* The Figma frame is 1900 wide. The canvas keeps that coordinate system and
    scales as one piece, so every measured position stays exact at any width. */
-.frame{width:1900px;transform-origin:top left;position:absolute;top:0}
+.frame{width:1900px;transform-origin:top left;position:absolute;top:0;z-index:1}
 /* clip, not hidden: `hidden` would make this a scroll container and the pinned
    section rail would have nothing to stick to. */
 .scaler{overflow-x:clip;overflow-y:visible;position:relative}
@@ -140,7 +140,7 @@ html.reduced-motion .cv::after{transition:none}
 .paddle{position:absolute;border:0;border-radius:50%;background:#D9D9D9;cursor:pointer;padding:0}
 .paddle:disabled{cursor:default}
 
-.rail{pointer-events:none}
+.rail{pointer-events:none;z-index:2}
 /* the button IS the text box, so the hit area matches what you can see and
    focus lands where you'd expect */
 .railItem{
@@ -311,3 +311,29 @@ html.reduced-motion .seamStill{display:block}
 .device{transition:transform .35s var(--e-out),filter .35s ease;transform-origin:50% 92%}
 a:hover .device{transform:scale(1.035)}
 a:focus-visible{outline:2px solid #626262;outline-offset:8px;border-radius:4px}
+
+
+/* The pinned hero - see components/PinnedHero.js. It renders in <Frame overlay>,
+   outside the scale transform, so sticky pins where you expect and `scroll()`
+   measures real pixels. z-index 0 puts it behind .frame, which is what lets the
+   page's own copy scroll over it. */
+.pinWrap{position:absolute;top:0;left:0;width:100%;z-index:0;background:#000}
+.pinStage{position:sticky;top:0;width:100%;overflow:hidden}
+.pinVideo{display:block;width:100%;height:100%;object-fit:cover}
+.pinScrim{position:absolute;inset:0;background:#000;opacity:.1}
+@keyframes pinDarken{from{opacity:.1}to{opacity:1}}
+@supports (animation-timeline: scroll()){
+  html.no-reduced-motion .pinScrim{
+    animation:pinDarken linear both;
+    /* `scroll()` alone binds to the NEAREST scroll container, and .pinStage
+       has overflow:hidden - which counts. That timeline never scrolls, so the
+       scrim would sit at its base opacity for ever. Bind to the document. */
+    animation-timeline:scroll(root block);
+    animation-range:0 var(--pin);
+  }
+}
+/* Reduced motion gets the frame as drawn: the still at the top, black beneath
+   it, nothing pinned and nothing moving. */
+html.reduced-motion .pinStage{position:static}
+html.reduced-motion .pinVideo{display:none}
+html.reduced-motion .pinScrim{display:none}
