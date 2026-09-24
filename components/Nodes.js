@@ -182,7 +182,7 @@ export function PhoneOutline({ x, y, w, h, stroke = 'rgba(255,255,255,.9)' }) {
   const r = w * 0.15
   return (
     <div style={{ position: 'absolute', left: x, top: y, width: w, height: h,
-                  border: `${Math.max(2, w * 0.011)}px solid ${stroke}`,
+                  border: `${Math.max(3, w * 0.016)}px solid ${stroke}`,
                   borderRadius: r, pointerEvents: 'none' }}>
       <div style={{ position: 'absolute', top: h * 0.018, left: '50%',
                     transform: 'translateX(-50%)', width: w * 0.30, height: h * 0.016,

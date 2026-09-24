@@ -30,10 +30,10 @@ const RSCH_Y  = 4028, RSCH_H = 2710
 const FIND_Y  = 6738, FIND_H = 2390
 const SOL_Y   = 9128
 const DARK_Y  = 12053
-const SOC_W1  = 14008
-const SOC1_Y  = 14472, SOC_H = 967
-const SOC_W2  = 15439
-const SOC2_Y  = 15965
+const SOC_W1  = 13888
+const SOC1_Y  = 14472, SOC_H = 1099
+const SOC_W2  = 15571
+const SOC2_Y  = 16069
 const FOOT_Y  = 19191
 
 // --- intro ------------------------------------------------------------------
@@ -50,7 +50,7 @@ const RS_X = 372, RS_EYE = 4221, RS_HEAD = 4284
 const RS_ASIDE_X = 1112, RS_ASIDE_Y = 4325
 const RS_COL1 = [368.9, 980.5], RS_COL2 = [369.5, 981.7], RS_CW = 550
 const RS_CARD1 = 4608, RS_CARD_H = 529, RS_Q1 = 5248, RS_W1 = 5411
-const RS_RED = 5533, RS_RED_BODY = 5732
+const RS_RED = 5601, RS_RED_BODY = 5745
 const RS_CARD2 = 5829, RS_Q2 = 6470, RS_W2 = 6633
 
 // --- findings ---------------------------------------------------------------
@@ -66,18 +66,18 @@ const GLOBE_Y = 9727, GLOBE_H = 767
 const LF_HEAD = 10851
 const LF_PHONE = [567, 1236], LF_PW = 242, LF_PH = 437, LF_PY = 11194
 const LF_CAP = [486, 1137], LF_CAP_Y = 11790
-const CT_HEAD_X = 281, CT_HEAD = 12309
-const CT_BODY_X = 280, CT_BODY = 12450
-const CT_X = 279.5, CT_W = 486.7, CT_STEP = 502.5, CT_Y = 12706, CT_H = 739
+const CT_HEAD_X = 281, CT_HEAD = 12263
+const CT_X = 279.5, CT_W = 486.7, CT_STEP = 502.5, CT_Y = 12539, CT_H = 739
+const CT_CAP = 862          // the caption sits this far below the track top
 
 // --- social / adapts / next --------------------------------------------------
-const SOC_HEAD = 14150
-const SOC_MID_X = 320.5, SOC_MID = 15660
-const AD_HEAD = 17130
-const AD_X = 387.4, AD_W = 1183.8, AD_Y = 17412, AD_H = 599
-const WN_X = 272.6, WN_HEAD = 18194
-const WN_TX = 271.4, WN_W = 538, WN_STEP = 569.8, WN_Y = 18420, WN_H = 410
-const END_Y = 18980
+const SOC_HEAD = 14116
+const SOC_MID = 15760                 // centred now, not left
+const AD_HEAD = 17229
+const AD_X = 384.4, AD_W = 1185.6, AD_Y = 17582, AD_H = 599
+const WN_X = 269, WN_HEAD = 18271
+const WN_TX = 268.4, WN_W = 538, WN_STEP = 569.8, WN_Y = 18603, WN_H = 378
+const END_Y = 19286
 
 const CENTRE = 950
 
@@ -127,7 +127,7 @@ export default function Peak() {
 
       {/* ---- user research ---- */}
       <T x={RS_X} y={RS_EYE} s="eyebrow" lines={C.research.eyebrow} rv="rise" block="rs" />
-      <T x={RS_X} y={RS_HEAD} s="headline" lines={C.research.headline}
+      <T x={RS_X} y={RS_HEAD} s="pkHead" lines={C.research.headline}
          rv="lines" block="rs" at={120} />
       <T x={RS_ASIDE_X} y={RS_ASIDE_Y} s="aside" lines={C.research.aside}
          rv="rise" block="rs" at={300} />
@@ -143,7 +143,7 @@ export default function Peak() {
         </Fragment>
       ))}
 
-      <T x={CENTRE} y={RS_RED} w={1500} align="center" s="headline"
+      <T x={CENTRE} y={RS_RED} w={1500} align="center" s="pkHead"
          lines={C.research.redditHead} rv="lines" block="rr" sv="drift" />
       <T x={CENTRE} y={RS_RED_BODY} w={900} align="center" s="aside"
          lines={C.research.redditBody} rv="rise" block="rr" at={260} />
@@ -162,7 +162,7 @@ export default function Peak() {
       {/* ---- research findings. Two 599 cards stacked on the left, one 1229
               on the right - the frame's own shapes, not a tidy grid. ---- */}
       <T x={FD_X} y={FD_EYE} s="eyebrow" lines={C.findings.eyebrow} rv="rise" block="fd" />
-      <T x={FD_X} y={FD_HEAD} s="headline" lines={C.findings.headline}
+      <T x={FD_X} y={FD_HEAD} s="pkHead" lines={C.findings.headline}
          rv="lines" block="fd" at={120} />
 
       <Rect x={FD_L} y={FD_TOP} w={FD_LW} h={FD_CARD_H} r={20} fill={WHITE}
@@ -206,10 +206,8 @@ export default function Peak() {
         </Fragment>
       ))}
 
-      <T x={CT_HEAD_X} y={CT_HEAD} s="headlineW" lines={C.solution.catalogHead}
+      <T x={CT_HEAD_X} y={CT_HEAD} s="solHead" lines={C.solution.catalogHead}
          rv="lines" block="ct" />
-      <T x={CT_BODY_X} y={CT_BODY} s="catBody" lines={C.solution.catalogBody}
-         rv="rise" block="ct" at={240} />
 
       <Carousel x={CT_X} y={CT_Y} w={1900 - CT_X} h={CT_H + 300}
                 inner={CT_W + 3 * CT_STEP} step={CT_STEP}
@@ -223,7 +221,7 @@ export default function Peak() {
                     rv="card" block="ctc" at={at} />
               <PhoneOutline x={left + (CT_W - 170) / 2} y={140} w={170} h={310}
                             stroke="rgba(190,200,215,.5)" />
-              <T x={left} y={CT_H + 45} s="catRest" lines={c.lines} w={CT_W}
+              <T x={left} y={CT_CAP} s="catRest" lines={c.lines} w={CT_W}
                  lead={{ lines: c.lead, color: '#FFFFFF', weight: 600 }}
                  rv="card" block="ctc" at={at} />
             </Fragment>
@@ -232,9 +230,9 @@ export default function Peak() {
       </Carousel>
 
       {/* ---- friendship ---- */}
-      <T x={CENTRE} y={SOC_HEAD} w={1200} align="center" s="headline" color="#E8842A"
+      <T x={CENTRE} y={SOC_HEAD} w={1200} align="center" s="pkBig" color="#E8842A"
          lines={[C.social.head[0]]} rv="lines" block="sh" />
-      <T x={CENTRE} y={SOC_HEAD + S.headline.lh} w={1200} align="center" s="headline"
+      <T x={CENTRE} y={SOC_HEAD + S.pkBig.lh} w={1200} align="center" s="pkBig"
          lines={[C.social.head[1]]} rv="lines" block="sh" at={110} />
 
       {[0, 1].map(i => {
@@ -247,8 +245,8 @@ export default function Peak() {
                        poster={`/media/peak-friends${i + 1}-poster.webp`}
                        over={`linear-gradient(${right ? 270 : 90}deg,`
                              + 'rgba(0,0,0,.42) 0%,rgba(0,0,0,.16) 48%,rgba(0,0,0,0) 82%)'} />
-            <PhoneOutline x={right ? 311 : 1316} y={y + (SOC_H - 600) / 2}
-                          w={300} h={600} stroke="rgba(6,6,6,.9)" />
+            <PhoneOutline x={right ? 315 : 1240} y={y + (SOC_H - 606) / 2}
+                          w={312} h={606} stroke="#0B0B0B" />
             <T x={right ? 1640 : 300} y={y + (SOC_H - S.bandHead.lh * b.lines.length) / 2}
                w={right ? 900 : undefined} align={right ? 'right' : 'left'}
                s="bandHead" lines={b.lines} rv="lines" block={`sb${i}`} />
@@ -256,18 +254,18 @@ export default function Peak() {
         )
       })}
 
-      <T x={SOC_MID_X} y={SOC_MID} s="headline" lines={C.social.mid}
+      <T x={CENTRE} y={SOC_MID} w={1400} align="center" s="pkBig" lines={C.social.mid}
          accent={{ text: C.social.midAccent, color: '#E8842A' }}
          rv="lines" block="sm" />
 
       {/* ---- adapts ---- */}
-      <T x={CENTRE} y={AD_HEAD} w={1400} align="center" s="headline"
+      <T x={CENTRE} y={AD_HEAD} w={1400} align="center" s="pkHead"
          lines={C.adapts.headline} rv="lines" block="ad" sv="drift" />
       <Plate x={AD_X} y={AD_Y} w={AD_W} h={AD_H} clip={V('adapts')}
              rv="card" block="adc" />
 
       {/* ---- what's next ---- */}
-      <T x={WN_X} y={WN_HEAD} s="headline" lines={C.whatsNext.headline}
+      <T x={WN_X} y={WN_HEAD} s="pkHead" lines={C.whatsNext.headline}
          rv="lines" block="wn" />
       <Carousel x={WN_TX} y={WN_Y} w={1900 - WN_TX} h={WN_H}
                 inner={WN_W + 2 * WN_STEP} step={WN_STEP}
@@ -279,9 +277,9 @@ export default function Peak() {
             <Fragment key={i}>
               <Rect x={left} y={0} w={WN_W} h={WN_H} r={20} fill={GREY}
                     rv="card" block="wnc" at={at} />
-              <T x={left + 36} y={205} s="nextTitle" lines={c.title}
+              <T x={left + 36} y={182} s="nextTitle" lines={c.title}
                  rv="card" block="wnc" at={at} />
-              <T x={left + 36} y={253} s="nextBody" lines={c.body}
+              <T x={left + 36} y={233} s="nextBody" lines={c.body}
                  rv="card" block="wnc" at={at} />
             </Fragment>
           )
