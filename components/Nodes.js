@@ -21,7 +21,7 @@ function rvProps(rv, block, at, sv) {
 }
 
 export function T({ x, y, lines, s, align = 'left', w, color, className, style,
-                    accent, as: Tag = 'div', rv, block, at, sv, ref, ...rest }) {
+                    accent, lead, as: Tag = 'div', rv, block, at, sv, ref, ...rest }) {
   const st = typeof s === 'string' ? S[s] : s
   const first = Array.isArray(lines) ? lines[0] : lines
   const rows = Array.isArray(lines) ? lines : [lines]
@@ -38,6 +38,12 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
     box.textAlign = 'right'
   } else {
     box.left = x - sideBearing(first, st)
+    // An absolutely positioned box shrink-wraps, and `.ln` clips to it. Any
+    // line longer than the first - which `accent` guarantees - then gets cut
+    // off mid-word. `max-content` does not survive the clip boxes, so give a
+    // left-aligned masked block the rest of the frame unless told otherwise.
+    if (w) box.width = w
+    else if (rv === 'lines' || accent || lead) box.width = Math.max(0, 1900 - box.left)
   }
   return (
     <Tag ref={ref} className={`node${className ? ' ' + className : ''}`} style={box}
@@ -47,9 +53,18 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
         // friend and grow together." Appending it cannot move anything: ink
         // metrics are taken from line 0, and the phrase sits inline after the
         // text it follows rather than being positioned.
-        const body = accent && i === rows.length - 1
-          ? <>{l}<span style={{ color: accent.color }}>{accent.text}</span></>
+        // `lead` runs a differently-weighted sentence INTO the first line -
+        // the catalog captions read "Type it however you want. Peak gets it..."
+        // as one paragraph with only the opening sentence in white.
+        const withLead = lead && i === 0
+          ? <><span style={{ color: lead.color, fontWeight: lead.weight, display: 'inline' }}>{lead.text}</span>{l}</>
           : l
+        const body = accent && i === rows.length - 1
+          // display:inline is not optional - globals.css sets `.node span
+          // { display: block }` for the line spans, which would drop the
+          // accent onto a line of its own.
+          ? <>{withLead}<span style={{ color: accent.color, display: 'inline' }}>{accent.text}</span></>
+          : withLead
         return rv === 'lines'
           // .ln clips, .w slides up from under it. The padding/margin pair keeps
           // the clip box off the glyphs without moving the layout by a hair.
@@ -122,6 +137,47 @@ export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, sv, class
          style={{ ...box, background: `url(${src}) center/100% 100% no-repeat` }}>
       <video className="shotVideo" src={clip.src} poster={src}
              autoPlay muted loop playsInline preload="metadata" />
+    </div>
+  )
+}
+
+
+// A plate: the flat dark rounded rect the new Peak frame draws wherever a clip
+// is going to go. With nothing dropped it stays a plate, which is exactly what
+// the frame shows; drop `peak-<slot>.mp4` and it fills with the clip.
+// The still hangs on the PARENT for the reduced-motion reason in rule 16.
+export function Plate({ x, y, w, h, r = 20, fill = '#050505', clip, poster, alt = '',
+                        rv, block, at, sv, ...rest }) {
+  const box = { position: 'absolute', left: x, top: y, width: w, height: h,
+                borderRadius: r, background: poster ? `url(${poster}) center/cover no-repeat` : fill,
+                overflow: 'hidden' }
+  if (!clip) return <div {...rvProps(rv, block, at, sv)} {...rest} style={box} />
+  if (!clip.video) {
+    return <div {...rvProps(rv, block, at, sv)} {...rest} role="img" aria-label={alt || undefined}
+                style={{ ...box, background: `url(${clip.src}) center/cover no-repeat` }} />
+  }
+  return (
+    <div {...rvProps(rv, block, at, sv)} {...rest}
+         role={alt ? 'img' : undefined} aria-label={alt || undefined} style={box}>
+      <video className="bandVideo" src={clip.src} poster={poster}
+             autoPlay muted loop playsInline preload="metadata" />
+    </div>
+  )
+}
+
+
+// The phone the new Peak frame draws over the social bands is an outline, not
+// a device shot - every PNG in public/figma has its background baked in
+// (rule 15), so a cutout would draw a black rectangle over the footage.
+export function PhoneOutline({ x, y, w, h, stroke = 'rgba(255,255,255,.9)' }) {
+  const r = w * 0.15
+  return (
+    <div style={{ position: 'absolute', left: x, top: y, width: w, height: h,
+                  border: `${Math.max(2, w * 0.011)}px solid ${stroke}`,
+                  borderRadius: r, pointerEvents: 'none' }}>
+      <div style={{ position: 'absolute', top: h * 0.018, left: '50%',
+                    transform: 'translateX(-50%)', width: w * 0.42, height: h * 0.022,
+                    borderRadius: 99, background: stroke }} />
     </div>
   )
 }

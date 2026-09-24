@@ -1,246 +1,263 @@
+import { Fragment } from 'react'
+
 import Frame from '@/components/Frame'
 import Carousel from '@/components/Carousel'
 import SectionRail from '@/components/SectionRail'
 import MotionDriver from '@/components/MotionDriver'
-import { T, Rect, Img, Shot, Cover, Band, MediaBand, Scrim, Seam, Icon, BrandIcon } from '@/components/Nodes'
+import { T, Rect, Img, Shot, Plate, PhoneOutline, Cover, Band, MediaBand } from '@/components/Nodes'
 import { slots } from '@/lib/clips'
 import S from '@/lib/styles'
-import { PEAK as G, PAD_LG, PAD_SM, PARA_GAP, CARD_GAP, META_GAP, META_VAL, FOOT_GAP, under }
-  from '@/lib/grid'
-
-import { Fragment } from 'react'
+import { PEAK as G } from '@/lib/grid'
 import * as C from '@/lib/peak-copy'
 
-const H = 14866
-const SCRIM = true
+// Rebuilt to Manav's new frame. Band stops and the x-grid are measured off that
+// export; the type ramp is the existing one, nudged to the sizes it draws.
+//
+// The page is three quarters black now and about a third of the words. It also
+// no longer carries the purple photo, the lime card or the two-phone social
+// card - see the sections below for what replaced each.
+const H = 19591
 
-
-// drop a clip or a still at public/media/peak-<name>.* - see lib/clips.js
 const V = slots('peak')
 
-// Real marks, from lib/brand-icons.js. Health Connect rather than Google Fit:
-// the Fit APIs are deprecated and only supported to the end of 2026, and
-// Health Connect is what an Android app reads from now.
-const INTEGRATIONS = [
-  { label: 'Hevy',           icon: 'hevy' },
-  { label: 'Health Connect', icon: 'google' },
-  { label: 'Apple Health',   icon: 'apple' },
-  { label: 'Strava',         icon: 'strava' },
-]
+// --- bands, measured off the export -----------------------------------------
+const HERO_H  = 1022
+const DARK    = '#141419'          // the Problems / catalog ground
+const BLACK    = '#000000'
+const WHITE    = '#FFFFFF'
+const GREY     = '#F5F5F7'
 
-// Sampled every 5% down the band in the export; both gradients are perfectly
-// uniform horizontally, so a plain vertical ramp reproduces them exactly.
-const CORAL = 'linear-gradient(180deg,#E65342 0%,#E7594F 5%,#E86262 10%,#E86A75 15%,#E97286 20%,#E97A96 25%,#EA82A2 30%,#EB88A7 35%,#EC90AC 40%,#EE98B3 45%,#EFA1B9 50%,#F1ABC1 55%,#F3B7CA 60%,#F5C0D0 65%,#F6C8D6 70%,#F7D1DC 75%,#F9DAE4 80%,#FBE4EB 85%,#FBECF0 90%,#FDF5F8 95%,#FFFEFE 100%)'
-const PURPLE = 'linear-gradient(180deg,#6B00A8 0%,#7B14B6 10%,#8C29C4 20%,#9D3ED4 30%,#AE53E2 40%,#B663E5 50%,#BD73E7 60%,#C583EA 70%,#D4A3F0 80%,#E4C3F6 90%,#F3E3FC 100%)'
+const INTRO_Y = HERO_H,  INTRO_H = 1134   // black, the four opening lines
+const PROB_Y  = 2156,    PROB_H  = 1872   // #141419
+const RSCH_Y  = 4028,    RSCH_H  = 2710   // white
+const FIND_Y  = 6738,    FIND_H  = 2390   // #F5F5F7
+const SOL_Y   = 9128,    SOL_H   = 4880   // black -> #141419
+const SOC1_Y  = 14472,   SOC_H   = 967    // friends band 1
+const SOC2_Y  = 15965                      // friends band 2
+const ADAPT_Y = 16931
+const NEXT_Y  = 18011
+const FOOT_Y  = 19191
 
-// Peak's frames draw the next card peeking past the right edge of the 1900
-// frame, so its tracks run to the edge rather than stopping on the measure.
-const TRACK_W   = 1900 - G.L
-const CARD_STEP = G.W + G.GUT
-const FEAT_W    = 539                 // the narrow feature cards
-const FEAT_STEP = FEAT_W + G.GUT
-const PAD_XS    = 49                  // padding inside a FEAT_W card
-const PADDLE_X  = G.R - 206
+// --- the opening lines ------------------------------------------------------
+// the frame indents the opening lines past the measure, and steps them 220
+const INTRO_X = 501
+const INTRO_1 = 1207, INTRO_STEP = 220
 
-// the four quotes printed on the research card, inside its own padding
-const QSTEP = (G.W - 2 * PAD_LG - 3 * G.GUT) / 4 + G.GUT
-const QCOL  = i => G.L + PAD_LG + i * QSTEP
+// --- problems ---------------------------------------------------------------
+const PB_EYE  = 2387, PB_HEAD = 2454
+const PB_CARD = 2577, PB_CARD_H = 599
+const PB_TWO  = 3198, PB_TWO_H = 599
 
-// the two columns printed on the social card, inside its padding
-const SOC = G.inset(PAD_SM)
+// --- research ---------------------------------------------------------------
+const RS_EYE  = 4221, RS_HEAD = 4284
+const RS_ASIDE = 4325
+const RS_CARD = 4608, RS_CARD_H = 529
+const RS_QUOTE = 5248, RS_WHO = 5411
+const RS_RED  = 5533, RS_RED_BODY = 5732
+const RS_CARD2 = 5829
+const RS_QUOTE2 = 6470, RS_WHO2 = 6633
 
-// --- vertical anchors, each derived from the block above it --------------
-const OV_HEAD = 1003.5
-const OV_P1   = under(OV_HEAD, S.headline, C.overview.headline.length)
-const OV_P2   = under(OV_P1, S.body, C.overview.p1.length, PARA_GAP)
-const OV_META = under(OV_P2, S.body, C.overview.p2.length, META_GAP)
+// --- findings ---------------------------------------------------------------
+const FD_EYE  = 6875, FD_HEAD = 6963
+const FD_TOP  = 7117
+const FD_SHORT = 545, FD_TALL = 1229, FD_LOW = 660   // the masonry shapes
+const FD_WIDE = 8378, FD_WIDE_H = 599
 
-const PB_HEAD = 1826.5
-const PB_BODY = under(PB_HEAD, S.headline, C.problem.headline.length)
+// --- solution ---------------------------------------------------------------
+const SL_HEAD = 9351
+const GLOBE_Y = 9727, GLOBE_H = 767
+const LIFT_HEAD = 10851
+const LIFT_PHONE = 11124, LIFT_PHONE_H = 549
+const LIFT_CAP = 11790
+const CAT_HEAD = 12309, CAT_BODY = 12450
+const CAT_TRACK = 12706, CAT_CARD_H = 739
+const CAT_CAP = 13480
 
-const PC2_Y  = 2712
-const PC2_HD = PC2_Y + 69
-const PC2_BD = under(PC2_HD, S.cardHead, 2, CARD_GAP)
+// --- friendship / adapts / next ---------------------------------------------
+const SOC_HEAD = 14150
+const SOC_MID  = 15660
+const AD_HEAD  = 17130
+const AD_CARD  = 17412, AD_CARD_H = 599
+const WN_HEAD  = 18194
+const WN_TRACK = 18433, WN_CARD_H = 378
+const END_Y    = 18990
 
-const RS_CARD_HD = 3994
-const RS_CARD_BD = under(RS_CARD_HD, S.cardHead, C.research.cardHead.length, CARD_GAP)
+// the rail follows the new bands
+const RAIL = {
+  items: [
+    { label: 'Overview',     x: 126.5, y: 997.5,  to: INTRO_Y },
+    { label: 'Problem',      x: 127.5, y: 1051,   to: PROB_Y },
+    { label: 'Research',     x: 127.5, y: 1104,   to: RSCH_Y },
+    { label: 'Solution',     x: 126.5, y: 1153.5, to: SOL_Y },
+    { label: "What's Next?", x: 126.5, y: 1203.5, to: NEXT_Y },
+  ],
+  natural: 960, stick: 300, height: 270, end: H,
+  dark: [[INTRO_Y, RSCH_Y], [SOL_Y, 14008], [SOC1_Y, SOC1_Y + SOC_H], [SOC2_Y, SOC2_Y + SOC_H]],
+  light: '#5A5A5A', darkInk: '#A9A9A9',
+}
 
-const SOL_HEAD  = 6393.5
-// the bubble clip, full-bleed, where the lime card used to be
-const GLOBE_Y   = 6700
-const GLOBE_H   = 840
-const LIFT_HEAD = 7740.5
-const LIFT_BODY = under(LIFT_HEAD, S.headlineW, C.solution.liftHead.length)
-const CAT_HEAD  = 8820
-const CAT_BODY  = under(CAT_HEAD, S.headlineW, C.solution.catalogHead.length)
-// a card's body starts under however many lines its title ran to
-const FEAT_BODY_Y = titleLines => 558 + titleLines * S.featTitle.lh + 12
-
-// the social section is two full-bleed bands now, inside the same envelope
-// the purple photo used to occupy (10151..11546) so nothing below it moves
-const SOC1_Y = 10151, SOC_H = 560
-const SOC_MID = SOC1_Y + SOC_H            // white gap between the two bands
-const SOC2_Y = 11546 - SOC_H
-const SOC_HEAD = SOC_MID + 96
-
-const AD_LH   = 59.5
-const AD_HEAD = 11770.5
-const AD_BODY = under(AD_HEAD, { lh: AD_LH }, C.adapts.headline.length)
+// two-up and the carousels
+const HALF = G.colW(2)
+const CAT_W = 487, CAT_STEP = 503
+const WN_W = 536, WN_STEP = 568
 
 export default function Peak() {
   return (
-    <Frame height={H} overlay={<SectionRail />}>
+    <Frame height={H} overlay={<SectionRail config={RAIL} />}>
       <MotionDriver />
 
       {/* ---- bands ---- */}
-      {/* The hero clip is Manav's own - a triptych montage. Its poster is a
-          frame lifted from the clip itself rather than the purple photo, so
-          reduced motion gets the same picture and not a different one. */}
-      <Cover y={0} h={832} clip={V('hero')} poster="/media/peak-hero-poster.webp" />
-      <Band y={832}   h={2662} fill="#FFFFFF" />
-      <Band y={3494}  h={1374} fill={CORAL} />
-      <Band y={4868}  h={1163} fill="#FFFFFF" />
-      <Band y={6031}  h={4120} fill="#101010" />
-      {/* the purple photo is gone - the social section is two bands of Manav's
-          own footage now, with white between them for the headline */}
-      <Band y={10151} h={1395} fill="#FFFFFF" />
-      <Band y={11546} h={1343} fill={PURPLE} />
-      {/* the ramp stops at #F3E3FC and white begins: a 29-level step. */}
-      <Seam y={12749} h={140} to={[255, 255, 255]} />
-      <Band y={12889} h={1237} fill="#FFFFFF" />
-      <Band y={14126} h={740}  fill="#F5F5F7" />
+      <Cover y={0} h={HERO_H} clip={V('hero')} poster="/media/peak-hero-poster.webp" />
+      <Band y={INTRO_Y} h={INTRO_H} fill={BLACK} />
+      <Band y={PROB_Y}  h={PROB_H}  fill={DARK} />
+      <Band y={RSCH_Y}  h={RSCH_H}  fill={WHITE} />
+      <Band y={FIND_Y}  h={FIND_H}  fill={GREY} />
+      <Band y={SOL_Y}   h={SOL_H}   fill={BLACK} />
+      {/* the catalog half of the solution sits on the lighter ground */}
+      <Band y={12053} h={14008 - 12053} fill={DARK} />
+      <Band y={14008} h={SOC1_Y - 14008} fill={WHITE} />
+      <Band y={SOC1_Y + SOC_H} h={SOC2_Y - SOC1_Y - SOC_H} fill={WHITE} />
+      <Band y={SOC2_Y + SOC_H} h={FOOT_Y - SOC2_Y - SOC_H} fill={WHITE} />
+      <Band y={FOOT_Y} h={H - FOOT_Y} fill={GREY} />
 
-      {/* the section rail is rendered by <Frame overlay>, outside the scaled
-          canvas, so it can be pinned with native sticky */}
-
-      {/* ---- overview ---- */}
-      <T x={G.L} y={OV_HEAD} s="headline" lines={C.overview.headline} rv="lines" block="ov" />
-      <T x={G.L} y={OV_P1}   s="body"     lines={C.overview.p1} rv="rise" block="ov" at={240} />
-      <T x={G.L} y={OV_P2}   s="body"     lines={C.overview.p2} rv="rise" block="ov" at={330} />
-
-      {C.overview.meta.map((m, i) => (
-        <Fragment key={m.label}>
-          <T x={G.col(i, 3)} y={OV_META} s="metaLabel" lines={m.label}
-             rv="rise" block="ov" at={420 + i * 50} />
-          <T x={G.col(i, 3)} y={OV_META + META_VAL} s="metaValue" lines={m.values}
-             rv="rise" block="ov" at={420 + i * 50} />
-        </Fragment>
+      {/* ---- the opening, four lines on black ---- */}
+      {C.intro.map((lines, i) => (
+        <T key={i} x={INTRO_X} y={INTRO_1 + i * INTRO_STEP} s="introW" lines={lines}
+           rv="lines" block={`in${i}`} />
       ))}
 
-      {/* ---- problem ---- */}
-      <T x={G.C} y={PB_HEAD} w={1300} align="center" s="headline" lines={C.problem.headline} rv="lines" block="pb" />
-      <T x={G.C} y={PB_BODY} w={1300} align="center" s="body"     lines={C.problem.body} rv="rise" block="pb" at={280} />
+      {/* ---- problems ---- */}
+      <T x={G.C} y={PB_EYE} w={800} align="center" s="eyebrowD" lines={C.problem.eyebrow}
+         rv="rise" block="pb" />
+      <T x={G.C} y={PB_HEAD} w={1500} align="center" s="headlineW" lines={C.problem.headline}
+         rv="lines" block="pb" at={120} sv="drift" />
 
-      <Rect x={G.L} y={2094} w={G.W} h={599} fill="#F5F5F7" rv="card" block="pc1" />
-      {/* The same paragraph is printed above this card and again on it. Checked
-          against the export: the frame really does draw it twice, so it is
-          reproduced. Manav's call whether to cut one. */}
-      <T x={G.C} y={2215} w={1000} align="center" s="body" lines={C.problem.body} rv="card" block="pc1" />
-      {[0, 1, 2].map(i => (
-        <Img key={i} x={G.C - 66.5 + (i - 1) * 200} y={2378} w={133} h={267}
-             src="/figma/cs-phone-light-a.png" alt="" rv="card" block="pc1" />
-      ))}
-
-      {C.problem.cards.map((card, i) => (
+      <Plate x={G.L} y={PB_CARD} w={G.W} h={PB_CARD_H} clip={V('problem')}
+             rv="card" block="pbc" />
+      {C.problem.cards.map((lines, i) => (
         <Fragment key={i}>
-          <Rect x={G.col(i, 2)} y={PC2_Y} w={G.colW(2)} h={709} fill="#F5F5F7"
-                rv="card" block="pc2" at={i * 130} />
-          <T x={G.col(i, 2) + PAD_SM} y={PC2_HD} s="cardHead" lines={card.head}
-             rv="card" block="pc2" at={i * 130} />
-          <T x={G.col(i, 2) + PAD_SM} y={PC2_BD} s="cardBody" lines={card.body}
-             rv="card" block="pc2" at={i * 130} />
-          {/* not in the Figma: an icon apiece in the empty lower half of each card */}
-          <Icon x={G.col(i, 2) + PAD_SM} y={3173} size={112} stroke={7.5}
-                name={['form', 'missed'][i]} rv="card" block="pc2" at={i * 130} />
+          <Rect x={G.col(i, 2)} y={PB_TWO} w={HALF} h={PB_TWO_H} r={20} fill="#050505"
+                rv="card" block="pbc2" at={i * 120} />
+          <T x={G.col(i, 2) + 44} y={PB_TWO + 46} s="cardHeadW" lines={lines}
+             rv="card" block="pbc2" at={i * 120} />
         </Fragment>
       ))}
 
-      {/* ---- research ---- */}
-      <T x={G.C} y={3725.5} w={1300} align="center" s="headlineW" lines={C.research.headline} rv="lines" block="rs" />
-      <Rect x={G.L} y={3920} w={G.W} h={886} fill="#FFFFFF" rv="card" block="rsc" />
-      {C.research.cardHead.map((l, i) => (
-        <T key={i} x={G.C} y={RS_CARD_HD + i * S.cardHead.lh} w={1100} align="center"
-           s="cardHead" lines={[l]} rv="card" block="rsc" />
-      ))}
-      <T x={G.C} y={RS_CARD_BD} w={1100} align="center" s="cardBody" lines={C.research.cardBody} rv="card" block="rsc" />
+      {/* ---- user research ---- */}
+      <T x={G.L} y={RS_EYE} s="eyebrow" lines={C.research.eyebrow} rv="rise" block="rs" />
+      <T x={G.L} y={RS_HEAD} s="headline" lines={C.research.headline}
+         rv="lines" block="rs" at={120} />
+      <T x={G.col(1, 2) + 130} y={RS_ASIDE} s="aside" lines={C.research.aside}
+         rv="rise" block="rs" at={300} />
+
       {C.research.quotes.map((q, i) => (
         <Fragment key={i}>
-          <T x={QCOL(i)} y={4311.5} s="quoteBody" lines={q} rv="card" block="rsc" />
-          <T x={QCOL(i)} y={4648}   s="quoteName" lines={C.research.name} rv="card" block="rsc" />
-          <T x={QCOL(i)} y={4674.5} s="quoteRole" lines={C.research.role} rv="card" block="rsc" />
+          <Plate x={G.col(i, 2)} y={RS_CARD} w={HALF} h={RS_CARD_H}
+                 clip={V(`voice${i + 1}`)} rv="card" block="rq" at={i * 120} />
+          <T x={G.col(i, 2)} y={RS_QUOTE} s="pkQuote" lines={q.lines}
+             rv="card" block="rq" at={i * 120} />
+          <T x={G.col(i, 2)} y={RS_WHO} s="pkWho" lines={q.who}
+             rv="card" block="rq" at={i * 120} />
         </Fragment>
       ))}
 
-      {/* ---- where smart-tracking stops ---- */}
-      <T x={G.L} y={4979.5} s="headline" lines={C.ceiling.headline} rv="lines" block="ce" />
-      {/* Peak's frames draw the next card peeking past the right edge, so unlike
-          the other three these tracks run to the edge of the frame rather than
-          stopping on the content measure. */}
-      <Carousel x={G.L} y={5114} w={TRACK_W} h={755} inner={G.W + CARD_STEP} step={CARD_STEP}
-                paddleY={5906.5} paddleX={PADDLE_X}>
-        <Rect x={0} y={0} w={G.W} h={755} fill="#F5F5F7" rv="card" block="ce" at={240} />
-        <T x={PAD_LG} y={97} s="cardHead" lines={C.ceiling.cardHead} rv="card" block="ce" at={240} />
-        {[0, 1, 2].map(i => (
-          <Img key={i} x={G.W / 2 - 74 + (i - 1) * 234} y={343} w={148} h={301}
-               src="/figma/cs-phone-light-b.png" alt="" rv="card" block="ce" at={240} />
-        ))}
-        <Rect x={CARD_STEP} y={0} w={G.W} h={755} fill="#FEFEFE" />
-      </Carousel>
+      <T x={G.C} y={RS_RED} w={1500} align="center" s="headline" lines={C.research.redditHead}
+         rv="lines" block="rr" sv="drift" />
+      <T x={G.C} y={RS_RED_BODY} w={900} align="center" s="aside" lines={C.research.redditBody}
+         rv="rise" block="rr" at={260} />
 
-      {/* ---- solution (black) ---- */}
-      {C.solution.headline.map((l, i) => (
-        <T key={i} x={G.C} y={SOL_HEAD + i * S.headlineLime.lh} w={1300} align="center"
-           s="headlineLime" color={i === 0 ? '#FFFFFF' : undefined} lines={[l]}
-           rv="lines" block="sol" at={i * 110} sv="drift" />
+      {C.research.redditQuotes.map((q, i) => (
+        <Fragment key={i}>
+          <Plate x={G.col(i, 2)} y={RS_CARD2} w={HALF} h={RS_CARD_H}
+                 clip={V(`reddit${i + 1}`)} rv="card" block="rq2" at={i * 120} />
+          <T x={G.col(i, 2)} y={RS_QUOTE2} s="pkQuote" lines={q.lines}
+             rv="card" block="rq2" at={i * 120} />
+          <T x={G.col(i, 2)} y={RS_WHO2} s="pkWho" lines={q.who}
+             rv="card" block="rq2" at={i * 120} />
+        </Fragment>
       ))}
 
-      {/* The lime card is gone - Manav's new frame runs his bubble clip
-          full-bleed here instead, on the black the section already sits on. */}
-      <MediaBand y={GLOBE_Y} h={GLOBE_H} clip={V('globe')} fill="#000000"
+      {/* ---- research findings, a masonry of three ---- */}
+      <T x={G.L} y={FD_EYE} s="eyebrow" lines={C.findings.eyebrow} rv="rise" block="fd" />
+      <T x={G.L} y={FD_HEAD} s="headline" lines={C.findings.headline}
+         rv="lines" block="fd" at={120} />
+
+      {/* left column: a short card over a lower one; right column: one tall */}
+      <Rect x={G.col(0, 2)} y={FD_TOP} w={HALF} h={FD_SHORT} r={20} fill={WHITE}
+            rv="card" block="fdc" />
+      <T x={G.col(0, 2) + 44} y={FD_TOP + 52} s="findCard" lines={C.findings.cards[0]}
+         rv="card" block="fdc" />
+
+      <Rect x={G.col(1, 2)} y={FD_TOP} w={HALF} h={FD_TALL} r={20} fill={WHITE}
+            rv="card" block="fdc" at={120} />
+      <T x={G.col(1, 2) + 44} y={FD_TOP + 52} s="findCard" lines={C.findings.cards[1]}
+         rv="card" block="fdc" at={120} />
+
+      <Rect x={G.col(0, 2)} y={FD_TOP + FD_SHORT + 24} w={HALF} h={FD_LOW} r={20} fill={WHITE}
+            rv="card" block="fdc" at={240} />
+      <T x={G.col(0, 2) + 44} y={FD_TOP + FD_SHORT + 76} s="findCard" lines={C.findings.cards[2]}
+         rv="card" block="fdc" at={240} />
+
+      <Rect x={G.L} y={FD_WIDE} w={G.W} h={FD_WIDE_H} r={20} fill={WHITE}
+            rv="card" block="fdw" />
+      <T x={G.C} y={FD_WIDE + 264} w={1100} align="center" s="ceiling" lines={C.findings.ceiling}
+         rv="card" block="fdw" />
+
+      {/* ---- solution ---- */}
+      {C.solution.headline.map((l, i) => (
+        <T key={i} x={G.C} y={SL_HEAD + i * S.solHead.lh} w={1500} align="center"
+           s="solHead" color={i === 0 ? '#FFFFFF' : '#C7D13D'} lines={[l]}
+           rv="lines" block="sl" at={i * 110} sv="drift" />
+      ))}
+
+      <MediaBand y={GLOBE_Y} h={GLOBE_H} clip={V('globe')} fill={BLACK}
                  poster="/media/peak-globe-poster.webp" />
 
-      {C.solution.liftHead.map((l, i) => (
-        <T key={i} x={G.C} y={LIFT_HEAD + i * S.headlineW.lh} w={1300} align="center"
-           s="headlineW" lines={[l]} rv="lines" block="lift" at={i * 110} />
-      ))}
-      <T x={G.C} y={LIFT_BODY} w={1300} align="center" s="bodyW" lines={C.solution.liftBody} rv="rise" block="lift" at={330} />
-      {/* scroll-driven rather than triggered - see data-sv in globals.css */}
-      {[0, 1].map(i => (
-        <Shot key={i} x={G.colC(i, 2) - 135} y={8128} w={270} h={549}
-              src="/figma/cs-phone-dark-big.png" clip={V(['lift-left', 'lift-right'][i])}
-              alt="" sv="tilt" />
-      ))}
-
-      {C.solution.catalogHead.map((l, i) => (
-        <T key={i} x={G.L} y={CAT_HEAD + i * S.headlineW.lh} s="headlineW" lines={[l]}
-           rv="lines" block="cat" at={i * 110} />
+      <T x={G.C} y={LIFT_HEAD} w={1500} align="center" s="liftHead" lines={C.solution.liftHead}
+         rv="lines" block="lf" />
+      {C.solution.liftCaps.map((cap, i) => (
+        <Fragment key={i}>
+          <Shot x={G.colC(i, 2) - 135} y={LIFT_PHONE} w={270} h={LIFT_PHONE_H}
+                src="/figma/cs-phone-dark-big.png" clip={V(['lift-left', 'lift-right'][i])}
+                alt="" sv="tilt" />
+          <T x={G.colC(i, 2) - 170} y={LIFT_CAP} s="liftCap"
+             lines={cap.lines} rv="rise" block="lf" at={260 + i * 120} />
+        </Fragment>
       ))}
 
-      <T x={G.L} y={CAT_BODY} s="cardBody" color="#A2A2A2" lines={C.solution.catalogBody}
-         rv="rise" block="cat" at={240} />
+      <T x={G.L} y={CAT_HEAD} s="headlineW" lines={C.solution.catalogHead}
+         rv="lines" block="ct" />
+      <T x={G.L} y={CAT_BODY} s="catBody" lines={C.solution.catalogBody}
+         rv="rise" block="ct" at={240} />
 
-      <Carousel x={G.L} y={9140} w={TRACK_W} h={739} inner={FEAT_W + 3 * FEAT_STEP} step={FEAT_STEP}
-                paddleY={9997} paddleX={PADDLE_X} depth>
+      {/* the caption sits UNDER each card in the new frame, not printed on it */}
+      <Carousel x={G.L} y={CAT_TRACK} w={1900 - G.L} h={CAT_CARD_H + 300}
+                inner={CAT_W + 3 * CAT_STEP} step={CAT_STEP}
+                paddleY={CAT_TRACK + CAT_CARD_H + 250} paddleX={G.R - 206}>
         {C.solution.cards.map((c, i) => {
-          const left = i * FEAT_STEP
-          const at = 300 + i * 120
+          const left = i * CAT_STEP
+          const at = 200 + i * 110
           return (
             <Fragment key={i}>
-              <Rect x={left} y={0} w={FEAT_W} h={739} fill="#000000" rv="card" block="cat" at={at} data-depth={i} />
-              <Img x={left + (FEAT_W - 170) / 2} y={65} w={170} h={345} src="/figma/cs-phone-darkcard.png" alt="" rv="card" block="cat" at={at} data-depth={i} />
-              <T x={left + PAD_XS} y={558} s="featTitle" lines={c.title} rv="card" block="cat" at={at} data-depth={i} />
-              <T x={left + PAD_XS} y={FEAT_BODY_Y(c.title.length)} s="featBody" lines={c.body}
-                 rv="card" block="cat" at={at} data-depth={i} />
+              <Rect x={left} y={0} w={CAT_W} h={CAT_CARD_H} r={20} fill="#050505"
+                    rv="card" block="ctc" at={at} />
+              <Img x={left + (CAT_W - 170) / 2} y={140} w={170} h={345}
+                   src="/figma/cs-phone-darkcard.png" alt=""
+                   rv="card" block="ctc" at={at} />
+              <T x={left} y={CAT_CARD_H + 45} s="catRest" lines={c.lines} w={CAT_W}
+                 lead={{ text: c.lead, color: '#FFFFFF', weight: 600 }}
+                 rv="card" block="ctc" at={at} />
             </Fragment>
           )
         })}
       </Carousel>
 
-      {/* ---- social ----
-          Two full-bleed bands of Manav's own footage with a line of white type
-          over each, and the headline on white between them. Each band carries a
-          wash because this is the one place white type sits on a busy photo and
-          the footage is bright in patches. */}
+      {/* ---- friendship ---- */}
+      <T x={G.C} y={SOC_HEAD} w={1200} align="center" s="headline" color="#E8842A"
+         lines={[C.social.head[0]]} rv="lines" block="sh" />
+      <T x={G.C} y={SOC_HEAD + S.headline.lh} w={1200} align="center" s="headline"
+         lines={[C.social.head[1]]} rv="lines" block="sh" at={110} />
+
       {[0, 1].map(i => {
         const b = C.social.bands[i]
         const y = i === 0 ? SOC1_Y : SOC2_Y
@@ -249,67 +266,55 @@ export default function Peak() {
           <Fragment key={i}>
             <MediaBand y={y} h={SOC_H} clip={V(`friends${i + 1}`)} fill="#101010"
                        poster={`/media/peak-friends${i + 1}-poster.webp`}
-                       over={'linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3)),'
+                       over={'linear-gradient(rgba(0,0,0,.26),rgba(0,0,0,.26)),'
                              + `linear-gradient(${right ? 270 : 90}deg,`
                              + 'rgba(0,0,0,.5) 0%,rgba(0,0,0,.22) 45%,rgba(0,0,0,0) 80%),'
                              + 'linear-gradient(90deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 22%)'} />
-            <T x={right ? G.R : G.L} y={y + (SOC_H - S.headlineW.lh * b.lines.length) / 2}
+            {/* the frame draws a stroked phone here, not a device shot */}
+            <PhoneOutline x={right ? 311 : 1316} y={y + (SOC_H - 600) / 2}
+                          w={300} h={600} stroke="rgba(6,6,6,.9)" />
+            <T x={right ? G.R : G.L} y={y + (SOC_H - S.bandHead.lh * b.lines.length) / 2}
                w={right ? 700 : undefined} align={right ? 'right' : 'left'}
-               s="headlineW" lines={b.lines} rv="lines" block={`soc${i}`} />
+               s="bandHead" lines={b.lines} rv="lines" block={`sb${i}`} />
           </Fragment>
         )
       })}
 
-      {/* the headline on the white gap between the two bands */}
-      <T x={G.L} y={SOC_HEAD} s="headline" lines={C.social.headline}
-         accent={{ text: C.social.headlineAccent, color: '#E8842A' }}
-         rv="lines" block="soch" />
+      <T x={G.L} y={SOC_MID} s="headline" lines={C.social.mid}
+         accent={{ text: C.social.midAccent, color: '#E8842A' }}
+         rv="lines" block="sm" />
 
-      {/* ---- adapts (purple gradient) ---- */}
-      <T x={G.C} y={AD_HEAD} w={1300} align="center" lines={C.adapts.headline}
-         s={{ size: 50, weight: 700, lh: AD_LH, color: '#FFFFFF' }} rv="lines" block="ad" sv="drift" />
-      <T x={G.C} y={AD_BODY}   w={1300} align="center" s="bodyW"     lines={C.adapts.body} rv="rise" block="ad" at={340} />
-
-      {/* ---- what it connects to (not in the Figma; Manav's ask) ---- */}
-      <T x={G.C} y={12232} w={900} align="center" s="bodyW" lines="Connects with what you already use"
-         rv="rise" block="int" />
-      {INTEGRATIONS.map((it, i) => {
-        const cx = G.C - (INTEGRATIONS.length - 1) * 150 + i * 300
-        return (
-          <Fragment key={it.label}>
-            <BrandIcon cx={cx} y={12300} name={it.icon}
-                       rv="card" block="int" at={160 + i * 90} />
-            <T x={cx} y={12452} w={280} align="center" s="captionW" lines={it.label}
-               rv="rise" block="int" at={220 + i * 90} />
-          </Fragment>
-        )
-      })}
+      {/* ---- adapts ---- */}
+      <T x={G.C} y={AD_HEAD} w={1400} align="center" s="headline" lines={C.adapts.headline}
+         rv="lines" block="ad" sv="drift" />
+      <Plate x={G.L} y={AD_CARD} w={G.W} h={AD_CARD_H} clip={V('adapts')}
+             rv="card" block="adc" />
 
       {/* ---- what's next ---- */}
-      <T x={G.L} y={13111.5} lines={C.whatsNext.headline}
-         s={{ size: 50, weight: 700, lh: 60, color: '#1C1C1E' }} rv="lines" block="wn" />
-      <Carousel x={G.L} y={13379} w={TRACK_W} h={378} inner={FEAT_W + 2 * FEAT_STEP} step={FEAT_STEP}
-                paddleY={13801.5} paddleX={PADDLE_X}>
-        {[0, 1, 2].map(i => {
-          const left = i * FEAT_STEP
-          const at = 340 + i * 120
+      <T x={G.L} y={WN_HEAD} s="headline" lines={C.whatsNext.headline}
+         rv="lines" block="wn" />
+      <Carousel x={G.L} y={WN_TRACK} w={1900 - G.L} h={WN_CARD_H} inner={WN_W + 2 * WN_STEP}
+                step={WN_STEP} paddleY={WN_TRACK + WN_CARD_H + 40} paddleX={G.R - 206}>
+        {C.whatsNext.cards.map((c, i) => {
+          const left = i * WN_STEP
+          const at = 200 + i * 110
           return (
             <Fragment key={i}>
-              <Rect x={left} y={0} w={FEAT_W} h={378} fill="#F5F5F7" rv="card" block="wn" at={at} />
-              <T x={left + PAD_XS} y={182} s="nextTitle" lines={C.whatsNext.cards[i].title} rv="card" block="wn" at={at} />
-              <T x={left + PAD_XS} y={233} s="nextBody"  lines={C.whatsNext.cards[i].body} rv="card" block="wn" at={at} />
+              <Rect x={left} y={0} w={WN_W} h={WN_CARD_H} r={20} fill={GREY}
+                    rv="card" block="wnc" at={at} />
+              <T x={left + 36} y={193} s="nextTitle" lines={c.title} rv="card" block="wnc" at={at} />
+              <T x={left + 36} y={241} s="nextBody" lines={c.body} rv="card" block="wnc" at={at} />
             </Fragment>
           )
         })}
       </Carousel>
 
-      {/* ---- end of the case study ----
-          Nothing is drawn in this band in the Figma; this is Manav's ask. */}
-      <T x={G.L} y={14330} s="footLink" lines="View next project"
+      {/* ---- end ---- */}
+      <T x={G.L} y={END_Y} s="footLink" lines={C.end.next}
          as="a" href="/work/times-media" rv="lines" block="end" />
-      <T x={G.L} y={14330 + FOOT_GAP} s="footLinkAlt" lines="Contact"
+      <T x={G.L} y={END_Y + 100} s="footLinkAlt" lines={C.end.contact}
          as="a" href="mailto:shah.manavd@northeastern.edu" rv="lines" block="end" at={140} />
-      <T x={G.C} y={14806} w={900} align="center" s="egg" className="egg"
+      <T x={G.C} y={H - 240} w={900} align="center" s="egg" className="egg"
          lines="god bless the white monster" rv="rise" block="end" at={520} />
     </Frame>
   )
