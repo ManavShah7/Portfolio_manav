@@ -76,6 +76,16 @@ export default function MotionDriver() {
       }
     }
 
+    // A block that is already above the viewport has been read past, so it
+    // belongs in its finished state - no delays, no performance.
+    const snap = members => {
+      for (const el of members) {
+        el.style.transitionDelay = '0ms'
+        el.querySelectorAll('.w').forEach(w => { w.style.transitionDelay = '0ms' })
+        el.classList.add('in')
+      }
+    }
+
     const io = new IntersectionObserver(entries => {
       for (const e of entries) {
         const members = leads.get(e.target)
@@ -84,11 +94,49 @@ export default function MotionDriver() {
         // only reset when the block has dropped back BELOW the viewport;
         // leaving off the top means you have simply scrolled past it
         else if (e.boundingClientRect.top > 0) reset(members)
+        // ...and if it is off the TOP, make sure it is shown. A fast flick can
+        // carry a block from below the trigger to above the viewport inside one
+        // frame, so the observer never once sees it intersecting and the
+        // entrance never fires. Without this the content stays at opacity 0
+        // permanently - 44 elements on this page, measured.
+        else snap(members)
       }
     }, { rootMargin: `0px 0px -${Math.round((1 - TRIGGER) * 100)}% 0px` })
 
     leads.forEach((_, lead) => io.observe(lead))
-    return () => io.disconnect()
+
+    // The safety net.
+    //
+    // IntersectionObserver only reports a THRESHOLD CROSSING. Flick the page
+    // hard enough and a block goes from below the trigger to above the viewport
+    // inside one frame: the ratio reads 0 before and 0 after, nothing crossed,
+    // and no entry is ever delivered - so the entrance never fires and the copy
+    // sits at opacity 0 for good. Measured at 44 elements on /work/peak.
+    //
+    // So once scrolling stops, sweep: anything already above the fold is shown
+    // outright. This is not per-frame work (rule 7) - it runs when the scroll
+    // settles, and only touches blocks that are in the wrong state.
+    let t
+    const sweep = () => {
+      for (const [lead, members] of leads) {
+        if (members.every(el => el.classList.contains('in'))) continue
+        const top = lead.getBoundingClientRect().top
+        // read past already - just show it
+        if (top <= 0) snap(members)
+        // on screen but the observer missed it - let it perform properly
+        else if (top < innerHeight * TRIGGER) { restage(members); play(members) }
+      }
+    }
+    const onScroll = () => { clearTimeout(t); t = setTimeout(sweep, 140) }
+    addEventListener('scroll', onScroll, { passive: true })
+    // and once on load, for anyone who arrives deep-linked or restores a scroll
+    t = setTimeout(sweep, 400)
+
+    return () => {
+      io.disconnect()
+      removeEventListener('scroll', onScroll)
+      clearTimeout(t)
+    }
   }, [])
   return null
 }

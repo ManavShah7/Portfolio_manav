@@ -91,7 +91,10 @@ Rules that are easy to break by accident:
 19. **The iPad's reveal is scroll-driven with `animation-timeline: view()`**, not
     a scroll listener - so it runs off the main thread and rule 7 still holds.
     Browsers without it get the finished state, which is just the iPad sitting
-    there, and `prefers-reduced-motion` gets the same.
+    there, and `prefers-reduced-motion` gets the same. **But see rule 22: a view
+    timeline is measured pre-transform, so its range is only correct at exactly
+    1900px wide.** Use `entry 0% exit 100%` ranges, which survive the distortion;
+    short `entry x% cover y%` ranges collapse towards zero as the scale drops.
 
 20. **There are two motion systems and they must not overlap on one element.**
     `data-rv` is trigger-based (IntersectionObserver, one-shot with rewind);
@@ -107,6 +110,24 @@ Rules that are easy to break by accident:
     frames use it, so they leave their block. Anything printed ON a card still
     has to share the card's `rv` and `at` (rule 8) - which is why the tablet on
     the Navi card did not get one.
+
+22. **Anything measured against the scroll port is measured PRE-TRANSFORM.**
+    Rule 6 covers `sticky`/`fixed`; `animation-timeline: view()` has the same
+    flaw for the same reason. Measured: a sticky band injected into the canvas
+    pins correctly at 1900px (scale 1) and **never pins at all** at 1512 or 1280.
+    A `view()` range of `entry 4% cover 38%` is active over 530px of scroll at
+    scale .8 and **0px** at scale .67. There is no fix inside the canvas - pinned
+    things go through `<Frame overlay>`, outside the transform.
+23. **A fast flick can leave content invisible for good, and IntersectionObserver
+    will not tell you.** IO reports a threshold CROSSING; scroll far enough in one
+    frame and a block goes from below the trigger to above the viewport with the
+    ratio reading 0 both times, so no entry is delivered, the entrance never
+    fires, and `[data-rv="rise"]` sits at `opacity:0` permanently. It was 44
+    elements on /work/peak and 36 on /work/times-media - whole overviews, gone.
+    `MotionDriver` now sweeps once the scroll settles (not per frame, so rule 7
+    holds): anything above the fold is snapped to its finished state, anything on
+    screen that the observer missed is played properly. `scripts/flick-check.mjs`
+    asserts nothing is left invisible after a flick, and after a rewind-and-flick.
 
 The section rail, the scroll-triggered motion, the progressive-blur scrim, the
 seam softeners, the paddle chevrons, the card icons, the integrations row and

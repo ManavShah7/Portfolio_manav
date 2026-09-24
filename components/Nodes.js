@@ -21,7 +21,7 @@ function rvProps(rv, block, at, sv) {
 }
 
 export function T({ x, y, lines, s, align = 'left', w, color, className, style,
-                    as: Tag = 'div', rv, block, at, sv, ref, ...rest }) {
+                    accent, as: Tag = 'div', rv, block, at, sv, ref, ...rest }) {
   const st = typeof s === 'string' ? S[s] : s
   const first = Array.isArray(lines) ? lines[0] : lines
   const rows = Array.isArray(lines) ? lines : [lines]
@@ -42,11 +42,20 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
   return (
     <Tag ref={ref} className={`node${className ? ' ' + className : ''}`} style={box}
          {...rvProps(rv, block, at, sv)} {...rest}>
-      {rows.map((l, i) => rv === 'lines'
-        // .ln clips, .w slides up from under it. The padding/margin pair keeps
-        // the clip box off the glyphs without moving the layout by a hair.
-        ? <span className="ln" key={i}><span className="w">{l}</span></span>
-        : <span key={i}>{l}</span>)}
+      {rows.map((l, i) => {
+        // `accent` colours a trailing phrase on the LAST line - "Push your
+        // friend and grow together." Appending it cannot move anything: ink
+        // metrics are taken from line 0, and the phrase sits inline after the
+        // text it follows rather than being positioned.
+        const body = accent && i === rows.length - 1
+          ? <>{l}<span style={{ color: accent.color }}>{accent.text}</span></>
+          : l
+        return rv === 'lines'
+          // .ln clips, .w slides up from under it. The padding/margin pair keeps
+          // the clip box off the glyphs without moving the layout by a hair.
+          ? <span className="ln" key={i}><span className="w">{body}</span></span>
+          : <span key={i}>{body}</span>
+      })}
     </Tag>
   )
 }
@@ -197,14 +206,23 @@ export function IPad({ x, y, w, h, src, screen, clip, alt = '' }) {
 // green one ends near-white under a dark caption and the pink one has to meet
 // the white band below without a step. The wash is hidden under reduced motion
 // too, or it would fade a ramp that already fades.
-export function MediaBand({ y, h, clip, fill, over, className }) {
+// `poster` is the still the band falls back to. It hangs on the PARENT as a
+// background, never on the <video>, because prefers-reduced-motion hides
+// .bandVideo and would otherwise leave a hole (CLAUDE.md rule 16).
+// `eager` is only for a clip above the fold: everything else is metadata-only
+// until it is close, or four autoplaying bands are a 40MB page load.
+export function MediaBand({ y, h, clip, fill, over, className, poster, eager }) {
   if (!clip) return <Band y={y} h={h} fill={fill} className={className} />
+  const still = poster
+    ? `url(${poster}) center/1900px ${h}px no-repeat`
+    : fill
   return (
     <div className={`band${className ? ' ' + className : ''}`}
-         style={{ top: y, height: h, background: fill }}>
+         style={{ top: y, height: h, background: still }}>
       {clip.video
-        ? <video className="bandVideo" src={clip.src}
-                 autoPlay muted loop playsInline preload="auto" />
+        ? <video className="bandVideo" src={clip.src} poster={poster}
+                 autoPlay muted loop playsInline
+                 preload={eager ? 'auto' : 'metadata'} />
         : <div className="bandVideo"
                style={{ background: `url(${clip.src}) center/cover no-repeat` }} />}
       {over && <div className="bandWash" style={{ background: over }} />}

@@ -66,12 +66,22 @@ const RS_CARD_HD = 3994
 const RS_CARD_BD = under(RS_CARD_HD, S.cardHead, C.research.cardHead.length, CARD_GAP)
 
 const SOL_HEAD  = 6393.5
+// the bubble clip, full-bleed, where the lime card used to be
+const GLOBE_Y   = 6700
+const GLOBE_H   = 840
 const LIFT_HEAD = 7740.5
 const LIFT_BODY = under(LIFT_HEAD, S.headlineW, C.solution.liftHead.length)
-const CAT_HEAD  = 8907.5
+const CAT_HEAD  = 8820
+const CAT_BODY  = under(CAT_HEAD, S.headlineW, C.solution.catalogHead.length)
+// a card's body starts under however many lines its title ran to
+const FEAT_BODY_Y = titleLines => 558 + titleLines * S.featTitle.lh + 12
 
-const CAP_Y  = 11091.5
-const CAP_BD = CAP_Y + 44.5
+// the social section is two full-bleed bands now, inside the same envelope
+// the purple photo used to occupy (10151..11546) so nothing below it moves
+const SOC1_Y = 10151, SOC_H = 560
+const SOC_MID = SOC1_Y + SOC_H            // white gap between the two bands
+const SOC2_Y = 11546 - SOC_H
+const SOC_HEAD = SOC_MID + 96
 
 const AD_LH   = 59.5
 const AD_HEAD = 11770.5
@@ -91,13 +101,10 @@ export default function Peak() {
       <Band y={3494}  h={1374} fill={CORAL} />
       <Band y={4868}  h={1163} fill="#FFFFFF" />
       <Band y={6031}  h={4120} fill="#101010" />
-      <MediaBand y={10151} h={1395} clip={V('purple')}
-                 fill="url(/figma/cs-purple-photo.webp) center/1900px 1395px no-repeat" />
+      {/* the purple photo is gone - the social section is two bands of Manav's
+          own footage now, with white between them for the headline */}
+      <Band y={10151} h={1395} fill="#FFFFFF" />
       <Band y={11546} h={1343} fill={PURPLE} />
-      {/* the photo ends on #4A0381 and the ramp below starts on #6B00A8 - a
-          39-level step you can see. Dissolve the last 140px into the ramp's
-          own first colour so the two read as one purple. */}
-      <Seam y={11406} h={140} to={[107, 0, 168]} />
       {/* the ramp stops at #F3E3FC and white begins: a 29-level step. */}
       <Seam y={12749} h={140} to={[255, 255, 255]} />
       <Band y={12889} h={1237} fill="#FFFFFF" />
@@ -187,12 +194,10 @@ export default function Peak() {
            rv="lines" block="sol" at={i * 110} sv="drift" />
       ))}
 
-      <Rect x={G.L} y={6775} w={G.W} h={755} fill="#C7D13D" rv="card" block="lime" />
-      <T x={G.C} y={6872} w={1100} align="center" s="cardHead" color="#010101" lines={C.solution.limeHead} rv="card" block="lime" />
-      {[0, 1, 2].map(i => (
-        <Img key={i} x={G.C - 63 + (i - 1) * 248.5} y={7062} w={126} h={233}
-             src="/figma/cs-phone-lime.png" alt="" rv="card" block="lime" />
-      ))}
+      {/* The lime card is gone - Manav's new frame runs his bubble clip
+          full-bleed here instead, on the black the section already sits on. */}
+      <MediaBand y={GLOBE_Y} h={GLOBE_H} clip={V('globe')} fill="#000000"
+                 poster="/media/peak-globe-poster.webp" />
 
       {C.solution.liftHead.map((l, i) => (
         <T key={i} x={G.C} y={LIFT_HEAD + i * S.headlineW.lh} w={1300} align="center"
@@ -211,41 +216,54 @@ export default function Peak() {
            rv="lines" block="cat" at={i * 110} />
       ))}
 
-      <Carousel x={G.L} y={9095} w={TRACK_W} h={739} inner={FEAT_W + 2 * FEAT_STEP} step={FEAT_STEP}
-                paddleY={9952.5} paddleX={PADDLE_X} depth>
-        {[0, 1, 2].map(i => {
+      <T x={G.L} y={CAT_BODY} s="cardBody" color="#A2A2A2" lines={C.solution.catalogBody}
+         rv="rise" block="cat" at={240} />
+
+      <Carousel x={G.L} y={9140} w={TRACK_W} h={739} inner={FEAT_W + 3 * FEAT_STEP} step={FEAT_STEP}
+                paddleY={9997} paddleX={PADDLE_X} depth>
+        {C.solution.cards.map((c, i) => {
           const left = i * FEAT_STEP
           const at = 300 + i * 120
           return (
             <Fragment key={i}>
               <Rect x={left} y={0} w={FEAT_W} h={739} fill="#000000" rv="card" block="cat" at={at} data-depth={i} />
               <Img x={left + (FEAT_W - 170) / 2} y={65} w={170} h={345} src="/figma/cs-phone-darkcard.png" alt="" rv="card" block="cat" at={at} data-depth={i} />
-              <T x={left + PAD_XS} y={558} s="featTitle" lines={C.solution.cards[i].title} rv="card" block="cat" at={at} data-depth={i} />
-              <T x={left + PAD_XS} y={598} s="featBody"  lines={C.solution.cardBody} rv="card" block="cat" at={at} data-depth={i} />
+              <T x={left + PAD_XS} y={558} s="featTitle" lines={c.title} rv="card" block="cat" at={at} data-depth={i} />
+              <T x={left + PAD_XS} y={FEAT_BODY_Y(c.title.length)} s="featBody" lines={c.body}
+                 rv="card" block="cat" at={at} data-depth={i} />
             </Fragment>
           )
         })}
       </Carousel>
 
-      {/* ---- social (purple photo) ----
-          The one place on the page where white type sits on a busy photo.
-          Apple's progressive blur: backdrop-filter plus a mask whose alpha
-          follows t^1.7, so the blur arrives without a visible edge. Not in the
-          Figma - set SCRIM to false to drop it. */}
-      {SCRIM && <Scrim y={10151} h={433} />}
-      <T x={G.L} y={10395.5} s="headlineW" lines={C.social.headline} rv="lines" block="soc" />
-      <Rect x={G.L} y={10584} w={G.W} h={755} fill="#FFFFFF" rv="card" block="soc" at={260} />
-      {C.social.cols.map((col, i) => (
-        <Fragment key={i}>
-          <Shot x={SOC.colC(i, 2) - 89} y={10669} w={178} h={361} src="/figma/cs-phone-white.png"
-                clip={V(['social-left', 'social-right'][i])} alt="" rv="card" block="soc" at={260} />
-          {/* the box IS the column, so a centred caption cannot overrun the card */}
-          <T x={SOC.colC(i, 2)} y={CAP_Y} w={SOC.colW(2)} align="center" s="caption"
-             lines={col.caption} rv="card" block="soc" at={260} />
-          <T x={SOC.colC(i, 2)} y={CAP_BD} w={SOC.colW(2)} align="center" s="captionBody"
-             lines={C.social.colBody} rv="card" block="soc" at={260} />
-        </Fragment>
-      ))}
+      {/* ---- social ----
+          Two full-bleed bands of Manav's own footage with a line of white type
+          over each, and the headline on white between them. Each band carries a
+          wash because this is the one place white type sits on a busy photo and
+          the footage is bright in patches. */}
+      {[0, 1].map(i => {
+        const b = C.social.bands[i]
+        const y = i === 0 ? SOC1_Y : SOC2_Y
+        const right = b.align === 'right'
+        return (
+          <Fragment key={i}>
+            <MediaBand y={y} h={SOC_H} clip={V(`friends${i + 1}`)} fill="#101010"
+                       poster={`/media/peak-friends${i + 1}-poster.webp`}
+                       over={'linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3)),'
+                             + `linear-gradient(${right ? 270 : 90}deg,`
+                             + 'rgba(0,0,0,.5) 0%,rgba(0,0,0,.22) 45%,rgba(0,0,0,0) 80%),'
+                             + 'linear-gradient(90deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 22%)'} />
+            <T x={right ? G.R : G.L} y={y + (SOC_H - S.headlineW.lh * b.lines.length) / 2}
+               w={right ? 700 : undefined} align={right ? 'right' : 'left'}
+               s="headlineW" lines={b.lines} rv="lines" block={`soc${i}`} />
+          </Fragment>
+        )
+      })}
+
+      {/* the headline on the white gap between the two bands */}
+      <T x={G.L} y={SOC_HEAD} s="headline" lines={C.social.headline}
+         accent={{ text: C.social.headlineAccent, color: '#E8842A' }}
+         rv="lines" block="soch" />
 
       {/* ---- adapts (purple gradient) ---- */}
       <T x={G.C} y={AD_HEAD} w={1300} align="center" lines={C.adapts.headline}
