@@ -23,8 +23,12 @@ function rvProps(rv, block, at, sv) {
 export function T({ x, y, lines, s, align = 'left', w, color, className, style,
                     accent, lead, as: Tag = 'div', rv, block, at, sv, ref, ...rest }) {
   const st = typeof s === 'string' ? S[s] : s
-  const first = Array.isArray(lines) ? lines[0] : lines
   const rows = Array.isArray(lines) ? lines : [lines]
+  // A line may be a string, or an array of segments for mixed weight inside
+  // one line - ['invaluable here. ', { t: 'The system uses', w: 600, c: '#fff' }].
+  // Metrics are taken from the flattened text, so segments cannot move a line.
+  const flat = l => Array.isArray(l) ? l.map(x => (typeof x === 'string' ? x : x.t)).join('') : l
+  const first = flat(rows[0])
   const top = y - inkOffset(first, st)
   const box = { position: 'absolute', top, fontSize: st.size, fontWeight: st.weight,
                 lineHeight: `${st.lh}px`, color: color || st.color, ...style }
@@ -64,10 +68,14 @@ export function T({ x, y, lines, s, align = 'left', w, color, className, style,
         // as one paragraph with only the opening sentence in white. Its last
         // line joins line 0 of the body; any earlier ones are bold lines of
         // their own, so a two-line lead breaks where the frame breaks it.
+        const painted = Array.isArray(l)
+          ? l.map((seg, k) => typeof seg === 'string' ? <span key={k} style={{ display: 'inline' }}>{seg}</span>
+              : <span key={k} style={{ display: 'inline', fontWeight: seg.w, color: seg.c }}>{seg.t}</span>)
+          : l
         const leadStyle = lead && { color: lead.color, fontWeight: lead.weight, display: 'inline' }
         const withLead = lead && i === 0
-          ? <><span style={leadStyle}>{lead.lines[lead.lines.length - 1]}</span>{l}</>
-          : l
+          ? <><span style={leadStyle}>{lead.lines[lead.lines.length - 1]}</span>{painted}</>
+          : painted
         const body = accent && i === rows.length - 1
           // display:inline is not optional - globals.css sets `.node span
           // { display: block }` for the line spans, which would drop the
@@ -156,10 +164,14 @@ export function Shot({ x, y, w, h, src, clip, alt = '', rv, block, at, sv, class
 // the frame shows; drop `peak-<slot>.mp4` and it fills with the clip.
 // The still hangs on the PARENT for the reduced-motion reason in rule 16.
 export function Plate({ x, y, w, h, r = 20, fill = '#050505', clip, poster, alt = '',
-                        rv, block, at, sv, ...rest }) {
+                        bezel, rv, block, at, sv, ...rest }) {
+  // `bezel` draws the device shell the frames put round a screen. It is a
+  // border rather than a PNG because every device PNG here has its background
+  // baked in (rule 15) and would draw a rectangle over a dark band.
   const box = { position: 'absolute', left: x, top: y, width: w, height: h,
                 borderRadius: r, background: poster ? `url(${poster}) center/cover no-repeat` : fill,
-                overflow: 'hidden' }
+                overflow: 'hidden', boxSizing: 'border-box',
+                ...(bezel ? { border: `${bezel}px solid #2A2A2E` } : {}) }
   if (!clip) return <div {...rvProps(rv, block, at, sv)} {...rest} style={box} />
   if (!clip.video) {
     return <div {...rvProps(rv, block, at, sv)} {...rest} role="img" aria-label={alt || undefined}

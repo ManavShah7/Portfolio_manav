@@ -337,3 +337,10 @@ a:focus-visible{outline:2px solid #626262;outline-offset:8px;border-radius:4px}
 html.reduced-motion .pinStage{position:static}
 html.reduced-motion .pinVideo{display:none}
 html.reduced-motion .pinScrim{display:none}
+
+
+/* Media that holds while the copy scrolls past it - components/Pinned.js.
+   In front of the bands, unlike the hero, which sits behind them. */
+.pinHold{position:absolute;left:0;width:100%;z-index:2;pointer-events:none}
+.pinHoldStage{position:sticky;top:0;height:100vh}
+html.reduced-motion .pinHoldStage{position:static}
