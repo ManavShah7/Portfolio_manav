@@ -1,139 +1,56 @@
 # Working in this repo
 
-This is a deliberate 1:1 reproduction of a Figma frame, with motion and a few
-additions layered on top. It is not a design system. Before changing anything,
-read `README.md` — especially *How the layout works* and *Motion*.
+manavshah.me - Manav's portfolio. A normal responsive Next.js site, built to the
+type, layout and motion measured off apple.com product pages. It **replaced** a
+1900px absolutely-positioned canvas that was scaled to fit the window (that
+build is still on `main` in git history). None of the canvas rules apply any
+more: no design px, no ink coordinates, no `<Frame overlay>`, no line arrays
+that must never be joined. Read `README.md` before changing anything.
 
 Rules that are easy to break by accident:
 
-1. **Do not "fix" the inconsistencies - except spacing, which Manav asked to be
-   fixed.** The source frames are hand-placed: cards that should line up don't,
-   column margins change between bands, and Peak centres twenty "centred" blocks
-   on twenty different axes. Everything else about them is still reproduced on
-   purpose, so if something looks wrong, check the export before changing it -
-   but **position comes from `lib/grid.js` now, not from the export**. One grid
-   per page: `L` left column, `W` measure, `C` centre axis, `GUT` gutter, plus a
-   set of vertical gaps. `scripts/grid-check.mjs` measures the rendered page and
-   fails if a card row does not span exactly L..R, or if the dominant left edge
-   or centre axis is not L or C. Multi-column rows are fine - it checks the row,
-   not each card. Because of this the pages no longer diff clean against the
-   exports; `align.py`/`diff.py`/`sweep.py` are for checking type, not position.
-2. **Never join a line array into a single string.** Line breaks are manual in
-   the Figma; letting the browser wrap moves everything below.
-3. **Coordinates are ink positions**, not CSS box positions. Pass the measured
-   top-left of the pixels and let `components/Nodes.js` do the conversion.
-4. **Verify with a screenshot diff**, not by eye. `scripts/align.py` gives you
-   the correction in design px; apply it to the coordinate and re-run.
-   `scripts/sweep.py` must stay clean outside the listed additions.
-5. Design px = export px ÷ 2. The frame is 1900 wide; the exports are 3800.
-6. **`position: sticky` and `position: fixed` do not work as expected inside
-   the canvas** — it is `transform: scale()`d, which makes it the containing
-   block for fixed and makes sticky resolve its offsets unscaled. Render pinned
-   things through `<Frame overlay>`, which puts them outside the transform, and
-   scale their numbers by hand via `useScale()`.
-7. **Do not reposition anything on every scroll frame** — it will visibly lag.
-   Let the compositor do it, and keep scroll listeners for state that changes
-   rarely, like the rail's colour.
-8. **Animate blocks, not elements.** A card and everything printed on it must
-   share one `rv` and one `at`, or the contents slide against the card.
-9. **`backdrop-filter` must be set inline.** From a stylesheet the CSS minifier
-   emits only `-webkit-backdrop-filter`, which Chrome does not support, so the
-   blur silently does nothing.
-10. `node:fs` cannot be imported into `components/Nodes.js` — client components
-    import from it. Do build-time file checks in the page, which is a server
-    component, and pass the result down.
-11. **Whichever element carries the absolute box must carry `data-rv`.** Put it
-    on a wrapper that generates no box (`display: contents`, or an `<a>` round
-    an absolutely positioned child) and the entrance silently does nothing —
-    worse, the block picks that zero-sized element as its trigger and never
-    fires. `scripts/motion-check.mjs` now asserts `box-less parts: 0`.
-12. **After inpainting text out of a background, check that it is gone.** Count
-    the bright pixels left in the text band. A mask aimed at the wrong rows
-    leaves the old text baked in, the live text renders on top of it, and you
-    get a doubled headline that no static screenshot diff will catch — the
-    reduced-motion capture looks identical either way.
+1. **Type comes from the ramp in `app/globals.css`, never from a one-off
+   font-size.** `.t-hero` ... `.t-fine` carry Apple's measured size, leading and
+   tracking, and restate all three at 1068 and 734. Tracking is a function of
+   size; leading depends on the job (reading copy is looser than a label at the
+   same size). A new size is a new rung, added at all three breakpoints.
+2. **Layout is `.wrap` (1260) / `.wrap-text` (980), `.section` padding and the
+   12-column `.grid`.** No absolute positioning for content, no px offsets to
+   line things up.
+3. **Copy stays in `lib/*-copy.js`, as Manav wrote it - line arrays and all.**
+   Headlines render through `<Lines>` (rows on large screens, reflowed on
+   phones); paragraphs go through `para()` and reflow. Do not rewrite his words
+   to fit a layout; flag it instead. `lib/work.js` only quotes the copy files.
+4. **Media is optional everywhere.** `media()` / `slots()` in `lib/clips.js`
+   resolve `public/media/<page>-<slot>.<ext>` at build time and return null if
+   nothing is there; `<Media>` renders nothing for null. Every section must read
+   as finished with its media missing. Never ship an empty placeholder box.
+5. **Every clip needs a still**: `public/media/<name>-poster.webp`, which
+   `media()` picks up. It is shown before the clip loads and instead of it for
+   `prefers-reduced-motion`. ffmpeg here has no WebP encoder - extract a JPEG
+   and convert it with Pillow.
+6. **Two kinds of motion, never both on one element.** `data-reveal` is a
+   one-shot entrance (components/Reveal.js, 150ms stagger inside
+   `data-stagger`). `data-sv` is scroll-linked through `animation-timeline:
+   view()` in CSS. Both set `transform` on the element, so combining them kills
+   the entrance. Put them on parent and child instead.
+7. **No smooth-scroll library.** The page scroll stays native, like apple.com.
+8. **`backdrop-filter` is set inline** (see `GLASS` in components/Chrome.js).
+   From a stylesheet the minifier only emits the `-webkit-` form.
+9. **Reduced motion and no-JS get a finished page.** Hidden states are written
+   as `html.js.no-reduced-motion [data-reveal]`; scroll-linked motion sits
+   inside `@supports (animation-timeline: view())` and `html.no-reduced-motion`.
+10. **Run `node scripts/check.mjs <url>` after any change.** It loads every page
+    at 1440, 1024 and 390 and fails on console errors, failed requests,
+    sideways scroll, text under 12px, and entrances left hidden after a normal
+    read or a flick.
 
-13. **`/work/liveasy` is composed, not reproduced.** There is no Figma frame
-    for it, so there is nothing to diff it against and `scripts/align.py` and
-    `scripts/diff.py` do not apply. It borrows the Lighthouse frame's band
-    stops, grid and vertical rhythm so it reads as one of the set. Its guard is
-    `scripts/fit-check.mjs`, which asserts nothing runs past the frame and
-    nothing printed on a card leaves it.
-14. **Never hand-place a second column.** If two things sit side by side, they
-    come from `G.col(i, n)`, and if they are printed ON a card they come from
-    `G.inset(pad).col(i, n)` so they land inside its padding rather than flush
-    to its edge. Hand-placed columns are what made the frames ragged.
-15. **A device frame has its background baked into the PNG.** There is no alpha
-    in any of them, so `-grey` cutouts (#F5F5F7) only work on grey cards and
-    `-white` ones only on white. Put the wrong one down and you get a visible
-    rectangle around the device.
+<!-- BEGIN:nextjs-agent-rules -->
 
-16. **Media goes in as a whole-frame replacement.** `<Shot>` and `<Cover>` take
-    a `clip` resolved by `lib/clips.js` at build time; drop
-    `public/media/<page>-<slot>.mp4` (or `.png`, `.webp`, `.jpg`) and the frame
-    uses it, drop nothing and it is the placeholder. `scripts/slots.mjs` prints the list with export sizes. Do
-    not try to composite a clip inside a bezel - the screen rectangles in these
-    PNGs defeat every edge test (the macbook wallpaper and the dark phone
-    screens especially), and a few px out looks broken. Both components put the
-    still on the PARENT as a background, because `prefers-reduced-motion` hides
-    the `<video>` and without that there would be a hole where the frame was.
+# This is NOT the Next.js you know
 
-17. **The home page has two measures and that is deliberate.** The About block
-    is on `HOME` in `lib/grid.js` (L 390, 856 across, 17 gutter - the only
-    gutter that gives the three 274-wide cards the frame draws), but the hero
-    above it is still on the frame's own numbers, text at 238 and devices at
-    193, because Manav redrew the page and left them there. `grid-check.mjs`
-    takes a `fromY` for exactly this. Card radius there is **14**, not 20.
-18. **The iPad is the one device whose screen is composited, not replaced.** Its
-    screen really is a flat white rect inside a near-black bezel, so it measures
-    cleanly: 1044.5x651 at (58, 51.5), radius 20. Everything else still uses
-    `<Shot>`.
-19. **The iPad's reveal is scroll-driven with `animation-timeline: view()`**, not
-    a scroll listener - so it runs off the main thread and rule 7 still holds.
-    Browsers without it get the finished state, which is just the iPad sitting
-    there, and `prefers-reduced-motion` gets the same. **But see rule 22: a view
-    timeline is measured pre-transform, so its range is only correct at exactly
-    1900px wide.** Use `entry 0% exit 100%` ranges, which survive the distortion;
-    short `entry x% cover y%` ranges collapse towards zero as the scale drops.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
 
-20. **There are two motion systems and they must not overlap on one element.**
-    `data-rv` is trigger-based (IntersectionObserver, one-shot with rewind);
-    `data-sv` is scroll-driven, tied to scroll position with
-    `animation-timeline: view()`. A CSS animation beats a normal declaration, so
-    `data-sv` on an element that also has `data-rv="rise"` or `"card"` silently
-    kills the entrance - those set a transform on the element itself.
-    `data-rv="lines"` is safe and composes well: it transforms the inner spans,
-    so the outer element is free to drift while its lines swing up.
-    `scripts/sv-check.mjs` asserts all of this, and that reduced motion leaves
-    every one of them alone.
-21. **`sv="tilt"` replaces `rv`, it does not join it.** The standalone showcase
-    frames use it, so they leave their block. Anything printed ON a card still
-    has to share the card's `rv` and `at` (rule 8) - which is why the tablet on
-    the Navi card did not get one.
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
-22. **Anything measured against the scroll port is measured PRE-TRANSFORM.**
-    Rule 6 covers `sticky`/`fixed`; `animation-timeline: view()` has the same
-    flaw for the same reason. Measured: a sticky band injected into the canvas
-    pins correctly at 1900px (scale 1) and **never pins at all** at 1512 or 1280.
-    A `view()` range of `entry 4% cover 38%` is active over 530px of scroll at
-    scale .8 and **0px** at scale .67. There is no fix inside the canvas - pinned
-    things go through `<Frame overlay>`, outside the transform.
-23. **A fast flick can leave content invisible for good, and IntersectionObserver
-    will not tell you.** IO reports a threshold CROSSING; scroll far enough in one
-    frame and a block goes from below the trigger to above the viewport with the
-    ratio reading 0 both times, so no entry is delivered, the entrance never
-    fires, and `[data-rv="rise"]` sits at `opacity:0` permanently. It was 44
-    elements on /work/peak and 36 on /work/times-media - whole overviews, gone.
-    `MotionDriver` now sweeps once the scroll settles (not per frame, so rule 7
-    holds): anything above the fold is snapped to its finished state, anything on
-    screen that the observer missed is played properly. `scripts/flick-check.mjs`
-    asserts nothing is left invisible after a flick, and after a rewind-and-flick.
-
-The section rail, the scroll-triggered motion, the progressive-blur scrim, the
-seam softeners, the paddle chevrons, the card icons, the integrations row and
-the footer are deliberate departures from the Figma, at Manav's request. See
-*Motion*, *Progressive blur*, *Seams* and *Known gaps* in the README.
-Everything else is still a 1:1 reproduction.
-
-Sources: `~/Desktop/newportfolio /new design/MacBook Air - 6.png` (home,
-3800x5402) and `MacBook Air - 7.png` (case study, 3800x29732).
+<!-- END:nextjs-agent-rules -->
