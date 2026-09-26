@@ -25,8 +25,17 @@ const V = slots('peak')
 
 // The phone the frame draws: an outline (the lift and catalog sections) or a
 // see-through device (the friendship films).
-function Phone({ kind = 'line', w, h, style }) {
-  return <div className={`pk-phone ${kind}`} style={{ '--w': w, '--h': h, ...style }} aria-hidden="true" />
+// The phone outlines the frame draws. `slot` fills one with a screen recording
+// of the app - the file is optional, so an empty slot is still just the outline.
+function Phone({ kind = 'line', w, h, slot, style }) {
+  const clip = slot ? media(`peak-${slot}`) : null
+  return (
+    <div className={`pk-phone ${kind}`} style={{ '--w': w, '--h': h, ...style }} aria-hidden="true">
+      {clip && (clip.video
+        ? <Video className="pk-phone-screen" src={clip.src} poster={clip.poster} />
+        : <span className="pk-phone-screen" style={{ backgroundImage: `url(${clip.src})` }} />)}
+    </div>
+  )
 }
 
 // the lead of a caption in full ink, the rest in grey
@@ -84,7 +93,7 @@ export default function Peak() {
         <section className="pk-sec" style={{ '--pt': 180, '--pb': 115 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
-            <h2 className="p70" data-reveal><Lines lines={C.research.headline} /></h2>
+            <h2 className="p70" style={{ '--ac': '#E01D85' }} data-reveal><Lines lines={C.research.headline} /></h2>
             <p className="p25 w500 pk-aside" data-reveal><Lines lines={C.research.aside} /></p>
           </div>
           <div className="pk-w pk-pair" style={{ '--mw': 966, '--mt': 86 }} data-stagger>
@@ -97,7 +106,7 @@ export default function Peak() {
             ))}
           </div>
 
-          <h3 className="p60 center pk-reddit" data-reveal><Lines lines={C.research.redditHead} /></h3>
+          <h3 className="p60 center pk-reddit" style={{ '--ac': '#FF383C' }} data-reveal><Lines lines={C.research.redditHead} /></h3>
           <div className="pk-w pk-pair" style={{ '--mw': 966, '--mt': 80 }} data-stagger>
             {C.research.redditQuotes.map((q, i) => (
               <blockquote key={i} className="pk-outline p28" data-reveal><Lines lines={q.lines} /></blockquote>
@@ -111,7 +120,7 @@ export default function Peak() {
             <h2 className="p70 pk-inset" data-reveal><Lines lines={C.findings.headline} /></h2>
             <div className="pk-bento" data-stagger>
               {C.findings.cards.map((lines, i) => (
-                <div key={i} className={`pk-card white pk-find pk-find-${i}`} data-reveal>
+                <div key={i} className={`pk-card white pk-find pk-find-${i}`} style={{ '--ac': '#077B67' }} data-reveal>
                   <p className="p38"><Lines lines={lines} /></p>
                 </div>
               ))}
@@ -141,7 +150,7 @@ export default function Peak() {
         {/* ---- lift: headline left, the two phones right ---- */}
         <section className="pk-sec pk-lift" style={{ '--pt': 288, '--pb': 380 }}>
           <div className="pk-lift-row">
-            <h3 className="p65 pk-x" style={{ '--x': 191 }} data-reveal><Lines lines={C.solution.liftHead} /></h3>
+            <h3 className="p65 pk-x ac-i" style={{ '--x': 191, '--ac': '#D3058B' }} data-reveal><Lines lines={C.solution.liftHead} /></h3>
             <div className="pk-lift-phones" data-stagger>
               {C.solution.liftCaps.map((c, i) => {
                 const text = para(c.lines)
@@ -149,7 +158,7 @@ export default function Peak() {
                 const [lead, ...rest] = text.split(/(?<=,)\s/)
                 return (
                   <figure key={i} data-reveal>
-                    <Phone w={226} h={461} />
+                    <Phone w={226} h={461} slot={['workout', 'insights'][i]} />
                     <figcaption className="p32 w500 pk-cap">
                       {c.bold ? <>{a}<b>{c.bold}</b>{b}</> : cap(lead, rest.join(' '))}
                     </figcaption>
@@ -167,7 +176,9 @@ export default function Peak() {
                    style={{ '--inset': 'calc(298 * var(--u))' }}>
             {C.solution.cards.map((c, i) => (
               <article key={i} className="pk-cat" data-reveal>
-                <div className="pk-card black pk-cat-card"><Phone w={206} h={420} /></div>
+                <div className="pk-card black pk-cat-card">
+                  <Phone w={206} h={420} slot={['catalog', 'food', 'disambig', 'integrations'][i]} />
+                </div>
                 <p className="p32 w500 pk-cap">{cap(para(c.lead), para(c.lines))}</p>
               </article>
             ))}
@@ -175,7 +186,7 @@ export default function Peak() {
         </section>
 
         {/* ---- friendship ---- */}
-        <section className="pk-sec" style={{ '--pt': 341, '--pb': 311 }}>
+        <section className="pk-sec" style={{ '--pt': 360, '--pb': 617 }}>
           <h2 className="p80 center" data-reveal>
             <span className="ln pk-magenta">{C.social.head[0]}</span>
             <span className="ln">{C.social.head[1]}</span>
@@ -185,7 +196,7 @@ export default function Peak() {
           <section key={i} className={`pk-band pk-band-${i}`}
                    style={{ background: `url(${friends[i].poster}) center/cover no-repeat` }}>
             <Video src={friends[i].src} poster={friends[i].poster} className="pk-band-film" />
-            <Phone kind="device" w={305} h={631} />
+            <Phone kind="device" w={305} h={631} slot={['social', 'onboarding'][i]} />
             <p className="p65 pk-band-copy" data-reveal><Lines lines={b.lines} /></p>
           </section>
         ))}
@@ -212,7 +223,7 @@ export default function Peak() {
         </section>
 
         {/* ---- contact ---- */}
-        <section className="pk-sec" style={{ '--pt': 271, '--pb': 325 }}>
+        <section className="pk-sec" style={{ '--pt': 28, '--pb': 245 }}>
           <p className="p70 pk-x" style={{ '--x': 240 }} data-reveal>
             <span className="ln">{C.end.contact[0]}</span>
             <a className="ln pk-contact" href={EMAIL}>{C.end.contact[1]}</a>

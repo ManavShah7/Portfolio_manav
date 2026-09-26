@@ -55,9 +55,16 @@ export function Page({ title, dark, children }) {
 
 // Authored line breaks. Kept as rows on large and medium screens, reflowed on
 // small ones (see .ln in globals.css).
+// `*word*` inside a line is an accent - the frames colour one word in a
+// headline ("Before jumping to *Figma,*"). The colour comes from --ac on an
+// ancestor, so the copy stays free of it.
+const mark = l => typeof l === 'string' && l.includes('*')
+  ? l.split(/\*([^*]+)\*/).map((part, i) => i % 2 ? <span key={i} className="ac">{part}</span> : part)
+  : l
+
 export function Lines({ lines, as: Tag = 'span', className }) {
   const rows = Array.isArray(lines) ? lines : [lines]
-  return rows.map((l, i) => <Tag key={i} className={`ln${className ? ' ' + className : ''}`}>{l}</Tag>)
+  return rows.map((l, i) => <Tag key={i} className={`ln${className ? ' ' + className : ''}`}>{mark(l)}</Tag>)
 }
 
 // A paragraph authored as a line array for the canvas build. On a page that

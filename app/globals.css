@@ -627,7 +627,12 @@ html.reduced-motion video.loop{display:none}
 .pk-phone{width:calc(var(--w)*var(--u));height:calc(var(--h)*var(--u));border-radius:calc(var(--w)*.17*var(--u));position:relative;flex:none}
 .pk-phone.line{border:calc(3*var(--u)) solid #C0CBD9;box-shadow:inset 0 0 0 calc(5*var(--u)) #000}
 .pk-phone.line::before{content:'';position:absolute;top:calc(10*var(--u));left:50%;transform:translateX(-50%);
-  width:28%;height:calc(4*var(--u));border-radius:9px;background:#3A3F47}
+  width:28%;height:calc(4*var(--u));border-radius:9px;background:#3A3F47;z-index:2}
+/* a screen recording inside a phone outline - it sits under the notch and is
+   clipped by the shell's own radius */
+.pk-phone{overflow:hidden}
+.pk-phone-screen{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  background-size:cover;background-position:center;display:block}
 .pk-phone.device{border:calc(12*var(--u)) solid #050505;box-shadow:0 0 0 calc(3*var(--u)) #C9CCD3,0 30px 60px rgba(0,0,0,.35)}
 .pk-phone.device::before{content:'';position:absolute;top:calc(-2*var(--u));left:50%;transform:translateX(-50%);
   width:32%;height:calc(22*var(--u));border-radius:0 0 calc(14*var(--u)) calc(14*var(--u));background:#050505}
@@ -725,3 +730,9 @@ html.reduced-motion video.loop{display:none}
 @media (min-width:1069px){ .pk .ln{white-space:nowrap} }
 @media (max-width:1068px){ .pk-projects .gallery-track{width:auto;padding-inline:var(--m);scroll-padding-inline:var(--m)} }
 @media (max-width:1068px){ .pk-aside{max-width:26em} }
+
+
+/* One word of a headline in an accent colour, as the frames draw it. The
+   colour is set per heading with --ac; `.ac-i` is the italic variant. */
+.ac{color:var(--ac,inherit)}
+.ac-i .ac{font-style:italic}
