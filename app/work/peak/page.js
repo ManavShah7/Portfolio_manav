@@ -65,7 +65,7 @@ export default function Peak() {
 
   return (
     <Page title="Peak" dark>
-      <div className="pk">
+      <div className="pk du">
         {/* ---- the film, and the four opening lines on black ---- */}
         <CaseHero clip={media('peak-hero')} className="pk-hero">
           {C.intro.map((lines, i) => (
