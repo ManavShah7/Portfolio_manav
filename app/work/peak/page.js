@@ -4,6 +4,7 @@ import { Page, Lines, para, EMAIL } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
 import { Media, Video } from '@/components/Media'
 import Gallery from '@/components/Gallery'
+import MotivationChart from '@/components/MotivationChart'
 import { media, slots } from '@/lib/clips'
 import { WORK } from '@/lib/work'
 import * as C from '@/lib/peak-copy'
@@ -119,9 +120,22 @@ export default function Peak() {
           <div className="pk-w" style={{ '--mw': 1180 }}>
             <h2 className="p70 pk-inset" data-reveal><Lines lines={C.findings.headline} /></h2>
             <div className="pk-bento" data-stagger>
-              {C.findings.cards.map((lines, i) => (
+              {C.findings.cards.map((c, i) => (
                 <div key={i} className={`pk-card white pk-find pk-find-${i}`} style={{ '--ac': '#077B67' }} data-reveal>
-                  <p className="p38"><Lines lines={lines} /></p>
+                  <p className="p38"><Lines lines={c.head} /></p>
+                  {c.body && <p className="p26 w500 pk-find-body">{para(c.body)}</p>}
+                  {c.chart && <>
+                    <MotivationChart />
+                    <div className="pk-phase">
+                      {C.findings.phases.map(ph => (
+                        <div key={ph.title}>
+                          <span style={{ background: ph.dot }} aria-hidden="true" />
+                          <h4>{ph.title}</h4>
+                          <p>{ph.body}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>}
                 </div>
               ))}
             </div>
@@ -192,14 +206,23 @@ export default function Peak() {
             <span className="ln">{C.social.head[1]}</span>
           </h2>
         </section>
-        {C.social.bands.map((b, i) => friends[i] && (
-          <section key={i} className={`pk-band pk-band-${i}`}
-                   style={{ background: `url(${friends[i].poster}) center/cover no-repeat` }}>
-            <Video src={friends[i].src} poster={friends[i].poster} className="pk-band-film" />
-            <Phone kind="device" w={305} h={631} slot={['social', 'onboarding'][i]} />
-            <p className="p65 pk-band-copy" data-reveal><Lines lines={b.lines} /></p>
-          </section>
-        ))}
+        {/* The phone holds still while the footage and the copy change behind
+            it - one sticky frame spanning both bands, which is what the frame
+            draws now that it puts the phone in the same place in each. */}
+        <div className="pk-bands">
+          {C.social.bands.map((b, i) => friends[i] && (
+            <section key={i} className={`pk-band pk-band-${i}`}
+                     style={{ background: `url(${friends[i].poster}) center/cover no-repeat` }}>
+              <Video src={friends[i].src} poster={friends[i].poster} className="pk-band-film" />
+              <p className="p65 pk-band-copy" data-reveal><Lines lines={b.lines} /></p>
+            </section>
+          ))}
+          {friends[0] && (
+            <div className="pk-bands-pin" aria-hidden="true">
+              <Phone kind="device" w={305} h={631} slot="social" />
+            </div>
+          )}
+        </div>
 
         {/* ---- what's next ---- */}
         <section className="pk-sec" style={{ '--pt': 179, '--pb': 0 }}>
@@ -216,14 +239,15 @@ export default function Peak() {
         </section>
 
         {/* ---- the other projects, each on an iPad ---- */}
-        <section className="pk-sec" style={{ '--pt': 199, '--pb': 0 }}>
+        <section className="pk-sec" style={{ '--pt': 236, '--pb': 0 }}>
+          <h2 className="p70 pk-x pk-other" style={{ '--x': 195 }} data-reveal><Lines lines={C.whatsNext.other} /></h2>
           <Gallery label="Other projects" className="pk-gallery pk-light-paddles pk-projects" paddles="center" always>
             {others.map(w => <NextSlide key={w.slug} w={w} />)}
           </Gallery>
         </section>
 
         {/* ---- contact ---- */}
-        <section className="pk-sec" style={{ '--pt': 28, '--pb': 245 }}>
+        <section className="pk-sec" style={{ '--pt': 219, '--pb': 751 }}>
           <p className="p70 pk-x" style={{ '--x': 240 }} data-reveal>
             <span className="ln">{C.end.contact[0]}</span>
             <a className="ln pk-contact" href={EMAIL}>{C.end.contact[1]}</a>
