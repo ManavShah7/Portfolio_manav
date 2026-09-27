@@ -881,9 +881,25 @@ html.reduced-motion video.loop{display:none}
 
 /* the frame leaves 137 between the band and the first device, and the row
    runs 1460..2620 */
+/* the frame leaves 137 between the band and the first device; the row runs
+   1460..2620. Each device is a link to the case study on its screen. */
 .hm-devices{position:relative;height:calc(1160*var(--u));margin-top:calc(137*var(--u))}
-.hm-devices img{position:absolute;display:block}
-.hm-d1{left:calc(284*var(--u));top:calc(0*var(--u));width:calc(933*var(--u))}
+.hm-dev{position:absolute;display:block;text-decoration:none;
+  transition:transform .5s cubic-bezier(.16,1,.3,1)}
+/* The device crops have their screens baked in - there is no alpha - so the
+   project sits ON TOP of the image, inside the measured screen rectangle,
+   rather than behind it where the image would cover it. */
+.hm-dev > img{display:block;width:100%;height:auto;position:relative;z-index:1;pointer-events:none}
+.hm-dev-screen{position:absolute;z-index:2;overflow:hidden;background:#fff;
+  background-size:cover;background-position:center;border-radius:calc(6*var(--u))}
+.hm-dev-screen video{display:block;width:100%;height:100%;object-fit:cover}
+.hm-dev-name{position:absolute;left:0;top:calc(100% + 14*var(--u));color:#626262;
+  opacity:0;transform:translateY(calc(-6*var(--u)));
+  transition:opacity .4s ease,transform .4s ease;white-space:nowrap}
+.hm-dev:hover{transform:translateY(calc(-10*var(--u)))}
+.hm-dev:hover .hm-dev-name,.hm-dev:focus-visible .hm-dev-name{opacity:1;transform:none}
+.hm-dev:focus-visible{outline:2px solid #C30126;outline-offset:calc(8*var(--u));border-radius:calc(8*var(--u))}
+.hm-d1{left:calc(284*var(--u));top:0;width:calc(933*var(--u))}
 .hm-d2{left:calc(1309*var(--u));top:calc(121*var(--u));width:calc(215*var(--u))}
 .hm-d3{left:calc(294*var(--u));top:calc(600*var(--u));width:calc(388*var(--u))}
 .hm-d4{left:calc(779*var(--u));top:calc(647*var(--u));width:calc(828*var(--u))}
@@ -904,11 +920,12 @@ html.reduced-motion video.loop{display:none}
   .hm-me,.hm-nav{position:static}
   .hm-nav{gap:10px}
   .hm-band{height:auto;padding:22vh var(--m);min-height:52vh}
-  .hm-devices{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:24px;
+  .hm-devices{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:56px 24px;
     align-items:center;padding:0 var(--m)}
-  .hm-devices img{position:static;width:100%}
-  .hm-d2{width:52%;justify-self:center}
-  .hm-d3{width:70%;justify-self:center}
+  .hm-dev{position:relative;left:auto;top:auto;width:100%}
+  .hm-d2{width:56%;justify-self:center}
+  .hm-d3{width:72%;justify-self:center}
+  .hm-dev-name{opacity:1;transform:none;position:static;display:block;margin-top:16px}
   .hm-purpose{height:auto;display:grid;gap:24px;padding:80px var(--m)}
   .hm-purpose-head,.hm-purpose-body{position:static}
   .hm-wall{columns:2;column-gap:10px;padding:10px}

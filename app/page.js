@@ -1,5 +1,9 @@
+import Link from 'next/link'
+
 import Reveal from '@/components/Reveal'
 import { Lines } from '@/components/Chrome'
+import { Video } from '@/components/Media'
+import { media } from '@/lib/clips'
 import * as C from '@/lib/home-copy'
 
 // Built to Manav's frame in design units (.du), the same as the case studies:
@@ -26,13 +30,26 @@ export default function Home() {
           <p className="p46 center" data-reveal><Lines lines={C.hero} /></p>
         </section>
 
-        {/* ---- the work, on four screens ---- */}
-        <section className="hm-devices" aria-hidden="true" data-stagger>
-          {/* eslint-disable @next/next/no-img-element */}
-          <img className="hm-d1" src={IMG('ipad-landscape')} alt="" data-reveal />
-          <img className="hm-d2" src={IMG('iphone')} alt="" data-reveal />
-          <img className="hm-d3" src={IMG('ipad-portrait')} alt="" data-reveal />
-          <img className="hm-d4" src={IMG('macbook')} alt="" data-reveal />
+        {/* ---- the work: every screen the frame draws is a case study ---- */}
+        <section className="hm-devices" aria-label="Selected work" data-stagger>
+          {C.devices.map(d => {
+            const clip = d.clip ? media(d.clip) : null
+            const [l, t, w, h] = d.screen
+            return (
+              <Link key={d.slug} href={`/work/${d.slug}`} className={`hm-dev ${d.cls}`}
+                    aria-label={`${d.name} case study`} data-reveal>
+                {/* the project, sitting in the device's own screen rectangle */}
+                <span className="hm-dev-screen"
+                      style={{ left: `${l}%`, top: `${t}%`, width: `${w}%`, height: `${h}%`,
+                               backgroundImage: clip?.poster ? `url(${clip.poster})` : undefined }}>
+                  {clip?.video && <Video src={clip.src} poster={clip.poster} />}
+                </span>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={IMG(d.img)} alt="" />
+                <span className="hm-dev-name p30">{d.name}</span>
+              </Link>
+            )
+          })}
         </section>
 
         {/* ---- purpose ---- */}
@@ -45,6 +62,9 @@ export default function Home() {
         <section className="hm-wall" aria-label="Selected work">
           {C.work.map(n => (
             <figure key={n} className="hm-wall-item" data-reveal>
+              {/* cut from the export at the size they are shown - next/image
+                  would re-encode and pick its own widths */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={IMG(n)} alt="" loading="lazy" />
             </figure>
           ))}
