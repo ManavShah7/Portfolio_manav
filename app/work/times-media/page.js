@@ -1,6 +1,6 @@
 import { Page, Lines, para } from '@/components/Chrome'
 import { CaseHero, NextProject } from '@/components/Case'
-import { Media } from '@/components/Media'
+import { Media, Video } from '@/components/Media'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
 
@@ -10,6 +10,7 @@ export const metadata = {
 }
 
 const V = slots('times')
+const waves = media('times-waves')
 const RED = '#F04250'
 const SCREEN = '2476 / 1568'
 
@@ -39,9 +40,9 @@ function Feature({ clip, flip, children }) {
 export default function TimesMedia() {
   return (
     <Page title="Times Media" dark>
-      <CaseHero clip={media('times-pink')} name="Times Media" kind="Web platform · Founding Product Designer">
+      <CaseHero clip={media('times-pink')} className="tm-hero">
         {C.intro.map((lines, i) => (
-          <p key={i} className="t-title intro-line" data-reveal>{para(lines)}</p>
+          <p key={i} className="t-title intro-line tm-intro" data-reveal>{para(lines)}</p>
         ))}
       </CaseHero>
 
@@ -49,12 +50,25 @@ export default function TimesMedia() {
       <section className="section bg-fill">
         <div className="wrap">
           <div className="center head-gap">
-            <p className="t-eyebrow c-2 eyebrow" data-reveal>{C.research.eyebrow}</p>
-            <h2 className="t-headline" data-reveal><Lines lines={C.research.headline} /></h2>
+            <h2 className="t-headline" style={{ '--ac': RED }} data-reveal>
+              <Lines lines={C.research.headline} />
+            </h2>
           </div>
-          <figure className="card white big-quote" data-reveal>
-            <blockquote className="t-title">{para(C.research.quote)}</blockquote>
-          </figure>
+
+          {/* the owner, and his words on the red beside him */}
+          <div className="tm-owner card" data-reveal>
+            <Media clip={V('owner')} ratio="1 / 1" className="tm-owner-shot" />
+            <blockquote className="t-body tm-owner-quote">{para(C.research.quote)}</blockquote>
+          </div>
+
+          <div className="grid tm-voices" data-stagger>
+            {C.research.voices.map((v, i) => (
+              <figure key={i} className="span-6 card white tm-voice" data-reveal>
+                <blockquote className="t-body">{para(v.lines)}</blockquote>
+                <figcaption className="t-fine c-2"><Lines lines={v.who} /></figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -113,6 +127,42 @@ export default function TimesMedia() {
         </div>
       </section>
 
+      {/* ---- the red band. The film holds while the line scrolls up over it,
+              the way apple.com/macbook-pro pins its performance film: sticky
+              stage, copy in normal flow above it, scrim darkening on scroll. */}
+      <section className="pin tm-waves">
+        <div className="pin-stage">
+          <div className="pin-still" style={waves?.poster ? { backgroundImage: `url(${waves.poster})` } : undefined} />
+          {waves?.video && <Video src={waves.src} poster={waves.poster} />}
+          <div className="pin-scrim" />
+        </div>
+        <div className="wrap pin-copy tm-waves-copy">
+          <p className="t-hero center" style={{ color: RED }} data-reveal>
+            <Lines lines={C.waves} />
+          </p>
+        </div>
+      </section>
+
+      {/* ---- 3D street view ---- */}
+      <section className="section bg-dark">
+        <div className="wrap">
+          <h2 className="t-headline head-gap" data-reveal><Lines lines={C.street.headline} /></h2>
+          {C.street.shots.map(sh => (
+            <div key={sh.slot} className="tm-shot" data-reveal>
+              <Media clip={V(sh.slot)} ratio={SCREEN} className="screen" />
+              <p className="t-body center measure tm-shot-cap">{para(sh.line)}</p>
+            </div>
+          ))}
+          <div className="grid tm-field" data-stagger>
+            <div className="span-8" data-reveal><Media clip={V('maintenance')} ratio="1.54" className="screen" /></div>
+            <div className="span-4" data-reveal><Media clip={V('field')} ratio="3 / 4" className="screen field" /></div>
+          </div>
+          <p className="t-body lit center measure tm-shot-cap" data-reveal>
+            <b>{C.street.field.lead}</b>{C.street.field.line}
+          </p>
+        </div>
+      </section>
+
       {/* ---- impact ---- */}
       <section className="section">
         <div className="wrap center">
@@ -120,6 +170,9 @@ export default function TimesMedia() {
         </div>
       </section>
 
+      <section className="section" style={{ paddingBottom: 0 }}>
+        <div className="wrap"><h2 className="t-headline" data-reveal><Lines lines={C.other} /></h2></div>
+      </section>
       <NextProject slug="times-media" />
     </Page>
   )

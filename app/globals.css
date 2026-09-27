@@ -788,3 +788,44 @@ html.reduced-motion video.loop{display:none}
 
 /* the frame leaves a clear gap under "Check out my other work." */
 .pk-other{margin-bottom:calc(120*var(--u))}
+
+
+/* ---- Times Media: the owner card, the voices, the red band ---------------- */
+.tm-owner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:hidden;
+  background:#E8112D;color:#fff;align-items:stretch}
+.tm-owner-shot{height:100%}
+.tm-owner-shot img,.tm-owner-shot video{height:100%;object-fit:cover}
+.tm-owner-quote{padding:clamp(28px,4vw,64px);align-self:center;margin:0}
+.tm-voices{margin-top:24px}
+.tm-voice{padding:clamp(24px,2.6vw,44px);display:flex;flex-direction:column;gap:28px;justify-content:space-between}
+.tm-voice blockquote{margin:0}
+@media (max-width:734px){
+  .tm-owner{grid-template-columns:1fr}
+  .tm-owner-shot{aspect-ratio:4/3}
+}
+
+/* the red band holds while the line scrolls up over it. The copy carries the
+   section's height, and `.pin-stage` pulls itself up over it (see .pin). */
+.tm-waves-copy{padding:70vh 0 34vh}
+.tm-shot{margin-top:clamp(48px,7vw,120px)}
+.tm-shot-cap{margin-top:28px}
+.tm-field{margin-top:clamp(48px,7vw,120px);align-items:end}
+
+/* The hero's scrim ramps over `contain`, which needs a section much taller
+   than the viewport. This band is only a little taller, so contain degenerates
+   and the scrim snaps straight to full. Ramp it over `cover` instead. */
+@supports (animation-timeline:view()){
+  html.no-reduced-motion .tm-waves .pin-scrim{
+    animation-range:cover 12% cover 62%;--dim-from:.05;--dim-to:.86;
+  }
+}
+
+/* Times' frame sets the four opening lines closer together than Peak's, and
+   the owner card runs the full measure with the photo square beside the red. */
+.tm-waves{--dim-from:.05}
+/* the frame sets 116px between the opening blocks, on a 57px line */
+.tm-intro + .tm-intro{margin-top:clamp(26px,3.1vw,62px)}
+.tm-waves-copy,.section-times .pin-copy{}
+.tm-hero .pin-copy{padding-top:15vh}
+.tm-owner{min-height:clamp(260px,23vw,438px)}
+.tm-owner-quote{max-width:22em}
