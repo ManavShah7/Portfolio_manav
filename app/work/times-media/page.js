@@ -122,7 +122,9 @@ export default function TimesMedia() {
         {/* ---- 3D street view ---- */}
         <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 240 }}>
           <h2 className="p60 du-x" style={{ '--x': 190 }} data-reveal><Lines lines={C.street.headline} /></h2>
-          {C.street.shots.map((sh, i) => (
+          {/* with no recording there is nothing to caption, so the whole block
+              comes out rather than leaving two margins stacked on empty space */}
+          {C.street.shots.map((sh, i) => V(sh.slot) && (
             <div key={sh.slot} className="du-w" style={{ '--mw': 1230, '--mt': i ? 214 : 176 }} data-reveal>
               <Media clip={V(sh.slot)} ratio="1230 / 830" className="screen" />
               <p className="p38 center tm-cap">{para(sh.line)}</p>

@@ -559,7 +559,9 @@ html.reduced-motion video.loop{display:none}
 }
 
 /* layout primitives (shared by any `.du` page) */
-.du-sec,.pk-sec{padding-top:calc(var(--pt,0)*var(--u));padding-bottom:calc(var(--pb,0)*var(--u));position:relative}
+/* flow-root: a first or last child's margin must never collapse out of its
+   section - it would open a stripe of the page background between two bands */
+.du-sec,.pk-sec{display:flow-root;padding-top:calc(var(--pt,0)*var(--u));padding-bottom:calc(var(--pb,0)*var(--u));position:relative}
 .du-x,.pk-x{margin-left:calc(var(--x)*var(--u));margin-right:var(--m)}
 .du-w,.pk-w{width:calc(var(--mw)*var(--u));margin:calc(var(--mt,0)*var(--u)) auto 0}
 .pk .center{padding-inline:var(--m)}
@@ -575,7 +577,7 @@ html.reduced-motion video.loop{display:none}
 /* hero: the film alone, then the opening lines on black */
 .pk-hero .pin-copy{padding:calc(141*var(--u)) 0 calc(122*var(--u));margin-left:calc(518*var(--u));width:auto}
 .pk-intro{color:#F5F5F7}
-.pk-intro + .pk-intro{margin-top:calc(70*var(--u))}
+.pk-intro + .pk-intro{margin-top:calc(64*var(--u))}
 @media (max-width:1068px){ .pk-hero .pin-copy{margin-inline:var(--m);padding:25vh 0 30vh} .pk-intro{max-width:none} .pk-intro + .pk-intro{margin-top:48px} }
 
 /* problems */
@@ -592,9 +594,9 @@ html.reduced-motion video.loop{display:none}
 .pk-pair{display:flex;justify-content:space-between;gap:24px}
 .pk-pair > *{width:calc(400*var(--u))}
 .pk-voice-photo{height:calc(345*var(--u));border-radius:calc(20*var(--u))}
-.pk-voice figcaption{margin-top:calc(38*var(--u));color:#1C1C1E}
+.pk-voice figcaption{margin-top:calc(38*var(--u));color:#1C1C1E;font-size:calc(26*var(--u));font-weight:600}
 .pk-voice blockquote{margin-top:calc(12*var(--u));color:#1C1C1E}
-.pk-reddit{margin-top:calc(100*var(--u))}
+.pk-reddit{margin-top:calc(257*var(--u))}
 .pk-outline{height:calc(340*var(--u));border:1px solid #1C1C1E;border-radius:calc(20*var(--u));padding:calc(80*var(--u)) calc(66*var(--u)) 0;color:#1C1C1E}
 @media (max-width:734px){
   .pk-pair{flex-direction:column;gap:32px} .pk-pair > *{width:auto}
@@ -604,8 +606,8 @@ html.reduced-motion video.loop{display:none}
 @media (min-width:735px) and (max-width:1068px){ .pk-pair > *{width:calc(50% - 12px)} .pk-voice-photo{height:auto;aspect-ratio:400/345} .pk-voice blockquote{width:auto} .pk-outline{height:auto;min-height:260px;padding:32px} }
 
 /* findings */
-.pk-inset{padding-left:calc(37*var(--u));margin-bottom:calc(72*var(--u))}
-.pk-bento{display:grid;grid-template-columns:565fr 583fr;grid-template-rows:calc(467*var(--u)) calc(597*var(--u));gap:calc(30*var(--u))}
+.pk-inset{padding-left:calc(37*var(--u));margin-bottom:calc(90*var(--u))}
+.pk-bento{display:grid;grid-template-columns:565fr 583fr;grid-template-rows:calc(402*var(--u)) calc(663*var(--u));gap:calc(28*var(--u))}
 .pk-find{padding:calc(66*var(--u)) calc(70*var(--u))}
 .pk-find-body{color:#6E6E73;margin-top:calc(26*var(--u));line-height:1.45}
 .pk-find-1{grid-column:2;grid-row:1 / span 2}
@@ -664,7 +666,7 @@ html.reduced-motion video.loop{display:none}
 
 /* catalog */
 .pk-catalog{background:#1C1C1E;color:#F5F5F7}
-.pk-catalog > h3{margin-bottom:calc(65*var(--u))}
+.pk-catalog > h3{margin-bottom:calc(79*var(--u))}
 .pk-gallery .gallery-track{gap:calc(51*var(--u))}
 .pk-cat{width:calc(421*var(--u))}
 .pk-cat-card{height:calc(638*var(--u));display:grid;place-items:center}
@@ -691,7 +693,7 @@ html.reduced-motion video.loop{display:none}
    sections; the sticky child holds inside it, so the frame never moves while
    the footage and the copy change behind. */
 .pk-bands{position:relative}
-.pk-bands-pin{position:absolute;left:calc(317*var(--u));top:0;bottom:0;width:calc(305*var(--u));pointer-events:none}
+.pk-bands-pin{position:absolute;left:calc(302*var(--u));top:calc(223*var(--u));bottom:calc(263*var(--u));width:calc(305*var(--u));pointer-events:none}
 .pk-bands-pin .pk-phone{position:sticky;top:calc(50vh - 316*var(--u))}
 @media (max-width:1068px){ .pk-bands-pin{display:none} }
 .pk-band-copy{text-shadow:0 2px 24px rgba(0,0,0,.25)}
@@ -704,8 +706,8 @@ html.reduced-motion video.loop{display:none}
 }
 
 /* what's next */
-.pk-next-cards{margin-top:calc(115*var(--u))}
-.pk-wn{width:calc(538*var(--u));height:calc(377*var(--u));display:flex;flex-direction:column;justify-content:flex-end;
+.pk-next-cards{margin-top:calc(188*var(--u))}
+.pk-wn{width:calc(538*var(--u));height:calc(441*var(--u));display:flex;flex-direction:column;justify-content:flex-end;
   padding:0 calc(51*var(--u)) calc(44*var(--u))}
 .pk-wn .p26{margin-top:calc(14*var(--u));color:#000C32}
 .pk-wn .p28{color:#000}
@@ -722,7 +724,7 @@ html.reduced-motion video.loop{display:none}
   border-radius:calc(48*var(--u));background:#0A0A0A;box-shadow:inset 0 0 0 calc(3*var(--u)) #C9CCD3,inset 0 0 0 calc(5*var(--u)) #1A1A1A}
 .pk-ipad-screen{position:relative;width:100%;height:100%;border-radius:calc(24*var(--u));overflow:hidden;color:#FFFFFF}
 .pk-ipad-screen > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.pk-ipad-screen::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.45),rgba(0,0,0,0) 60%)}
+
 .pk-ipad-copy{position:absolute;left:calc(52*var(--u));bottom:calc(52*var(--u));right:calc(52*var(--u));z-index:1}
 .pk-ipad-copy .p24{margin-top:calc(10*var(--u))}
 .pk-ipad-copy .p20{display:inline-block;margin-top:calc(14*var(--u))}
@@ -794,7 +796,7 @@ html.reduced-motion video.loop{display:none}
 }
 
 /* the frame leaves a clear gap under "Check out my other work." */
-.pk-other{margin-bottom:calc(120*var(--u))}
+.pk-other{margin-bottom:calc(102*var(--u))}
 
 
 /* =============================================================================
@@ -802,8 +804,16 @@ html.reduced-motion video.loop{display:none}
    ========================================================================== */
 /* --u and --m come from .du - never redeclare them here or the responsive
    unit is overridden back to a flat 1px and the page overflows. */
+/* Every section needs its OWN background. The hero is a `.pin`, and
+   `.pin-stage` carries margin-bottom:-100vh to pull what follows up over the
+   film - so a transparent section after it shows the film through, which is
+   what made the research headline unreadable. */
 .tm{background:#fff;color:#1d1d1f}
-.tm .bg-dark{background:#000;color:#f5f5f7}
+.tm .du-sec{background:#fff;position:relative}
+.tm .du-sec.bg-dark,.tm .bg-dark{background:#000;color:#f5f5f7}
+/* a margin on a section's first child collapses out through a zero padding and
+   shows the page behind it; a flow root keeps it inside */
+.tm .du-sec{display:flow-root}
 .tm .bg-fill{background:#f5f5f7}
 .tm .center{text-align:center}
 .tm .lit{color:#8a8a8e}
@@ -814,19 +824,18 @@ html.reduced-motion video.loop{display:none}
 /* the opening lines: 57 pitch, 116 between blocks */
 .tm-intro{max-width:calc(760*var(--u))}
 .tm-intro + .tm-intro{margin-top:calc(59*var(--u))}
-.tm-hero .pin-copy{padding:calc(152*var(--u)) 0 calc(200*var(--u));
+.tm-hero .pin-copy{padding:calc(140*var(--u)) 0 calc(166*var(--u));
   width:auto;max-width:none;margin:0 var(--m) 0 calc(518*var(--u))}
 
 /* the owner: his photo square against the red carrying his words */
-.tm-owner{display:grid;grid-template-columns:minmax(0,438fr) minmax(0,723fr);
-  border-radius:calc(20*var(--u));overflow:hidden;background:#E8112D;color:#fff;
-  min-height:calc(438*var(--u))}
+.tm-owner{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,661fr);
+  border-radius:calc(20*var(--u));overflow:hidden;background:#E62132;color:#fff;
+  min-height:calc(532*var(--u))}
 .tm-owner-shot{height:100%}
 .tm-owner-quote{margin:0;align-self:center;padding:calc(56*var(--u))}
 .tm-voices{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
-.tm-voice{background:#f5f5f7;border-radius:calc(20*var(--u));padding:calc(44*var(--u));
-  min-height:calc(533*var(--u));display:flex;flex-direction:column;justify-content:space-between;
-  gap:calc(40*var(--u))}
+.tm-voice{background:#f5f5f7;border-radius:calc(20*var(--u));padding:calc(72*var(--u)) calc(80*var(--u));
+  min-height:calc(533*var(--u));display:flex;flex-direction:column;justify-content:flex-start}
 .tm-voice blockquote{margin:0}
 
 /* the four ways it broke: one column of copy, the deck beside the first two */
@@ -834,30 +843,24 @@ html.reduced-motion video.loop{display:none}
    both sections, so the sticky child holds across the white/black seam; the
    copy keeps the left column to itself. */
 .tm-run{position:relative}
-.tm-run-pin{position:absolute;left:calc(1045*var(--u));top:0;bottom:0;
-  width:calc(696*var(--u));pointer-events:none}
-.tm-run-pin > *{position:sticky;top:calc(50vh - 216*var(--u))}
-.tm-broke-copy{max-width:calc(560*var(--u));margin-inline:calc(237*var(--u)) var(--m)}
+.tm-run-pin{position:absolute;left:calc(1034*var(--u));top:calc(303*var(--u));bottom:0;
+  width:calc(710*var(--u));pointer-events:none}
+.tm-run-pin > *{position:sticky;top:calc(50vh - 230*var(--u))}
+.tm-broke-copy{max-width:calc(600*var(--u));margin-inline:calc(237*var(--u)) var(--m)}
 .tm-broke-copy > *{margin-top:calc(163*var(--u))}
 .tm-broke-copy > * + *{margin-top:calc(253*var(--u))}
-.tm-site{display:grid;grid-template-columns:minmax(0,1133fr) minmax(0,560fr);
-  align-items:center;gap:calc(46*var(--u));margin:calc(160*var(--u)) var(--m) 0 calc(47*var(--u))}
-.tm-site-copy{max-width:calc(430*var(--u))}
-.tm-cap{margin-top:calc(116*var(--u))}
-.tm-field{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);
-  gap:calc(60*var(--u));align-items:end}
-
+.tm-broke-dark > :first-child{margin-top:0}
+.tm-broke-dark > * + *{margin-top:calc(162*var(--u))}
 /* the red band holds while the line scrolls up over it */
-.tm-waves-copy{padding:70vh 0 34vh}
 
 @media (max-width:1068px){
   .tm-owner{grid-template-columns:1fr;min-height:0}
   .tm-owner-shot{aspect-ratio:4/3}
-  .tm-voices,.tm-site,.tm-field{grid-template-columns:1fr;gap:24px}
+  .tm-voices{grid-template-columns:1fr;gap:24px}
   .tm-broke-copy,.tm-site{margin-inline:var(--m)}
   .tm-broke-copy{max-width:none}
-  .tm-run-pin{position:static;width:auto;margin:32px var(--m) 0}
-  .tm-run-pin > *{position:static}
+  .tm-run-pin{position:static;width:auto;margin:0;padding:8px var(--m) 48px;background:#000}
+  .tm-run-pin > .dev{position:relative;top:auto}
   .tm-voice{min-height:0}
   .tm-hero .pin-copy{margin-left:var(--m);margin-right:var(--m)}
   .tm-intro{max-width:none}
@@ -883,8 +886,10 @@ html.reduced-motion video.loop{display:none}
 .hm-nav a{text-decoration:none}
 .hm-nav a:hover{color:#000}
 
-.hm-band{height:calc(754*var(--u));background:url(/media/home/home-gradient.webp) center/cover no-repeat;
+.hm-band{position:relative;overflow:hidden;height:calc(754*var(--u));
   color:#fff;display:flex;align-items:center;justify-content:center}
+.hm-band-bg{position:absolute;inset:0;background:url(/media/home/home-gradient.webp) center/cover no-repeat}
+.hm-band p{position:relative}
 .hm-band p{margin:0}
 
 /* the frame leaves 137 between the band and the first device, and the row
@@ -916,11 +921,16 @@ html.reduced-motion video.loop{display:none}
 .hm-purpose-head{position:absolute;left:calc(269*var(--u));top:calc(390*var(--u))}
 .hm-purpose-body{position:absolute;left:calc(1036*var(--u));top:calc(366*var(--u));font-weight:500}
 
-/* The wall. His own tiles, laid on an even four-column masonry instead of the
-   overlapping collage - same pieces, no holes, nothing cropped by a neighbour. */
-.hm-wall{columns:5;column-gap:calc(14*var(--u));padding:calc(14*var(--u));background:#D9D9D9}
-.hm-wall-item{break-inside:avoid;margin:0 0 calc(14*var(--u))}
-.hm-wall-item img{display:block;width:100%;height:auto;border-radius:calc(6*var(--u))}
+/* The wall - the frame's collage, placed tile for tile (lib/home-copy.js).
+   It is a picture, so it scales with the window at every width rather than
+   switching to the tablet unit. The tiles are cropped slightly larger than
+   their cells and drift inside them, so the motion never opens a gap. */
+.hm-wall{--wu:calc(100vw / 1900);position:relative;height:calc(1189*var(--wu));background:#D9D9D9;overflow:hidden}
+.hm-wall-item{position:absolute;margin:0;overflow:hidden;
+  left:calc(var(--x)*var(--wu));top:calc(var(--y)*var(--wu));
+  width:calc(var(--w)*var(--wu));height:calc(var(--h)*var(--wu))}
+.hm-wall-item img{display:block;width:100%;height:calc(100% + 30px);margin-top:-15px;object-fit:cover}
+.hm-wall-item:hover img{filter:brightness(1.04)}
 
 @media (max-width:1068px){
   .hm-top{height:auto;display:flex;justify-content:space-between;align-items:flex-start;
@@ -936,7 +946,85 @@ html.reduced-motion video.loop{display:none}
   .hm-dev-name{opacity:1;transform:none;position:static;display:block;margin-top:16px}
   .hm-purpose{height:auto;display:grid;gap:24px;padding:80px var(--m)}
   .hm-purpose-head,.hm-purpose-body{position:static}
-  .hm-wall{columns:2;column-gap:10px;padding:10px}
-  .hm-wall-item{margin-bottom:10px}
 }
-@media (max-width:734px){ .hm-devices{grid-template-columns:1fr} .hm-wall{columns:1} }
+/* on a phone the collage would be a postage stamp, so it becomes two columns */
+@media (max-width:734px){
+  .hm-devices{grid-template-columns:1fr}
+  .hm-wall{height:auto;columns:2;column-gap:8px;padding:8px}
+  .hm-wall-item{position:relative;left:auto;top:auto;width:auto;height:auto;margin-bottom:8px;break-inside:avoid;border-radius:6px}
+  .hm-wall-item img{height:auto;margin:0;aspect-ratio:var(--w)/var(--h)}
+}
+
+/* ---- devices cut from a frame (components/Device.js) ---------------------- */
+.dev{position:relative}
+.dev-frame{display:block;width:100%;height:auto;position:relative;z-index:1;pointer-events:none}
+.dev-screen{position:absolute;z-index:0;overflow:hidden;background:#000 center/cover no-repeat}
+.dev-screen > video{display:block;width:100%;height:100%;object-fit:cover}
+
+/* authored lines are the frame's own breaks: on a laptop they never re-wrap */
+@media (min-width:1069px){ .du .ln{white-space:nowrap} }
+
+/* ---- Times Media, the rebuilt lower half ------------------------------------ */
+.tm-dev{width:calc(1361*var(--u))}
+.tm-dev.du-w{margin-inline:auto}
+.tm-site{display:flex;align-items:flex-start;gap:calc(80*var(--u));margin:calc(231*var(--u)) 0 calc(200*var(--u)) calc(172*var(--u))}
+.tm-mac{width:calc(1018*var(--u));flex:none}
+.tm-site-copy{color:#fff;margin-top:calc(167*var(--u))}
+.tm-waves{background:#000}
+.tm-waves-film{position:relative;aspect-ratio:1900/1096;overflow:hidden;background:#C8000F center/cover no-repeat}
+.tm-waves-film > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tm-red{color:#D40B12}
+.tm-cap{color:#fff;margin-top:calc(45*var(--u));padding-inline:var(--m)}
+.tm-field{display:flex;align-items:flex-start;margin:calc(181*var(--u)) 0 0 calc(278*var(--u))}
+.tm-field-ipad{width:calc(886*var(--u))}
+.tm-field-phone{width:calc(259*var(--u));margin-left:calc(157*var(--u));margin-top:calc(32*var(--u))}
+.tm-impact{color:#F14351}
+@media (max-width:1068px){
+  .tm-dev,.tm-dev.du-x{width:auto;margin-left:var(--m);margin-right:var(--m)}
+  .tm-site{flex-direction:column;align-items:stretch;margin:48px var(--m) 96px;gap:32px}
+  .tm-mac{width:100%}
+  .tm-field{margin:64px var(--m) 0;gap:24px;align-items:center}
+  .tm-field-ipad{width:auto;flex:3}
+  .tm-field-phone{width:auto;flex:1;margin:0}
+  .tm-waves-film{aspect-ratio:auto;height:60vh}
+}
+
+/* the home band's gradient breathes as the band crosses the screen */
+@keyframes svZoom{ from{transform:scale(1.18)} to{transform:scale(1)} }
+@supports (animation-timeline:view()){
+  html.no-reduced-motion [data-sv="zoom"]{animation:svZoom linear both;animation-timeline:view();animation-range:entry 0% exit 100%}
+}
+
+/* "One system, three platforms." runs magenta to red across the words */
+.tm-grad .ac{background:linear-gradient(90deg,#AC0165 0%,#F5010A 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.tm-voice-who{color:#1D1D1F;font-weight:500;margin-top:calc(30*var(--u))}
+
+/* the frame's carousel controls are plain grey dots */
+.pk-projects .paddle{background:#D9D9D9 !important}
+.pk-projects .paddle svg{display:none}
+/* the chart card carries the frame's own chart image */
+.pk-chart{display:block;width:calc(569*var(--u));margin:calc(150*var(--u)) calc(-70*var(--u)) 0 calc(-67*var(--u));max-width:none}
+.pk-find-body{max-width:calc(395*var(--u))}
+@media (max-width:734px){ .pk-chart{width:calc(100% + 56px);margin:24px -28px 0} }
+
+/* The case-study heroes, as the frames draw them: the film is soft (blurred)
+   and dimmed, with a darker band across its top 197px. */
+.pk-hero .pin-stage > video,.tm-hero .pin-stage > video,
+.pk-hero .pin-still,.tm-hero .pin-still{filter:blur(calc(9*var(--u)));transform:scale(1.04)}
+.pk-hero .pin-first::before,.tm-hero .pin-first::before{content:'';position:absolute;left:0;right:0;top:0;
+  height:calc(197*var(--u));background:rgba(0,0,0,.38);z-index:1;pointer-events:none}
+.pk-hero .pin-first,.tm-hero .pin-first{position:relative}
+html.no-reduced-motion .pk-hero .pin-scrim,html.no-reduced-motion .tm-hero .pin-scrim{--dim-from:.45}
+
+/* findings cards, as set: body in full ink, 24 on 29 */
+.pk-find-body{color:#1D1D1F !important;font-size:calc(24*var(--u)) !important;line-height:1.21 !important}
+.pk-find .p38{font-size:calc(37*var(--u))}
+
+.pk-wn-row{display:grid;grid-template-columns:repeat(3,calc(540*var(--u)));gap:calc(30*var(--u));margin-left:calc(170*var(--u))}
+.pk-wn-row .pk-wn{width:auto;padding-bottom:calc(57*var(--u))}
+@media (max-width:1068px){ .pk-wn-row{grid-template-columns:1fr;margin-inline:var(--m);gap:16px} .pk-wn-row .pk-wn{height:auto;min-height:220px} }
+
+.pk-projects .paddle:disabled{opacity:1}
+.tm .pk-other{margin-bottom:calc(149*var(--u))}
+@media (max-width:1068px){ .pk-find-body{font-size:17px !important;max-width:none} }

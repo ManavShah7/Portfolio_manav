@@ -41,7 +41,8 @@ export default function Home() {
                 {/* the project, sitting in the device's own screen rectangle */}
                 <span className="hm-dev-screen"
                       style={{ left: `${l}%`, top: `${t}%`, width: `${w}%`, height: `${h}%`,
-                               backgroundImage: clip?.poster ? `url(${clip.poster})` : undefined }}>
+                               backgroundImage: d.still ? `url(${d.still})`
+                                 : clip?.poster ? `url(${clip.poster})` : undefined }}>
                   {clip?.video && <Video src={clip.src} poster={clip.poster} />}
                 </span>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -58,14 +59,16 @@ export default function Home() {
           <p className="p45 hm-purpose-body" data-reveal><Lines lines={C.purpose.body} /></p>
         </section>
 
-        {/* ---- the wall ---- */}
-        <section className="hm-wall" aria-label="Selected work">
-          {C.work.map(n => (
-            <figure key={n} className="hm-wall-item" data-reveal>
-              {/* cut from the export at the size they are shown - next/image
-                  would re-encode and pick its own widths */}
+        {/* ---- the wall: the frame's collage, tile for tile. Each tile rises
+                in with the stagger and then drifts at its own rate while the
+                wall crosses the screen ---- */}
+        <section className="hm-wall" aria-label="Selected work" data-stagger>
+          {C.work.map(({ n, r: [x, y, w, h], d }) => (
+            <figure key={n} className="hm-wall-item" data-reveal
+                    style={{ '--x': x, '--y': y, '--w': w, '--h': h }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={IMG(n)} alt="" loading="lazy" />
+              <img src={IMG(n)} alt="" loading="lazy" data-sv="drift"
+                   style={{ '--drift': `${Math.round(d / 6)}px` }} />
             </figure>
           ))}
         </section>

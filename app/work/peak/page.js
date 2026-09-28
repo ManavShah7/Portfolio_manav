@@ -108,11 +108,6 @@ export default function Peak() {
           </div>
 
           <h3 className="p60 center pk-reddit" style={{ '--ac': '#FF383C' }} data-reveal><Lines lines={C.research.redditHead} /></h3>
-          <div className="pk-w pk-pair" style={{ '--mw': 966, '--mt': 80 }} data-stagger>
-            {C.research.redditQuotes.map((q, i) => (
-              <blockquote key={i} className="pk-outline p28" data-reveal><Lines lines={q.lines} /></blockquote>
-            ))}
-          </div>
         </section>
 
         {/* ---- findings: two stacked on the left, one tall on the right ---- */}
