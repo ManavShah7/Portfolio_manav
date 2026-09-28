@@ -108,14 +108,25 @@ export default function TimesMedia() {
 
         {/* ---- the red band. The film holds while the line scrolls up over it,
                 the way apple.com/macbook-pro pins its performance film. ---- */}
-        <section className="pin tm-waves">
-          <div className="pin-stage">
-            <div className="pin-still" style={waves?.poster ? { backgroundImage: `url(${waves.poster})` } : undefined} />
-            {waves?.video && <Video src={waves.src} poster={waves.poster} />}
-            <div className="pin-scrim" />
+        {/* The red band, as apple.com/macbook-pro does its chip film: the
+            video plays full-bleed and a black layer over it in `multiply`
+            carries the line in white, so the film shows only through the
+            letterforms. The text starts at scale 400 - one stroke filling the
+            screen, which reads as the film itself - and shrinks to 1 as you
+            scroll. Nothing is clipped; it is all the blend. */}
+        <section className="mx tm-waves">
+          <div className="mx-stage">
+            <div className="mx-still"
+                 style={waves?.poster ? { backgroundImage: `url(${waves.poster})` } : undefined} />
+            {waves?.video && <Video src={waves.src} poster={waves.poster} className="mx-film" />}
+            <div className="mx-mask" aria-hidden="true">
+              <p className="mx-text">{C.waves.join(' ')}</p>
+            </div>
           </div>
-          <div className="pin-copy tm-waves-copy">
-            <p className="p60 center" style={{ color: RED }} data-reveal><Lines lines={C.waves} /></p>
+          {/* the line again, in the ink the frame gives it, for anyone whose
+              browser has no scroll timeline and for screen readers */}
+          <div className="mx-read">
+            <p className="p60 center" style={{ color: RED }}><Lines lines={C.waves} /></p>
           </div>
         </section>
 

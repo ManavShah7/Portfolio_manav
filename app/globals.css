@@ -970,25 +970,51 @@ html.reduced-motion video.loop{display:none}
 .tm-site{display:flex;align-items:flex-start;gap:calc(80*var(--u));margin:calc(231*var(--u)) 0 calc(200*var(--u)) calc(172*var(--u))}
 .tm-mac{width:calc(1018*var(--u));flex:none}
 .tm-site-copy{color:#fff;margin-top:calc(167*var(--u))}
-/* The red band holds while the line scrolls up over it. The copy carries the
-   section's height - that is what gives the pin something to hold for - and
-   the scrim ramps over `cover`, not `contain`: contain needs a section much
-   taller than the viewport, and this one is not, so it degenerates and the
-   scrim sticks at its start value (bright red under red type). The ramp is
-   finished by 45% so the line lands on black rather than on the film. */
-.tm-waves{background:#000}
-.tm-waves-copy{padding:78vh 0 30vh}
-@supports (animation-timeline:view()){
-  html.no-reduced-motion .tm-waves .pin-scrim{
-    animation-range:cover 6% cover 45%;--dim-from:.06;--dim-to:.94;
-  }
+/* ---- film shrinking into its own headline -----------------------------------
+   apple.com/macbook-pro, measured: the film is full-bleed, and over it sits a
+   black layer in `mix-blend-mode: multiply` carrying the line in white. White
+   multiplies to the backdrop (the film shows), black multiplies to black - so
+   the film appears only inside the letterforms, with no clip or mask image.
+   Only `transform: scale()` animates; the font-size never changes. Apple runs
+   400 -> 1 and the curve is close to exponential, so the stops below are its
+   own measured values rather than an ease. */
+.mx{position:relative;background:#000;height:220vh}
+.mx-stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate;background:#000}
+.mx-still,.mx-film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  background-size:cover;background-position:center}
+.mx-mask{position:absolute;inset:0;background:#000;mix-blend-mode:multiply;
+  display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mx-text{margin:0;color:#fff;font-size:80px;line-height:1.05;font-weight:600;
+  letter-spacing:-.02em;white-space:nowrap;transform:scale(400);
+  /* the zoom has to start inside a stroke, or the first screen is black
+     instead of film - this point has solid white for 5px around it */
+  transform-origin:40.4% 70.2%;will-change:transform}
+/* the readable copy under the film, for no-timeline browsers and AT */
+.mx-read{position:absolute;inset:auto 0 0;padding:0 0 12vh;pointer-events:none}
+
+@keyframes mxShrink{
+  0%{transform:scale(400)}   14%{transform:scale(313)}  29%{transform:scale(196)}
+  43%{transform:scale(113)}  57%{transform:scale(57.5)} 71%{transform:scale(24.3)}
+  86%{transform:scale(7.6)}  100%{transform:scale(1)}
 }
-.tm-red{color:#D40B12}
-.tm-cap{color:#fff;margin-top:calc(45*var(--u));padding-inline:var(--m)}
-.tm-field{display:flex;align-items:flex-start;margin:calc(181*var(--u)) 0 0 calc(278*var(--u))}
-.tm-field-ipad{width:calc(886*var(--u))}
-.tm-field-phone{width:calc(259*var(--u));margin-left:calc(157*var(--u));margin-top:calc(32*var(--u))}
-.tm-impact{color:#F14351}
+@supports (animation-timeline:view()){
+  html.no-reduced-motion .mx{view-timeline:--mx block}
+  html.no-reduced-motion .mx-text{
+    animation:mxShrink linear both;animation-timeline:--mx;
+    animation-range:contain 0% contain 100%;
+  }
+  /* with the mask doing the work the spelled-out line is redundant */
+  html.no-reduced-motion .mx-read{display:none}
+}
+/* no scroll timeline, or reduced motion: the film sits behind the line as it
+   did before, rather than a headline frozen at 400x */
+html.reduced-motion .mx-mask,
+html:not(.no-reduced-motion) .mx-mask{display:none}
+html.reduced-motion .mx-stage,
+html:not(.no-reduced-motion) .mx-stage{position:relative;height:60vh}
+html.reduced-motion .mx,
+html:not(.no-reduced-motion) .mx{height:auto}
+
 @media (max-width:1068px){
   .tm-dev,.tm-dev.du-x{width:auto;margin-left:var(--m);margin-right:var(--m)}
   .tm-site{flex-direction:column;align-items:stretch;margin:48px var(--m) 96px;gap:32px}
