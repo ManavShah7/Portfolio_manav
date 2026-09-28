@@ -9,10 +9,15 @@
    Breakpoints are Apple's: large > 1068, medium 735-1068, small <= 734.
    ========================================================================== */
 
-/* SF Pro. On Apple devices `-apple-system` resolves to the system SF, which
-   switches between its Display and Text optical cuts by size on its own - the
-   same switch Apple's pages make at 19px. Everywhere else the self-hosted
-   Display cut is the fallback. */
+/* SF Pro, and only SF Pro.
+   Measured in Chromium on this machine: `-apple-system` and `system-ui` both
+   resolve to the system SF and they are NOT the same as naming
+   'SF Pro Display' - at 17px the system cut sets 5% wider, at 63px they
+   converge. That is the optical axis doing its job: SF Pro Text below ~20px,
+   SF Pro Display above it. Naming a cut yourself defeats it, so the stack
+   never does. ('SF Pro Text', 'SF Pro' and 'SF Pro Rounded' are not installed
+   families here at all - asking for them falls through to a serif.)
+   Off Apple hardware the self-hosted Display cut is all there is. */
 @font-face{font-family:'SF Pro Web';src:url('/fonts/SFProDisplay-Regular.otf') format('opentype');font-weight:400;font-display:swap}
 @font-face{font-family:'SF Pro Web';src:url('/fonts/SFProDisplay-Medium.otf') format('opentype');font-weight:500;font-display:swap}
 @font-face{font-family:'SF Pro Web';src:url('/fonts/SFProDisplay-Semibold.ttf') format('truetype');font-weight:600;font-display:swap}
@@ -69,7 +74,7 @@ body{
   font-size:17px;line-height:1.47059;font-weight:400;letter-spacing:-0.022em;
   color:var(--ink);background:#FFFFFF;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-  font-synthesis:none;text-rendering:optimizeLegibility;
+  font-synthesis:none;text-rendering:optimizeLegibility;font-optical-sizing:auto;
 }
 a{color:inherit;text-decoration:none}
 img,video{display:block;max-width:100%}
@@ -517,30 +522,34 @@ html.reduced-motion video.loop{display:none}
 @media (max-width:1068px){ .du{--u:.6px} }
 @media (max-width:734px){ .du{--u:.46px;--m:24px} }
 
-/* type, as the frame sets it: SF Pro, Figma's auto leading (1.2), no tracking */
-.du [class^="p"],.du [class*=" p"]{letter-spacing:0}
-.du .p80{font-size:calc(80*var(--u));line-height:1.19;font-weight:600}
-.du .p70{font-size:calc(70*var(--u));line-height:1.2;font-weight:600}
-.du .p65{font-size:calc(65*var(--u));line-height:1.2;font-weight:600}
-.du .p60{font-size:calc(60*var(--u));line-height:1.2;font-weight:600}
-.du .p55{font-size:calc(55*var(--u));line-height:1.2;font-weight:600}
-.du .p59{font-size:calc(59*var(--u));line-height:calc(77/59);font-weight:600}
-.du .p48{font-size:calc(47.5*var(--u));line-height:1.2;font-weight:600}
-.du .p46{font-size:calc(46*var(--u));line-height:calc(60/46);font-weight:600}
-.du .p30{font-size:calc(30*var(--u));line-height:1.2;font-weight:500}
-.du .p45{font-size:calc(45*var(--u));line-height:1.2;font-weight:600}
-.du .p34{font-size:calc(34*var(--u));line-height:1.2;font-weight:500}
-.du .p42{font-size:calc(42*var(--u));line-height:1.19;font-weight:600}
-.du .p40{font-size:calc(40*var(--u));line-height:1.2;font-weight:600}
-.du .p38{font-size:calc(38*var(--u));line-height:1.19;font-weight:600}
-.du .p32{font-size:calc(32*var(--u));line-height:1.19;font-weight:600}
-.du .p28{font-size:calc(28*var(--u));line-height:1.18;font-weight:600}
-.du .p27{font-size:calc(27.5*var(--u));line-height:1.19;font-weight:600}
-.du .p26{font-size:calc(26*var(--u));line-height:1.19;font-weight:600}
-.du .p25{font-size:calc(25*var(--u));line-height:1.2;font-weight:600}
-.du .p24{font-size:calc(24*var(--u));line-height:1.2;font-weight:500}
-.du .p23{font-size:calc(23*var(--u));line-height:1.2;font-weight:600}
-.du .p20{font-size:calc(20*var(--u));line-height:1.2;font-weight:500}
+/* Type, as the frame sets it: SF Pro, Figma's auto leading (1.2).
+   Tracking is NOT Figma's flat 0. SF is drawn to be tracked as a function of
+   size - negative on display sizes, slightly positive through the middle, and
+   negative again below 19 - the same ramp as `.t-*` above, measured off
+   apple.com. Set at 0 the headlines read loose and soft, which is what made
+   the page look like it was set in something other than SF Pro. */
+.du .p80{font-size:calc(80*var(--u));line-height:1.19;font-weight:600;letter-spacing:-.015em}
+.du .p70{font-size:calc(70*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.011em}
+.du .p65{font-size:calc(65*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.009em}
+.du .p60{font-size:calc(60*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.007em}
+.du .p55{font-size:calc(55*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.005em}
+.du .p59{font-size:calc(59*var(--u));line-height:calc(77/59);font-weight:600;letter-spacing:-.007em}
+.du .p48{font-size:calc(47.5*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.003em}
+.du .p46{font-size:calc(46*var(--u));line-height:calc(60/46);font-weight:600;letter-spacing:-.002em}
+.du .p30{font-size:calc(30*var(--u));line-height:1.2;font-weight:500;letter-spacing:.005em}
+.du .p45{font-size:calc(45*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.002em}
+.du .p34{font-size:calc(34*var(--u));line-height:1.2;font-weight:500;letter-spacing:.004em}
+.du .p42{font-size:calc(42*var(--u));line-height:1.19;font-weight:600;letter-spacing:-.001em}
+.du .p40{font-size:calc(40*var(--u));line-height:1.2;font-weight:600;letter-spacing:0em}
+.du .p38{font-size:calc(38*var(--u));line-height:1.19;font-weight:600;letter-spacing:.001em}
+.du .p32{font-size:calc(32*var(--u));line-height:1.19;font-weight:600;letter-spacing:.004em}
+.du .p28{font-size:calc(28*var(--u));line-height:1.18;font-weight:600;letter-spacing:.007em}
+.du .p27{font-size:calc(27.5*var(--u));line-height:1.19;font-weight:600;letter-spacing:.008em}
+.du .p26{font-size:calc(26*var(--u));line-height:1.19;font-weight:600;letter-spacing:.008em}
+.du .p25{font-size:calc(25*var(--u));line-height:1.2;font-weight:600;letter-spacing:.009em}
+.du .p24{font-size:calc(24*var(--u));line-height:1.2;font-weight:500;letter-spacing:.009em}
+.du .p23{font-size:calc(23*var(--u));line-height:1.2;font-weight:600;letter-spacing:.01em}
+.du .p20{font-size:calc(20*var(--u));line-height:1.2;font-weight:500;letter-spacing:.011em}
 .du .w500{font-weight:500}
 .du .p28 b,.du .p32 b{font-weight:600}
 @media (max-width:1068px){
@@ -549,6 +558,12 @@ html.reduced-motion video.loop{display:none}
   .du .p55{font-size:40px} .du .p48{font-size:34px} .du .p45{font-size:32px} .du .p34{font-size:22px} .du .p42{font-size:30px} .du .p40{font-size:28px}
   .du .p38{font-size:28px} .du .p32{font-size:21px} .du .p28,.du .p27{font-size:21px} .du .p26,.du .p25{font-size:19px}
   .du .p24,.du .p23{font-size:17px} .du .p20{font-size:15px}
+  .du .p80{letter-spacing:-.005em} .du .p70{letter-spacing:-.003em} .du .p65{letter-spacing:-.002em}
+  .du .p60,.du .p59,.du .p55{letter-spacing:0em} .du .p48{letter-spacing:.003em}
+  .du .p46,.du .p45{letter-spacing:.004em} .du .p42{letter-spacing:.005em}
+  .du .p40,.du .p38{letter-spacing:.007em} .du .p34{letter-spacing:.01em}
+  .du .p32,.du .p28,.du .p27{letter-spacing:.011em} .du .p30,.du .p26,.du .p25{letter-spacing:.012em}
+  .du .p24,.du .p23{letter-spacing:-.022em} .du .p20{letter-spacing:-.016em}
 }
 @media (max-width:734px){
   .du .p80{font-size:40px} .du .p70{font-size:34px} .du .p65{font-size:32px} .du .p60{font-size:30px}
@@ -556,6 +571,12 @@ html.reduced-motion video.loop{display:none}
   .du .p55{font-size:30px} .du .p48{font-size:28px} .du .p45{font-size:26px} .du .p34{font-size:19px} .du .p42{font-size:24px} .du .p40{font-size:24px}
   .du .p38{font-size:24px} .du .p32{font-size:19px} .du .p28,.du .p27{font-size:19px} .du .p26,.du .p25{font-size:17px}
   .du .p24,.du .p23{font-size:16px} .du .p20{font-size:14px}
+  .du .p80{letter-spacing:0em} .du .p70,.du .p65,.du .p59{letter-spacing:.004em}
+  .du .p60,.du .p55{letter-spacing:.005em} .du .p48{letter-spacing:.007em}
+  .du .p46,.du .p45{letter-spacing:.008em} .du .p42,.du .p40,.du .p38{letter-spacing:.009em}
+  .du .p34,.du .p32,.du .p28,.du .p27{letter-spacing:.012em}
+  .du .p30,.du .p26,.du .p25{letter-spacing:-.022em}
+  .du .p24,.du .p23{letter-spacing:-.02em} .du .p20{letter-spacing:-.016em}
 }
 
 /* layout primitives (shared by any `.du` page) */
@@ -835,17 +856,21 @@ html.reduced-motion video.loop{display:none}
 .tm-owner-quote{margin:0;align-self:center;padding:calc(56*var(--u))}
 .tm-voices{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
 .tm-voice{background:#f5f5f7;border-radius:calc(20*var(--u));padding:calc(72*var(--u)) calc(80*var(--u));
-  min-height:calc(533*var(--u));display:flex;flex-direction:column;justify-content:flex-start}
+  min-height:calc(533*var(--u));display:flex;flex-direction:column}
 .tm-voice blockquote{margin:0}
+/* the frame sits the attribution on the floor of the card, not under the last
+   line of the quote - `auto` takes up the slack, the padding is the floor of
+   the gap when a quote runs long */
+.tm-voice figcaption{margin-top:auto;padding-top:calc(76*var(--u))}
 
 /* the four ways it broke: one column of copy, the deck beside the first two */
 /* The deck holds still while the four points scroll past it. The wrapper spans
    both sections, so the sticky child holds across the white/black seam; the
    copy keeps the left column to itself. */
 .tm-run{position:relative}
-.tm-run-pin{position:absolute;left:calc(1034*var(--u));top:calc(303*var(--u));bottom:0;
-  width:calc(710*var(--u));pointer-events:none}
-.tm-run-pin > *{position:sticky;top:calc(50vh - 230*var(--u))}
+.tm-run-pin{position:absolute;left:calc(1046*var(--u));top:calc(640*var(--u));bottom:0;
+  width:calc(693*var(--u));pointer-events:none}
+.tm-run-pin > *{position:sticky;top:calc(50vh - 215*var(--u))}
 .tm-broke-copy{max-width:calc(600*var(--u));margin-inline:calc(237*var(--u)) var(--m)}
 .tm-broke-copy > *{margin-top:calc(163*var(--u))}
 .tm-broke-copy > * + *{margin-top:calc(253*var(--u))}
@@ -967,9 +992,15 @@ html.reduced-motion video.loop{display:none}
 /* ---- Times Media, the rebuilt lower half ------------------------------------ */
 .tm-dev{width:calc(1361*var(--u))}
 .tm-dev.du-w{margin-inline:auto}
-.tm-site{display:flex;align-items:flex-start;gap:calc(80*var(--u));margin:calc(231*var(--u)) 0 calc(200*var(--u)) calc(172*var(--u))}
-.tm-mac{width:calc(1018*var(--u));flex:none}
-.tm-site-copy{color:#fff;margin-top:calc(167*var(--u))}
+/* the field pair: the iPad and the agent's phone stand side by side, as drawn */
+.tm-field{display:flex;align-items:flex-start;gap:calc(171*var(--u))}
+.tm-field > :first-child{width:calc(875*var(--u));flex:none}
+.tm-field > :last-child{width:calc(237*var(--u));flex:none;margin-top:calc(10*var(--u))}
+.tm-cap{margin-top:calc(60*var(--u))}
+.tm-site{display:flex;align-items:center;gap:calc(184*var(--u));
+  margin:calc(196*var(--u)) calc(139*var(--u)) calc(200*var(--u)) calc(181*var(--u))}
+.tm-mac,.tm-site-media{width:calc(905*var(--u));flex:none}
+.tm-site-copy{color:#fff;width:calc(491*var(--u));flex:none}
 /* ---- film shrinking into its own headline -----------------------------------
    apple.com/macbook-pro, measured: the film is full-bleed, and over it sits a
    black layer in `mix-blend-mode: multiply` carrying the line in white. White
@@ -1018,11 +1049,18 @@ html:not(.no-reduced-motion) .mx{height:auto}
 @media (max-width:1068px){
   .tm-dev,.tm-dev.du-x{width:auto;margin-left:var(--m);margin-right:var(--m)}
   .tm-site{flex-direction:column;align-items:stretch;margin:48px var(--m) 96px;gap:32px}
-  .tm-mac{width:100%}
+  .tm-mac,.tm-site-media,.tm-site-copy{width:100%}
   .tm-field{margin:64px var(--m) 0;gap:24px;align-items:center}
-  .tm-field-ipad{width:auto;flex:3}
-  .tm-field-phone{width:auto;flex:1;margin:0}
+  .tm-field > :first-child{width:auto;flex:3}
+  .tm-field > :last-child{width:auto;flex:1;margin-top:0}
   .tm-waves-film{aspect-ratio:auto;height:60vh}
+}
+/* on a phone the iPad and the handset cannot share a row - the handset would
+   land about 80px wide - so they stack and the handset keeps its own scale */
+@media (max-width:734px){
+  .tm-field{flex-direction:column;align-items:center}
+  .tm-field > :first-child{width:100%;flex:none}
+  .tm-field > :last-child{width:58%;flex:none}
 }
 
 /* the home band's gradient breathes as the band crosses the screen */

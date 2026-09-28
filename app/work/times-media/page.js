@@ -89,7 +89,7 @@ export default function TimesMedia() {
           </div>
 
           <div className="du-w" style={{ '--mw': 1230, '--mt': 202 }} data-reveal>
-            <Media clip={V('admin')} ratio="1230 / 830" className="screen" data-sv="rise" />
+            <Media clip={V('admin')} ratio="2476 / 1568" className="screen" data-sv="rise" />
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.solution.admin.lead, C.solution.admin.line)}
@@ -141,9 +141,13 @@ export default function TimesMedia() {
               <p className="p38 center tm-cap">{para(sh.line)}</p>
             </div>
           ))}
-          <div className="du-w tm-field" style={{ '--mw': 1230, '--mt': 214 }} data-stagger>
-            <div data-reveal><Media clip={V('maintenance')} ratio="1.54" className="screen" /></div>
-            <div data-reveal><Media clip={V('field')} ratio="3 / 4" className="screen field" /></div>
+          {/* with both street shots still missing there is nothing above this
+              to space away from, so it follows the headline instead */}
+          <div className="du-w tm-field"
+               style={{ '--mw': 1283, '--mt': C.street.shots.some(sh => V(sh.slot)) ? 214 : 130 }}
+               data-stagger>
+            <div data-reveal><Media clip={V('maintenance')} ratio="2476 / 1568" className="screen" /></div>
+            <div data-reveal><Media clip={V('field')} ratio="626 / 1368" className="screen" /></div>
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.street.field.lead, C.street.field.line)}

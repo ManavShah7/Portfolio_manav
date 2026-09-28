@@ -70,7 +70,14 @@ export function Lines({ lines, as: Tag = 'span', className }) {
 // A paragraph authored as a line array for the canvas build. On a page that
 // reflows, those breaks were only ever about the old fixed measure, so the
 // lines are joined and the browser sets the paragraph.
-export const para = lines => (Array.isArray(lines) ? lines.join(' ') : lines).replace(/\s+/g, ' ').trim()
+// A trailing space is meaningful: `cap()` runs a bold opener straight on into
+// the grey that follows, and trimming it welded the two words together
+// ("...to scroll through.No credibility"). Leading space is still dropped.
+export const para = lines => {
+  const raw = Array.isArray(lines) ? lines.join(' ') : lines
+  const one = raw.replace(/\s+/g, ' ').trim()
+  return /\s$/.test(raw) ? `${one} ` : one
+}
 
 export function Chev() {
   return <span className="chev" aria-hidden="true">›</span>
