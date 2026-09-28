@@ -51,35 +51,36 @@ export default function TimesMedia() {
           </div>
         </section>
 
-        {/* ---- the four ways it broke. The frame runs the list down one column
-                with the deck beside the first two, and carries it across the
-                white/black seam - 3 and 4 land on the black. ---- */}
-        <section className="du-sec" style={{ '--pt': 185, '--pb': 104 }}>
-          <h2 className="p70 du-x" style={{ '--x': 237 }} data-reveal>
-            <Lines lines={C.problem.headline} />
-          </h2>
-          <div className="tm-broke">
+        {/* ---- the four ways it broke. The deck holds still while all four
+                scroll past it, across the white/black seam - one sticky frame
+                spanning both sections. ---- */}
+        <div className="tm-run">
+          <section className="du-sec" style={{ '--pt': 185, '--pb': 104 }}>
+            <h2 className="p70 du-x" style={{ '--x': 237 }} data-reveal>
+              <Lines lines={C.problem.headline} />
+            </h2>
             <div className="tm-broke-copy" data-stagger>
               {C.problem.items.slice(0, 2).map((it, i) => (
                 <p key={i} className="p38 lit" data-reveal>{cap(para(it.lead), para(it.lines))}</p>
               ))}
             </div>
-            <div className="tm-broke-media" data-reveal>
-              <Media clip={V('problem')} ratio="696 / 432" className="screen"
-                     alt="The PowerPoint: one board per slide" />
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="du-sec bg-dark" style={{ '--pt': 102, '--pb': 0 }}>
-          <div className="tm-broke">
+          <section className="du-sec bg-dark" style={{ '--pt': 102, '--pb': 170 }}>
             <div className="tm-broke-copy" data-stagger>
               {C.problem.items.slice(2).map((it, i) => (
                 <p key={i} className="p38 lit" data-reveal>{cap(para(it.lead), para(it.lines))}</p>
               ))}
             </div>
-          </div>
+          </section>
 
+          <div className="tm-run-pin" aria-hidden="true">
+            <Media clip={V('problem')} ratio="696 / 432" className="screen"
+                   alt="The PowerPoint: one board per slide" />
+          </div>
+        </div>
+
+        <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 0 }}>
           {/* ---- the solution ---- */}
           <div className="du-w" style={{ '--mw': 1400, '--mt': 445 }}>
             <h2 className="p70 center" style={{ '--ac': RED }} data-reveal>

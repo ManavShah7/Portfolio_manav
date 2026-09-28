@@ -830,9 +830,14 @@ html.reduced-motion video.loop{display:none}
 .tm-voice blockquote{margin:0}
 
 /* the four ways it broke: one column of copy, the deck beside the first two */
-.tm-broke{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;
-  margin-inline:calc(237*var(--u)) var(--m)}
-.tm-broke-copy{max-width:calc(560*var(--u))}
+/* The deck holds still while the four points scroll past it. The wrapper spans
+   both sections, so the sticky child holds across the white/black seam; the
+   copy keeps the left column to itself. */
+.tm-run{position:relative}
+.tm-run-pin{position:absolute;left:calc(1045*var(--u));top:0;bottom:0;
+  width:calc(696*var(--u));pointer-events:none}
+.tm-run-pin > *{position:sticky;top:calc(50vh - 216*var(--u))}
+.tm-broke-copy{max-width:calc(560*var(--u));margin-inline:calc(237*var(--u)) var(--m)}
 .tm-broke-copy > *{margin-top:calc(163*var(--u))}
 .tm-broke-copy > * + *{margin-top:calc(253*var(--u))}
 .tm-site{display:grid;grid-template-columns:minmax(0,1133fr) minmax(0,560fr);
@@ -848,8 +853,11 @@ html.reduced-motion video.loop{display:none}
 @media (max-width:1068px){
   .tm-owner{grid-template-columns:1fr;min-height:0}
   .tm-owner-shot{aspect-ratio:4/3}
-  .tm-voices,.tm-broke,.tm-site,.tm-field{grid-template-columns:1fr;gap:24px}
-  .tm-broke,.tm-site{margin-inline:var(--m)}
+  .tm-voices,.tm-site,.tm-field{grid-template-columns:1fr;gap:24px}
+  .tm-broke-copy,.tm-site{margin-inline:var(--m)}
+  .tm-broke-copy{max-width:none}
+  .tm-run-pin{position:static;width:auto;margin:32px var(--m) 0}
+  .tm-run-pin > *{position:static}
   .tm-voice{min-height:0}
   .tm-hero .pin-copy{margin-left:var(--m);margin-right:var(--m)}
   .tm-intro{max-width:none}
