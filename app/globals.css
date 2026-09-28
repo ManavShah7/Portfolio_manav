@@ -970,9 +970,19 @@ html.reduced-motion video.loop{display:none}
 .tm-site{display:flex;align-items:flex-start;gap:calc(80*var(--u));margin:calc(231*var(--u)) 0 calc(200*var(--u)) calc(172*var(--u))}
 .tm-mac{width:calc(1018*var(--u));flex:none}
 .tm-site-copy{color:#fff;margin-top:calc(167*var(--u))}
+/* The red band holds while the line scrolls up over it. The copy carries the
+   section's height - that is what gives the pin something to hold for - and
+   the scrim ramps over `cover`, not `contain`: contain needs a section much
+   taller than the viewport, and this one is not, so it degenerates and the
+   scrim sticks at its start value (bright red under red type). The ramp is
+   finished by 45% so the line lands on black rather than on the film. */
 .tm-waves{background:#000}
-.tm-waves-film{position:relative;aspect-ratio:1900/1096;overflow:hidden;background:#C8000F center/cover no-repeat}
-.tm-waves-film > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tm-waves-copy{padding:78vh 0 30vh}
+@supports (animation-timeline:view()){
+  html.no-reduced-motion .tm-waves .pin-scrim{
+    animation-range:cover 6% cover 45%;--dim-from:.06;--dim-to:.94;
+  }
+}
 .tm-red{color:#D40B12}
 .tm-cap{color:#fff;margin-top:calc(45*var(--u));padding-inline:var(--m)}
 .tm-field{display:flex;align-items:flex-start;margin:calc(181*var(--u)) 0 0 calc(278*var(--u))}
