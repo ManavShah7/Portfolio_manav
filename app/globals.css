@@ -1275,8 +1275,45 @@ html.reduced-motion video.loop{display:none}
    empty device draws no screen layer at all. */
 .fr{position:relative;line-height:0;max-width:100%}
 .fr > img{display:block;width:100%;height:100%;position:relative;z-index:1;pointer-events:none}
-.fr-screen{position:absolute;z-index:0;overflow:hidden;background:#fff center/cover no-repeat;line-height:0}
+/* Above the mockup, not under it. The cut-out device images are opaque, and
+   the MacBook has the stock wallpaper baked into its screen - so a screen
+   layer behind it is simply invisible. The rect is measured off the mockup,
+   so it lands exactly on the glass; the small radius keeps the corners from
+   squaring off the ones the device has. */
+.fr-screen{position:absolute;z-index:2;overflow:hidden;border-radius:.4%;
+  background:#fff center/cover no-repeat;line-height:0}
 .fr-screen > video{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---- a whole page inside a screen ------------------------------------------
+   A full-page screenshot is far taller than the screen it sits in, so it
+   scrolls through rather than being squashed or cropped. --fr-roll is set by
+   components/Frame.js from the two aspect ratios, as a percentage of the
+   shot's own height, so a re-export of any length still ends exactly on its
+   last row. A shot no taller than the screen gets no roll and simply fills. */
+.fr-shot{display:block;width:100%;height:auto}
+.fr-screen:not(.fr-rolls) > .fr-shot{height:100%;object-fit:cover}
+.fr-rolls > .fr-shot{will-change:transform}
+@keyframes frRoll{ from{transform:translateY(0)} to{transform:translateY(calc(var(--fr-roll) * -1))} }
+@supports (animation-timeline:view()){
+  html.no-reduced-motion .fr-rolls > .fr-shot{
+    animation:frRoll linear both;animation-timeline:view();
+    animation-range:entry 35% exit 15%
+  }
+  /* The pinned laptop never moves, so `view()` on it never progresses. The
+     run wrapper is the thing that passes the viewport, and `contain` is the
+     stretch where the laptop is actually held - which is exactly the window
+     the four points scroll past it in.
+     Only above 1069, where the laptop is actually pinned: below that it is a
+     static block that appears once, after the points, so the run's range has
+     already finished and it would open on the foot of the old page. Its own
+     `view()` is right there. */
+  @media (min-width:1069px){
+    html.no-reduced-motion .lv-run{view-timeline:--lvrun block}
+    html.no-reduced-motion .lv-run-pin .fr-rolls > .fr-shot{
+      animation-timeline:--lvrun;animation-range:contain 0% contain 100%
+    }
+  }
+}
 
 /* ---- devices cut from a frame (components/Device.js) ---------------------- */
 .dev{position:relative}

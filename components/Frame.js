@@ -24,21 +24,37 @@ const DEV = {
 
 export const ratio = kind => DEV[kind].r
 
-export default function Frame({ kind, w, clip, still, alt = '', className = '', style, ...rest }) {
+// The aspect of the screen rectangle itself, which is what a full-page
+// screenshot has to be measured against - not the aspect of the whole mockup.
+const screenRatio = d => (d.r * d.screen[2]) / d.screen[3]
+
+// `shot` is a whole page captured in one image: { src, r } where r is its own
+// width/height. Anything taller than the screen scrolls inside it rather than
+// being squashed or cropped, and --fr-roll is how far it has to travel to
+// bring its last row to the bottom of the screen, as a percentage of its own
+// height: 1 - (shot aspect / screen aspect). Derived, not eyeballed, so a
+// re-export at any length still lands exactly on its own end.
+export default function Frame({ kind, w, clip, still, shot, alt = '',
+                                className = '', style, ...rest }) {
   const d = DEV[kind]
   const [l, t, sw, sh] = d.screen
   const poster = still || clip?.poster || (clip && !clip.video ? clip.src : undefined)
-  const filled = Boolean(poster || clip?.video)
+  const roll = shot ? Math.max(0, 1 - shot.r / screenRatio(d)) : 0
+  const filled = Boolean(poster || clip?.video || shot)
   return (
     <div className={`fr fr-${kind} ${className}`}
          style={{ aspectRatio: d.r,
                   ...(w ? { width: `min(calc(${w} * var(--u)), 100%)` } : null), ...style }} {...rest}>
       {filled && (
-        <span className="fr-screen"
+        <span className={`fr-screen${roll ? ' fr-rolls' : ''}`}
               role={alt ? 'img' : undefined} aria-label={alt || undefined}
               style={{ left: `${l}%`, top: `${t}%`, width: `${sw}%`, height: `${sh}%`,
-                       backgroundImage: poster ? `url(${poster})` : undefined }}>
-          {clip?.video && <Video src={clip.src} poster={clip.poster} />}
+                       ...(roll ? { '--fr-roll': `${(roll * 100).toFixed(2)}%` } : null),
+                       backgroundImage: !shot && poster ? `url(${poster})` : undefined }}>
+          {shot
+            /* eslint-disable-next-line @next/next/no-img-element */
+            ? <img className="fr-shot" src={shot.src} alt="" loading="lazy" />
+            : clip?.video && <Video src={clip.src} poster={clip.poster} />}
         </span>
       )}
       {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -63,7 +63,11 @@ export default function Liveasy() {
             </div>
           </section>
 
-          <div className="lv-run-pin" aria-hidden="true"><Frame kind="mac" w={760} /></div>
+          {/* the page it replaced, scrolling past inside the laptop while the
+              four points that describe it scroll past on the right */}
+          <div className="lv-run-pin" aria-hidden="true">
+            <Frame kind="mac" w={760} shot={C.shots.old} />
+          </div>
         </div>
 
         {/* ---- the orange band: the film plays full bleed and the line shrinks
@@ -89,7 +93,11 @@ export default function Liveasy() {
                 middle row, which is the one the frame draws mirrored. ---- */}
         <section className="du-sec" style={{ '--pt': 0, '--pb': 0 }}>
           {C.solution.map((row, i) => {
-            const dev = <div key="d" className="lv-row-dev" data-reveal><Frame kind={row.dev} w={row.w} /></div>
+            const dev = (
+              <div key="d" className="lv-row-dev" data-reveal>
+                <Frame kind={row.dev} w={row.w} shot={C.shots[row.shot]} alt={row.alt} />
+              </div>
+            )
             const copy = <p key="c" className="p50 lv-row-copy" data-reveal><Lines lines={row.lines} /></p>
             return (
               <div key={i} className="lv-row" data-stagger
