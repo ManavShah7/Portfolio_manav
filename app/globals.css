@@ -534,6 +534,8 @@ html.reduced-motion video.loop{display:none}
 .du .p60{font-size:calc(60*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.007em}
 .du .p55{font-size:calc(55*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.005em}
 .du .p59{font-size:calc(59*var(--u));line-height:calc(77/59);font-weight:600;letter-spacing:-.007em}
+.du .p64{font-size:calc(64*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.009em}
+.du .p50{font-size:calc(50*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.004em}
 .du .p48{font-size:calc(47.5*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.003em}
 .du .p46{font-size:calc(46*var(--u));line-height:calc(60/46);font-weight:600;letter-spacing:-.002em}
 .du .p30{font-size:calc(30*var(--u));line-height:1.2;font-weight:500;letter-spacing:.005em}
@@ -555,9 +557,11 @@ html.reduced-motion video.loop{display:none}
 @media (max-width:1068px){
   .du .p80{font-size:56px} .du .p70{font-size:48px} .du .p65{font-size:44px} .du .p60{font-size:40px}
   .du .p59{font-size:40px} .du .p46{font-size:32px} .du .p30{font-size:19px}
+  .du .p64{font-size:44px} .du .p50{font-size:36px}
   .du .p55{font-size:40px} .du .p48{font-size:34px} .du .p45{font-size:32px} .du .p34{font-size:22px} .du .p42{font-size:30px} .du .p40{font-size:28px}
   .du .p38{font-size:28px} .du .p32{font-size:21px} .du .p28,.du .p27{font-size:21px} .du .p26,.du .p25{font-size:19px}
   .du .p24,.du .p23{font-size:17px} .du .p20{font-size:15px}
+  .du .p64{letter-spacing:-.002em} .du .p50{letter-spacing:.002em}
   .du .p80{letter-spacing:-.005em} .du .p70{letter-spacing:-.003em} .du .p65{letter-spacing:-.002em}
   .du .p60,.du .p59,.du .p55{letter-spacing:0em} .du .p48{letter-spacing:.003em}
   .du .p46,.du .p45{letter-spacing:.004em} .du .p42{letter-spacing:.005em}
@@ -568,9 +572,11 @@ html.reduced-motion video.loop{display:none}
 @media (max-width:734px){
   .du .p80{font-size:40px} .du .p70{font-size:34px} .du .p65{font-size:32px} .du .p60{font-size:30px}
   .du .p59{font-size:32px} .du .p46{font-size:26px} .du .p30{font-size:17px}
+  .du .p64{font-size:32px} .du .p50{font-size:27px}
   .du .p55{font-size:30px} .du .p48{font-size:28px} .du .p45{font-size:26px} .du .p34{font-size:19px} .du .p42{font-size:24px} .du .p40{font-size:24px}
   .du .p38{font-size:24px} .du .p32{font-size:19px} .du .p28,.du .p27{font-size:19px} .du .p26,.du .p25{font-size:17px}
   .du .p24,.du .p23{font-size:16px} .du .p20{font-size:14px}
+  .du .p64{letter-spacing:.004em} .du .p50{letter-spacing:.008em}
   .du .p80{letter-spacing:0em} .du .p70,.du .p65,.du .p59{letter-spacing:.004em}
   .du .p60,.du .p55{letter-spacing:.005em} .du .p48{letter-spacing:.007em}
   .du .p46,.du .p45{letter-spacing:.008em} .du .p42,.du .p40,.du .p38{letter-spacing:.009em}
@@ -868,9 +874,9 @@ html.reduced-motion video.loop{display:none}
    both sections, so the sticky child holds across the white/black seam; the
    copy keeps the left column to itself. */
 .tm-run{position:relative}
-.tm-run-pin{position:absolute;left:calc(1046*var(--u));top:calc(640*var(--u));bottom:0;
-  width:calc(693*var(--u));pointer-events:none}
-.tm-run-pin > *{position:sticky;top:calc(50vh - 215*var(--u))}
+.tm-run-pin{position:absolute;left:calc(1038*var(--u));top:calc(640*var(--u));bottom:0;
+  width:calc(703*var(--u));pointer-events:none}
+.tm-run-pin > *{position:sticky;top:calc(50vh - 225*var(--u))}
 .tm-broke-copy{max-width:calc(600*var(--u));margin-inline:calc(237*var(--u)) var(--m)}
 .tm-broke-copy > *{margin-top:calc(163*var(--u))}
 .tm-broke-copy > * + *{margin-top:calc(253*var(--u))}
@@ -980,6 +986,105 @@ html.reduced-motion video.loop{display:none}
   .hm-wall-item img{height:auto;margin:0;aspect-ratio:var(--w)/var(--h)}
 }
 
+/* =============================================================================
+   Liveasy - to Manav's frame, in design units (.du). 11051 design px tall.
+   Never redeclare --u or --m here; they come from .du.
+   ========================================================================== */
+.lv{background:#fff;color:#1D1D1F}
+.lv .du-sec{background:#fff;position:relative;display:flow-root}
+.lv .du-sec.bg-dark,.lv .bg-dark{background:#000;color:#F5F5F7}
+.lv .center{text-align:center}
+
+/* the opening lines on black: 45, 54 pitch, 118 between blocks */
+.lv-intro{max-width:calc(1000*var(--u))}
+.lv-intro + .lv-intro{margin-top:calc(118*var(--u))}
+.lv-hero .pin-copy{padding:calc(151*var(--u)) 0 calc(130*var(--u));
+  width:auto;max-width:none;margin:0 var(--m) 0 calc(520*var(--u))}
+
+/* the four points, with the laptop holding still beside them. The wrapper
+   spans both sections so the sticky child holds across the seam. */
+.lv-run{position:relative}
+.lv-run-pin{position:absolute;left:calc(190*var(--u));top:calc(718*var(--u));bottom:0;
+  width:calc(760*var(--u));pointer-events:none}
+.lv-run-pin > *{position:sticky;top:calc(50vh - 229*var(--u))}
+/* The four points are spaced top-to-top in the frame (291, 336, 291), and
+   they are not all the same number of lines, so each margin is the gap minus
+   the block above it rather than one repeated value. */
+.lv-points{margin-left:calc(1107*var(--u));margin-right:var(--m);max-width:calc(565*var(--u))}
+.lv-points > :first-child{margin-top:calc(294*var(--u))}
+.lv-points > * + *{margin-top:calc(201*var(--u))}
+.lv-points-dark > :first-child{margin-top:calc(46*var(--u))}
+
+.lv-res-head{margin-top:calc(387*var(--u))}
+.lv-cards{display:grid;grid-template-columns:1fr 1fr;gap:calc(52*var(--u)) calc(43*var(--u));
+  width:calc(941*var(--u));margin:calc(197*var(--u)) var(--m) 0 calc(458*var(--u))}
+.lv-card{background:#fff;color:#1D1D1F;border-radius:calc(27*var(--u));
+  height:calc(450*var(--u));padding:calc(59*var(--u)) calc(58*var(--u))}
+
+/* the redesign rows: a device and its line. The middle row puts the copy
+   first in the DOM, which is how the frame mirrors it - no row-reverse, so
+   every margin below stays the physical one the frame measures. */
+.lv-row{display:flex;align-items:flex-start;margin-top:calc(var(--mt)*var(--u))}
+.lv-row > :first-child{margin-left:calc(var(--dx)*var(--u));flex:none}
+.lv-row-dev{width:min(calc(var(--dw)*var(--u)),100%);flex:none}
+.lv-row > * + *{margin-left:calc(var(--cgap)*var(--u));flex:none}
+/* the copy sits --cy below the top of the device either way round */
+.lv-row-copy{width:calc(var(--cw)*var(--u));margin-top:calc(var(--cy)*var(--u))}
+
+@media (max-width:1068px){
+  .lv-hero .pin-copy{margin-inline:var(--m)}
+  .lv-intro{max-width:none}
+  .lv-run-pin{position:static;width:auto;margin:0;padding:8px var(--m) 48px;background:#fff}
+  .lv-run-pin > *{position:relative;top:auto;width:100%}
+  .lv-points{margin-inline:var(--m);max-width:none}
+  .lv-points > *,.lv-points > :first-child{margin-top:48px}
+  .lv-res-head{margin-top:96px}
+  .lv-cards{gap:24px}
+  .lv-card{height:auto;min-height:200px;padding:28px;border-radius:20px}
+  .lv .bg-dark .lv-cards{padding-bottom:96px}
+  .lv-cards{width:auto;margin:64px var(--m) 0}
+  .lv-row{flex-direction:column;align-items:stretch;margin:80px var(--m) 0}
+  .lv-row > :first-child,.lv-row > * + *{margin-left:0}
+  .lv-row-dev{width:100%}
+  .lv-row > * + *{margin-top:28px}
+  .lv-row-copy{margin-top:28px}
+  .lv-row-copy{width:auto}
+  .lv-row .fr{width:100% !important}
+}
+
+/* ---- the foot every updated frame draws ------------------------------------
+   A #F5F5F7 band, 567 tall, four columns at 146 / 519 / 1120 / 1479. The
+   label is 48 and the note under it 34, both measured off liveasy.png. */
+.ft{background:#F5F5F7;color:#1D1D1F;padding:calc(189*var(--u)) 0 calc(293*var(--u))}
+.ft-row{display:grid;grid-template-columns:373fr 601fr 359fr 421fr;padding-left:calc(146*var(--u));
+  padding-right:var(--m)}
+.ft-col{display:block;text-decoration:none;color:inherit}
+.ft-label{display:block;font-weight:600;white-space:nowrap}
+.ft-label .chev{font-weight:400}
+.ft-note{display:block;color:#6E6E73;margin-top:calc(26*var(--u));white-space:nowrap}
+.ft-col:hover .ft-label{color:#000}
+.ft-col:hover .ft-note{color:#1D1D1F}
+.ft-contact{display:block}
+.ft-contact:hover{text-decoration:underline}
+@media (max-width:1068px){
+  .ft{padding:72px 0 80px}
+  .ft-row{grid-template-columns:1fr 1fr;gap:40px 24px;padding-inline:var(--m)}
+  .ft-note{white-space:normal;word-break:break-word}
+}
+@media (max-width:734px){
+  .ft{padding:56px 0 64px}
+  .ft-row{grid-template-columns:1fr;gap:28px}
+}
+
+/* ---- devices as the frames draw them (components/Frame.js) ----------------
+   The mockup image carries the bezel and its own corner radius, so the screen
+   layer sits UNDER nothing and over the image only where a clip fills it. An
+   empty device draws no screen layer at all. */
+.fr{position:relative;line-height:0;max-width:100%}
+.fr > img{display:block;width:100%;height:100%;position:relative;z-index:1;pointer-events:none}
+.fr-screen{position:absolute;z-index:0;overflow:hidden;background:#fff center/cover no-repeat;line-height:0}
+.fr-screen > video{display:block;width:100%;height:100%;object-fit:cover}
+
 /* ---- devices cut from a frame (components/Device.js) ---------------------- */
 .dev{position:relative}
 .dev-frame{display:block;width:100%;height:auto;position:relative;z-index:1;pointer-events:none}
@@ -993,10 +1098,10 @@ html.reduced-motion video.loop{display:none}
 .tm-dev{width:calc(1361*var(--u))}
 .tm-dev.du-w{margin-inline:auto}
 /* the field pair: the iPad and the agent's phone stand side by side, as drawn */
-.tm-field{display:flex;align-items:flex-start;gap:calc(171*var(--u))}
-.tm-field > :first-child{width:calc(875*var(--u));flex:none}
-.tm-field > :last-child{width:calc(237*var(--u));flex:none;margin-top:calc(10*var(--u))}
-.tm-cap{margin-top:calc(60*var(--u))}
+.tm-field{display:flex;align-items:flex-start;gap:calc(164*var(--u))}
+.tm-field > :first-child{width:calc(883*var(--u));flex:none}
+.tm-field > :last-child{width:calc(251*var(--u));flex:none;margin-top:calc(22*var(--u))}
+.tm-cap{margin-top:calc(64*var(--u))}
 .tm-site{display:flex;align-items:center;gap:calc(184*var(--u));
   margin:calc(196*var(--u)) calc(139*var(--u)) calc(200*var(--u)) calc(181*var(--u))}
 .tm-mac,.tm-site-media{width:calc(905*var(--u));flex:none}
@@ -1009,17 +1114,27 @@ html.reduced-motion video.loop{display:none}
    Only `transform: scale()` animates; the font-size never changes. Apple runs
    400 -> 1 and the curve is close to exponential, so the stops below are its
    own measured values rather than an ease. */
-.mx{position:relative;background:#000;height:220vh}
+/* --mx-run is the whole section; the sticky stage takes 100vh of it, so the
+   shrink is driven by what is left. 220vh gave 120vh of scroll and read slow;
+   170vh gives 70vh, which is a little under twice the pace. */
+.mx{position:relative;background:#000;height:var(--mx-run,170vh)}
 .mx-stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate;background:#000}
 .mx-still,.mx-film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   background-size:cover;background-position:center}
 .mx-mask{position:absolute;inset:0;background:#000;mix-blend-mode:multiply;
   display:flex;align-items:center;justify-content:center;overflow:hidden}
-.mx-text{margin:0;color:#fff;font-size:80px;line-height:1.05;font-weight:600;
-  letter-spacing:-.02em;white-space:nowrap;transform:scale(400);
-  /* the zoom has to start inside a stroke, or the first screen is black
-     instead of film - this point has solid white for 5px around it */
-  transform-origin:40.4% 70.2%;will-change:transform}
+/* 80px is Apple's, and it is what the band is drawn at, but the line has to
+   fit the window at scale 1 or its last frame is clipped - 5vw lands on 80 at
+   1600 and scales down from there. */
+.mx-text{margin:0;color:#fff;font-size:clamp(22px,5vw,80px);line-height:1.05;font-weight:600;
+  letter-spacing:-.02em;white-space:nowrap;text-align:center;transform:scale(400);
+  /* The zoom has to start INSIDE a stroke or the first screen is black instead
+     of film: at 400x the visible window is about 5 x 2.5 px of the line, so a
+     centred origin can land in the gap between two glyphs. --mx-origin is
+     found per band by rendering the line and searching for a point with solid
+     white for 4px in every direction (scripts/mx-origin.mjs). */
+  transform-origin:var(--mx-origin,49.1% 50%);will-change:transform}
+.mx-text .ln{display:block}
 /* the readable copy under the film, for no-timeline browsers and AT */
 .mx-read{position:absolute;inset:auto 0 0;padding:0 0 12vh;pointer-events:none}
 
@@ -1100,5 +1215,9 @@ html.no-reduced-motion .pk-hero .pin-scrim,html.no-reduced-motion .tm-hero .pin-
 @media (max-width:1068px){ .pk-wn-row{grid-template-columns:1fr;margin-inline:var(--m);gap:16px} .pk-wn-row .pk-wn{height:auto;min-height:220px} }
 
 .pk-projects .paddle:disabled{opacity:1}
-.tm .pk-other{margin-bottom:calc(149*var(--u))}
+.tm .pk-other{margin-bottom:calc(134*var(--u))}
+/* in a flex track a block child takes its image's intrinsic width, so the
+   slide has to carry the frame's width itself */
+.ow-slide{display:block;flex:none;width:calc(778*var(--u))}
+@media (max-width:1068px){ .ow-slide{width:min(760px,calc(100vw - 2 * var(--m)))} }
 @media (max-width:1068px){ .pk-find-body{font-size:17px !important;max-width:none} }

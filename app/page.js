@@ -2,8 +2,6 @@ import Link from 'next/link'
 
 import Reveal from '@/components/Reveal'
 import { Lines } from '@/components/Chrome'
-import { Video } from '@/components/Media'
-import { media } from '@/lib/clips'
 import * as C from '@/lib/home-copy'
 
 // Built to Manav's frame in design units (.du), the same as the case studies:
@@ -25,32 +23,27 @@ export default function Home() {
           </nav>
         </header>
 
-        {/* ---- the line, on the gradient the frame draws ---- */}
+        {/* ---- the line, on the gradient the frame draws. The gradient is
+                its own layer so it can breathe as the band crosses the screen;
+                without it the band was white and so was the line. ---- */}
         <section className="hm-band">
+          <span className="hm-band-bg" aria-hidden="true" data-sv="zoom" />
           <p className="p46 center" data-reveal><Lines lines={C.hero} /></p>
         </section>
 
         {/* ---- the work: every screen the frame draws is a case study ---- */}
+        {/* Every screen is still its case study, but the updated frame draws
+            them empty, so the mockups carry their own blank screens and
+            nothing is composited on top. */}
         <section className="hm-devices" aria-label="Selected work" data-stagger>
-          {C.devices.map(d => {
-            const clip = d.clip ? media(d.clip) : null
-            const [l, t, w, h] = d.screen
-            return (
-              <Link key={d.slug} href={`/work/${d.slug}`} className={`hm-dev ${d.cls}`}
-                    aria-label={`${d.name} case study`} data-reveal>
-                {/* the project, sitting in the device's own screen rectangle */}
-                <span className="hm-dev-screen"
-                      style={{ left: `${l}%`, top: `${t}%`, width: `${w}%`, height: `${h}%`,
-                               backgroundImage: d.still ? `url(${d.still})`
-                                 : clip?.poster ? `url(${clip.poster})` : undefined }}>
-                  {clip?.video && <Video src={clip.src} poster={clip.poster} />}
-                </span>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={IMG(d.img)} alt="" />
-                <span className="hm-dev-name p30">{d.name}</span>
-              </Link>
-            )
-          })}
+          {C.devices.map(d => (
+            <Link key={d.slug} href={`/work/${d.slug}`} className={`hm-dev ${d.cls}`}
+                  aria-label={`${d.name} case study`} data-reveal>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={IMG(d.img)} alt="" />
+              <span className="hm-dev-name p30">{d.name}</span>
+            </Link>
+          ))}
         </section>
 
         {/* ---- purpose ---- */}

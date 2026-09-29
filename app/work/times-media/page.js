@@ -1,5 +1,7 @@
-import { Page, Lines, para } from '@/components/Chrome'
-import { CaseHero, NextProject } from '@/components/Case'
+import { Page, Lines, Outro, para } from '@/components/Chrome'
+import { CaseHero } from '@/components/Case'
+import Frame from '@/components/Frame'
+import OtherWork from '@/components/OtherWork'
 import { Media, Video } from '@/components/Media'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
@@ -75,8 +77,7 @@ export default function TimesMedia() {
           </section>
 
           <div className="tm-run-pin" aria-hidden="true">
-            <Media clip={V('problem')} ratio="696 / 432" className="screen"
-                   alt="The PowerPoint: one board per slide" />
+            <Frame kind="ipad" w={703} />
           </div>
         </div>
 
@@ -89,7 +90,7 @@ export default function TimesMedia() {
           </div>
 
           <div className="du-w" style={{ '--mw': 1230, '--mt': 202 }} data-reveal>
-            <Media clip={V('admin')} ratio="2476 / 1568" className="screen" data-sv="rise" />
+            <Frame kind="ipad" w={1300} data-sv="rise" />
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.solution.admin.lead, C.solution.admin.line)}
@@ -100,7 +101,7 @@ export default function TimesMedia() {
           </h3>
           <div className="tm-site">
             <div className="tm-site-media" data-reveal>
-              <Media clip={V('hero')} ratio="1133 / 665" className="screen" />
+              <Frame kind="mac" w={905} />
             </div>
             <p className="p38 tm-site-copy" data-reveal>{para(C.solution.site)}</p>
           </div>
@@ -126,28 +127,25 @@ export default function TimesMedia() {
           {/* the line again, in the ink the frame gives it, for anyone whose
               browser has no scroll timeline and for screen readers */}
           <div className="mx-read">
-            <p className="p60 center" style={{ color: RED }}><Lines lines={C.waves} /></p>
+            <p className="p70 center" style={{ color: RED }}><Lines lines={C.waves} /></p>
           </div>
         </section>
 
-        {/* ---- 3D street view ---- */}
-        <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 240 }}>
-          <h2 className="p60 du-x" style={{ '--x': 190 }} data-reveal><Lines lines={C.street.headline} /></h2>
-          {/* with no recording there is nothing to caption, so the whole block
-              comes out rather than leaving two margins stacked on empty space */}
-          {C.street.shots.map((sh, i) => V(sh.slot) && (
-            <div key={sh.slot} className="du-w" style={{ '--mw': 1230, '--mt': i ? 214 : 176 }} data-reveal>
-              <Media clip={V(sh.slot)} ratio="1230 / 830" className="screen" />
+        {/* ---- 3D street view. The updated frame turns the ground back to
+                white here and keeps it white all the way to the foot. ---- */}
+        <section className="du-sec" style={{ '--pt': 437, '--pb': 240 }}>
+          <h2 className="p70 du-x" style={{ '--x': 256 }} data-reveal>
+            <Lines lines={C.street.headline} />
+          </h2>
+          {C.street.shots.map((sh, i) => (
+            <div key={sh.slot} className="du-w tm-shot" style={{ '--mw': 1221, '--mt': i ? 342 : 225 }} data-reveal>
+              <Frame kind="ipad" w={1221} />
               <p className="p38 center tm-cap">{para(sh.line)}</p>
             </div>
           ))}
-          {/* with both street shots still missing there is nothing above this
-              to space away from, so it follows the headline instead */}
-          <div className="du-w tm-field"
-               style={{ '--mw': 1283, '--mt': C.street.shots.some(sh => V(sh.slot)) ? 214 : 130 }}
-               data-stagger>
-            <div data-reveal><Media clip={V('maintenance')} ratio="2476 / 1568" className="screen" /></div>
-            <div data-reveal><Media clip={V('field')} ratio="626 / 1368" className="screen" /></div>
+          <div className="du-w tm-field" style={{ '--mw': 1296, '--mt': 281 }} data-stagger>
+            <div data-reveal><Frame kind="ipad" w={883} /></div>
+            <div data-reveal><Frame kind="phone" w={251} /></div>
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.street.field.lead, C.street.field.line)}
@@ -155,17 +153,15 @@ export default function TimesMedia() {
         </section>
 
         {/* ---- impact ---- */}
-        <section className="du-sec" style={{ '--pt': 300, '--pb': 300 }}>
+        <section className="du-sec" style={{ '--pt': 233, '--pb': 0 }}>
           <div className="du-w" style={{ '--mw': 1400 }}>
-            <p className="p60 center" style={{ color: RED }} data-reveal><Lines lines={C.impact} /></p>
+            <p className="p65 center" style={{ color: RED }} data-reveal><Lines lines={C.impact} /></p>
           </div>
         </section>
 
-        <section className="du-sec" style={{ '--pt': 0, '--pb': 120 }}>
-          <h2 className="p60 du-x" style={{ '--x': 195 }} data-reveal><Lines lines={C.other} /></h2>
-        </section>
+        <OtherWork slug="times-media" head={C.other} headX={403} other={{ pt: 164, pb: 0 }} />
+        <Outro x={164} pt={225} pb={267} />
       </div>
-      <NextProject slug="times-media" />
     </Page>
   )
 }

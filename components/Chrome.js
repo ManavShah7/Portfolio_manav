@@ -25,29 +25,59 @@ export function Nav({ title, dark = false }) {
   )
 }
 
+export const LINKEDIN = 'https://www.linkedin.com/in/manavshah177'
+export const PHONE = 'tel:+16177498140'
+
+// The foot of every case study, as the updated frames draw it: "Like my work?
+// / Get in contact." on the page's own ground, then a #F5F5F7 band carrying
+// four columns. Measured off liveasy.png - band 567 tall, labels 48 at 189
+// from its top, the note under them 34, columns at x 146 / 519 / 1120 / 1479.
+const FEET = [
+  { label: 'Resume',   note: 'View & Download',             href: RESUME, download: true },
+  { label: 'Email',    note: 'shah.manavd@northeastern.edu', href: EMAIL },
+  { label: 'Linkedin', note: 'Let\u2019s connect',              href: LINKEDIN, blank: true },
+  { label: 'Contact',  note: '+1 (617)749-8140',            href: PHONE },
+]
+
 export function Footer() {
   return (
-    <footer className="foot">
-      <div className="wrap foot-in">
-        <span>Designed and built by Manav Shah. <span className="egg">god bless the white monster</span></span>
-        <span className="foot-links">
-          <a href={EMAIL}>Email</a>
-          <a href="https://www.linkedin.com/in/manavshah177" target="_blank" rel="noreferrer">LinkedIn</a>
-          <a href={RESUME} download>Resume</a>
-        </span>
+    <footer className="ft du" aria-label="Contact">
+      <div className="ft-row" data-stagger>
+        {FEET.map(f => (
+          <a key={f.label} className="ft-col" href={f.href}
+             {...(f.download ? { download: true } : null)}
+             {...(f.blank ? { target: '_blank', rel: 'noreferrer' } : null)} data-reveal>
+            <span className="p48 ft-label">{f.label} <Chev /></span>
+            <span className="p34 ft-note">{f.note}</span>
+          </a>
+        ))}
       </div>
     </footer>
   )
 }
 
-// Every page: the page and the entrance driver. The frames draw no global nav
-// and no footer - a case study opens on its film and ends on its own contact
-// line - so `Nav` and `Footer` are kept here but not mounted. `title` and
-// `dark` stay in the signature so the pages do not all have to change.
+// "Like my work? / Get in contact." - the last thing on the page above the
+// footer band. 70, left at 156, on whatever ground the section sits on.
+export function Outro({ x = 156, pt = 300, pb = 298, lines = ['Like my work?', 'Get in contact.'] }) {
+  return (
+    <section className="du-sec" style={{ '--pt': pt, '--pb': pb }}>
+      <p className="p70 du-x" style={{ '--x': x }} data-reveal>
+        <span className="ln">{lines[0]}</span>
+        <a className="ln ft-contact" href={EMAIL}>{lines[1]}</a>
+      </p>
+    </section>
+  )
+}
+
+// Every case study: the page, the foot the updated frames draw, and the
+// entrance driver. There is still no global nav - a case study opens on its
+// film - so `Nav` is kept here but not mounted. `title` and `dark` stay in the
+// signature so the pages do not all have to change.
 export function Page({ title, dark, children }) {
   return (
     <>
       <main>{children}</main>
+      <Footer />
       <Reveal />
     </>
   )
