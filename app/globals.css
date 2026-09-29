@@ -456,6 +456,24 @@ html.reduced-motion video.loop{display:none}
    ========================================================================== */
 .on-dark-2{color:rgba(245,245,247,.72)}
 .pin-first{position:relative;height:100vh;height:100svh}
+
+/* ---- the credit row on a hero film ----------------------------------------
+   Three facts and nothing else, on a hairline at the foot of the first
+   screen, left-aligned to the copy that follows it. Values in white, labels
+   in a muted white so the eye reads the facts and not the scaffolding. */
+.pin-credits{position:absolute;left:calc(520*var(--u));right:var(--m);
+  bottom:calc(132*var(--u));display:flex;gap:calc(96*var(--u));
+  padding-top:calc(30*var(--u));border-top:1px solid rgba(255,255,255,.28)}
+.pin-credit{display:flex;flex-direction:column;gap:calc(8*var(--u))}
+.pin-credit-label{color:rgba(255,255,255,.58);font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.pin-credit-value{color:#fff;font-weight:600;white-space:nowrap}
+@media (max-width:1068px){
+  .pin-credits{left:var(--m);right:var(--m);bottom:56px;gap:32px;
+    padding-top:18px;flex-wrap:wrap}
+  .pin-credit-value{white-space:normal}
+}
+@media (max-width:734px){ .pin-credits{gap:20px 28px;bottom:40px} }
 .pin-copy{padding:30vh 0 40vh}
 .intro-line{max-width:17em;text-wrap:pretty}
 .intro-line + .intro-line{margin-top:32vh}
@@ -1621,5 +1639,12 @@ html.no-reduced-motion .pk-hero .pin-scrim,html.no-reduced-motion .tm-hero .pin-
 /* in a flex track a block child takes its image's intrinsic width, so the
    slide has to carry the frame's width itself */
 .ow-slide{display:block;flex:none;width:calc(778*var(--u))}
+/* the project's name under its screen, with the chevron this codebase already
+   uses for "there is more this way" */
+.ow-name{display:flex;align-items:center;gap:calc(10*var(--u));
+  margin-top:calc(34*var(--u));font-weight:600;color:inherit}
+.ow-name .chev{color:#8A8A8E;transition:transform .3s cubic-bezier(0,0,.5,1)}
+html.no-touch .ow-slide:hover .ow-name .chev{transform:translateX(calc(6*var(--u)))}
+@media (max-width:1068px){ .ow-name{margin-top:18px;gap:8px} }
 @media (max-width:1068px){ .ow-slide{width:min(760px,calc(100vw - 2 * var(--m)))} }
 @media (max-width:1068px){ .pk-find-body{font-size:17px !important;max-width:none} }

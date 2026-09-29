@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
-import { Lines } from './Chrome'
+import { Lines, Chev } from './Chrome'
 import Frame from './Frame'
+import { media } from '@/lib/clips'
 import Gallery from './Gallery'
 import { WORK } from '@/lib/work'
 
@@ -12,7 +13,8 @@ import { WORK } from '@/lib/work'
 function Slide({ w }) {
   return (
     <Link href={`/work/${w.slug}`} className="ow-slide" aria-label={`${w.name} case study`} data-reveal>
-      <Frame kind="ipad" w={778} />
+      <Frame kind="ipad" w={778} clip={media(`other-${w.slug}`)} />
+      <span className="ow-name p30">{w.name} <Chev /></span>
     </Link>
   )
 }

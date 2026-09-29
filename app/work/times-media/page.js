@@ -3,7 +3,6 @@ import { CaseHero } from '@/components/Case'
 import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import { Media, Video } from '@/components/Media'
-import Orbit from '@/components/Orbit'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
 
@@ -27,7 +26,7 @@ export default function TimesMedia() {
   return (
     <Page title="Times Media" dark>
       <div className="tm du cine">
-        <CaseHero clip={media('times-court')} className="tm-hero">
+        <CaseHero clip={media('times-court')} className="tm-hero" credits={C.credits}>
           {/* each line rises out of its own box, a beat apart, over the film */}
           {C.intro.map((lines, i) => (
             <p key={i} className="p48 tm-intro" data-reveal data-swipe>
@@ -39,8 +38,8 @@ export default function TimesMedia() {
         {/* ---- research ---- */}
         <section className="du-sec" style={{ '--pt': 185, '--pb': 62 }}>
           <div className="du-w" style={{ '--mw': 1400 }}>
-            <h2 className="p60 center" style={{ '--ac': RED }} data-reveal>
-              <Lines lines={C.research.headline} />
+            <h2 className="p60 center" style={{ '--ac': RED }} data-reveal data-swipe>
+              <Lines lines={C.research.headline} swipe />
             </h2>
           </div>
           <div className="du-w tm-owner" style={{ '--mw': 1161, '--mt': 229 }} data-reveal>
@@ -65,8 +64,8 @@ export default function TimesMedia() {
                 spanning both sections. ---- */}
         <div className="tm-run">
           <section className="du-sec" style={{ '--pt': 185, '--pb': 104 }}>
-            <h2 className="p70 du-x" style={{ '--x': 237 }} data-reveal>
-              <Lines lines={C.problem.headline} />
+            <h2 className="p70 du-x" style={{ '--x': 237 }} data-reveal data-swipe>
+              <Lines lines={C.problem.headline} swipe />
             </h2>
             <div className="tm-broke-copy" data-stagger>
               {C.problem.items.slice(0, 2).map((it, i) => (
@@ -91,8 +90,8 @@ export default function TimesMedia() {
         <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 0 }}>
           {/* ---- the solution ---- */}
           <div className="du-w" style={{ '--mw': 1400, '--mt': 445 }}>
-            <h2 className="p70 center" style={{ '--ac': RED }} data-reveal>
-              <Lines lines={C.solution.headline} />
+            <h2 className="p70 center" style={{ '--ac': RED }} data-reveal data-swipe>
+              <Lines lines={C.solution.headline} swipe />
             </h2>
           </div>
 
@@ -108,7 +107,7 @@ export default function TimesMedia() {
           </h3>
           <div className="tm-site">
             <div className="tm-site-media" data-reveal>
-              <Frame kind="mac" w={905} clip={V('hero')} />
+              <Frame kind="mac" w={905} clip={V('hero')} data-sv="rise" />
             </div>
             <p className="p38 tm-site-copy" data-reveal>{para(C.solution.site)}</p>
           </div>
@@ -141,18 +140,15 @@ export default function TimesMedia() {
         {/* ---- 3D street view. The updated frame turns the ground back to
                 white here and keeps it white all the way to the foot. ---- */}
         <section className="du-sec" style={{ '--pt': 437, '--pb': 240 }}>
-          <h2 className="p70 du-x" style={{ '--x': 256 }} data-reveal>
-            <Lines lines={C.street.headline} />
+          <h2 className="p70 du-x" style={{ '--x': 256 }} data-reveal data-swipe>
+            <Lines lines={C.street.headline} swipe />
           </h2>
-          {/* The first of these is the real thing: drag it and the view pans
-              around the hoarding, from the pan in his own Street View capture.
-              The second is the reach heatmap. */}
           <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal>
-            <Frame kind="ipad" w={1221} orbit={C.shots.orbit} Orbit={Orbit} />
+            <Frame kind="ipad" w={1221} clip={V('street')} data-sv="rise" />
             <p className="p38 center tm-cap">{para(C.street.shots[0].line)}</p>
           </div>
           <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 342 }} data-reveal>
-            <Frame kind="ipad" w={1221} clip={V('reach')} />
+            <Frame kind="ipad" w={1221} clip={V('reach')} data-sv="rise" />
             <p className="p38 center tm-cap">{para(C.street.shots[1].line)}</p>
           </div>
           <div className="du-w tm-field" style={{ '--mw': 1296, '--mt': 281 }} data-stagger>
@@ -167,7 +163,8 @@ export default function TimesMedia() {
         {/* ---- impact ---- */}
         <section className="du-sec" style={{ '--pt': 233, '--pb': 0 }}>
           <div className="du-w" style={{ '--mw': 1400 }}>
-            <p className="p65 center" style={{ color: RED }} data-reveal><Lines lines={C.impact} /></p>
+            <p className="p65 center" style={{ color: RED }} data-reveal data-swipe>
+              <Lines lines={C.impact} swipe /></p>
           </div>
         </section>
 

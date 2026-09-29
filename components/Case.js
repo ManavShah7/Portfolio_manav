@@ -9,7 +9,23 @@ import { next } from '@/lib/work'
 // the film is sticky and holds for the length of the section, the product name
 // sits on it for the first screen, and the opening lines then scroll up over
 // the film at 1:1 while a flat black scrim darkens it on a linear ramp.
-export function CaseHero({ clip, name, kind, fill, className = '', children }) {
+// The credit row on the film's first screen: who, what they did, how long.
+// Left-aligned to the intro copy above it and sitting on a hairline, so it
+// reads as a caption on the film rather than a panel over it.
+function Credits({ items }) {
+  return (
+    <div className="pin-credits" data-reveal>
+      {items.map(c => (
+        <div key={c.label} className="pin-credit">
+          <span className="p20 pin-credit-label">{c.label}</span>
+          <span className="p30 pin-credit-value">{c.value}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export function CaseHero({ clip, name, kind, fill, credits, className = '', children }) {
   const still = clip?.poster || (clip && !clip.video ? clip.src : undefined)
   return (
     <section className={`pin ${className}`}>
@@ -20,6 +36,7 @@ export function CaseHero({ clip, name, kind, fill, className = '', children }) {
         <div className="pin-scrim" />
       </div>
       <div className="pin-first">
+        {credits && <Credits items={credits} />}
         {/* a page can open on the film alone - Peak's frame has no title on it */}
         {name && (
           <div className="wrap pin-title">
