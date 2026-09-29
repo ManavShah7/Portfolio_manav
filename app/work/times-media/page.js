@@ -115,13 +115,13 @@ export default function TimesMedia() {
             letterforms. The text starts at scale 400 - one stroke filling the
             screen, which reads as the film itself - and shrinks to 1 as you
             scroll. Nothing is clipped; it is all the blend. */}
-        <section className="mx tm-waves">
+        <section className="mx tm-waves" style={{ '--mx-origin': '47.6% 47.6%', '--mx-em': 12.0 }}>
           <div className="mx-stage">
             <div className="mx-still"
                  style={waves?.poster ? { backgroundImage: `url(${waves.poster})` } : undefined} />
             {waves?.video && <Video src={waves.src} poster={waves.poster} className="mx-film" />}
             <div className="mx-mask" aria-hidden="true">
-              <p className="mx-text">{C.waves.join(' ')}</p>
+              <p className="mx-text"><Lines lines={C.waves} /></p>
             </div>
           </div>
           {/* the line again, in the ink the frame gives it, for anyone whose

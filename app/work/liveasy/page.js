@@ -71,7 +71,7 @@ export default function Liveasy() {
                 Nothing is clipped - a black layer in `multiply` over the film
                 carries the line in white, so the film shows only through the
                 letterforms. ---- */}
-        <section className="mx lv-band" style={{ '--mx-origin': '50.7% 50.8%' }}>
+        <section className="mx lv-band" style={{ '--mx-origin': '50.7% 50.8%', '--mx-em': 13.4 }}>
           <div className="mx-stage">
             <div className="mx-still"
                  style={band?.poster ? { backgroundImage: `url(${band.poster})` } : undefined} />

@@ -22,4 +22,6 @@ for (let y = 4; y < H - 4; y++) for (let x = 4; x < W - 4; x++) {
   const d = Math.hypot(x / W - 0.5, y / H - 0.5)
   if (!best || d < best.d) best = { x, y, d }
 }
-console.log(`box ${W}x${H}  origin ${best ? (best.x/W*100).toFixed(1)+'% '+(best.y/H*100).toFixed(1)+'%' : 'NONE'}`)
+// --mx-em is the line box in units of font-size: the band divides the window
+// by it, so the line is always as large as fits.
+console.log(`box ${W}x${H}  origin ${best ? (best.x/W*100).toFixed(1)+'% '+(best.y/H*100).toFixed(1)+'%' : 'NONE'}  --mx-em ${(W/80).toFixed(1)}`)

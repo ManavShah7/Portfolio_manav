@@ -549,9 +549,9 @@ html.reduced-motion video.loop{display:none}
 .du .p27{font-size:calc(27.5*var(--u));line-height:1.19;font-weight:600;letter-spacing:.008em}
 .du .p26{font-size:calc(26*var(--u));line-height:1.19;font-weight:600;letter-spacing:.008em}
 .du .p25{font-size:calc(25*var(--u));line-height:1.2;font-weight:600;letter-spacing:.009em}
-.du .p24{font-size:calc(24*var(--u));line-height:1.2;font-weight:500;letter-spacing:.009em}
-.du .p23{font-size:calc(23*var(--u));line-height:1.2;font-weight:600;letter-spacing:.01em}
-.du .p20{font-size:calc(20*var(--u));line-height:1.2;font-weight:500;letter-spacing:.011em}
+.du .p24{font-size:max(12px,calc(24*var(--u)));line-height:1.2;font-weight:500;letter-spacing:.009em}
+.du .p23{font-size:max(12px,calc(23*var(--u)));line-height:1.2;font-weight:600;letter-spacing:.01em}
+.du .p20{font-size:max(12px,calc(20*var(--u)));line-height:1.2;font-weight:500;letter-spacing:.011em}
 .du .w500{font-weight:500}
 .du .p28 b,.du .p32 b{font-weight:600}
 @media (max-width:1068px){
@@ -784,7 +784,12 @@ html.reduced-motion video.loop{display:none}
    Text wears ink tokens, never the series colour; the axis rules are solid
    hairlines one shade off the surface. Every label is HTML at a real size -
    SVG <text> would scale with the viewBox and set at 6-9px in this card. */
-.pk-chart{margin:calc(44*var(--u)) 0 0}
+/* The frame runs the chart out to the card's edges - 569 wide inside a 585
+   card, so the negative margins cancel its padding. Below 1069 the card is
+   narrow enough that the bleed pushed the axis labels off it, so the chart
+   sits inside the padding there instead. */
+.pk-chart{display:block;max-width:none;
+  width:calc(569*var(--u));margin:calc(150*var(--u)) calc(-70*var(--u)) 0 calc(-67*var(--u))}
 /* a two-column grid: the scale on the left, the plot beside it, Time beneath.
    Laid out rather than absolutely positioned, so a label can never fall off
    the edge of the card. */
@@ -801,7 +806,7 @@ html.reduced-motion video.loop{display:none}
 .pk-chart-key span{display:inline-flex;align-items:center;gap:calc(11*var(--u))}
 .pk-chart-key i{width:calc(22*var(--u));height:calc(6*var(--u));border-radius:99px;flex:none}
 @media (max-width:1068px){
-  .pk-chart{margin-top:26px}
+  .pk-chart{width:100%;max-width:100%;margin:32px 0 0}
   .pk-chart-plot{column-gap:10px;row-gap:6px}
   .pk-chart-tick{font-size:13px}
   .pk-chart-key{gap:20px;margin-top:16px;font-size:14px}
@@ -1043,6 +1048,7 @@ html.reduced-motion video.loop{display:none}
   .lv-card{height:auto;min-height:200px;padding:28px;border-radius:20px}
   .lv .bg-dark .lv-cards{padding-bottom:96px}
   .lv-cards{width:auto;margin:64px var(--m) 0}
+  .lh-cards{grid-template-columns:1fr 1fr}
   .lv-row{flex-direction:column;align-items:stretch;margin:80px var(--m) 0}
   .lv-row > :first-child,.lv-row > * + *{margin-left:0}
   .lv-row-dev{width:100%}
@@ -1091,7 +1097,7 @@ html.reduced-motion video.loop{display:none}
 
 /* the people, on the green. The band is the export's own swirl with the line
    painted back out of it, so the words below are live text. */
-.lh-green{height:calc(1162*var(--u));background:url(/media/lighthouse-green.webp) center/cover no-repeat;
+.lh-green{height:calc(1162*var(--u));background:url(/media/lighthouse-band.webp) center/cover no-repeat;
   color:#fff;position:relative}
 .lh-green-head{position:absolute;left:calc(398*var(--u));top:calc(155*var(--u));right:var(--m)}
 
@@ -1115,7 +1121,11 @@ html.reduced-motion video.loop{display:none}
   .lh-shot figcaption{left:24px;top:24px;right:24px}
   .lh-cards{gap:24px}
   .lh-card{height:auto;min-height:180px;padding:28px}
-  .lh-green{height:auto;min-height:60vh;padding:88px 0}
+  /* the wide band has the empty card baked into it, which at this width
+     leaves a green-white-green sandwich, so a card-free strip of the same
+     swirl covers the band instead */
+  .lh-green{height:auto;min-height:52vh;padding:15vh 0;display:flex;align-items:center;
+    background-image:url(/media/lighthouse-band-top.webp)}
   .lh-green-head{position:relative;left:auto;top:auto;margin-inline:var(--m)}
   .lh-row{flex-direction:column;align-items:stretch;margin:80px var(--m) 0}
   .lh-row > :first-child,.lh-row > * + *,
@@ -1139,6 +1149,12 @@ html.reduced-motion video.loop{display:none}
 .ft-col:hover .ft-note{color:#1D1D1F}
 .ft-contact{display:block}
 .ft-contact:hover{text-decoration:underline}
+/* Lighthouse ends on 1864 design px of white, which is a held beat on a
+   1900-wide laptop and most of a screen of nothing on a phone. */
+@media (max-width:1068px){ .ft-outro{padding-top:min(calc(var(--pt)*var(--u)),200px);
+  padding-bottom:min(calc(var(--pb)*var(--u)),140px)} }
+@media (max-width:734px){ .ft-outro{padding-top:min(calc(var(--pt)*var(--u)),120px);
+  padding-bottom:min(calc(var(--pb)*var(--u)),96px)} }
 @media (max-width:1068px){
   .ft{padding:72px 0 80px}
   .ft-row{grid-template-columns:1fr 1fr;gap:40px 24px;padding-inline:var(--m)}
@@ -1196,10 +1212,12 @@ html.reduced-motion video.loop{display:none}
   background-size:cover;background-position:center}
 .mx-mask{position:absolute;inset:0;background:#000;mix-blend-mode:multiply;
   display:flex;align-items:center;justify-content:center;overflow:hidden}
-/* 80px is Apple's, and it is what the band is drawn at, but the line has to
-   fit the window at scale 1 or its last frame is clipped - 5vw lands on 80 at
-   1600 and scales down from there. */
-.mx-text{margin:0;color:#fff;font-size:clamp(22px,5vw,80px);line-height:1.05;font-weight:600;
+/* 80px is Apple's, and what the band is drawn at, but the line has to fit the
+   window at scale 1 or its last frame is clipped. --mx-em is the line box in
+   units of font-size (scripts/mx-origin.mjs prints it), so dividing the window
+   by it makes the line exactly as large as fits, at any width. */
+.mx-text{margin:0;color:#fff;line-height:1.05;font-weight:600;
+  font-size:min(80px,calc((100vw - 96px) / var(--mx-em,12)));
   letter-spacing:-.02em;white-space:nowrap;text-align:center;transform:scale(400);
   /* The zoom has to start INSIDE a stroke or the first screen is black instead
      of film: at 400x the visible window is about 5 x 2.5 px of the line, so a
@@ -1245,6 +1263,10 @@ html:not(.no-reduced-motion) .mx{height:auto}
 }
 /* on a phone the iPad and the handset cannot share a row - the handset would
    land about 80px wide - so they stack and the handset keeps its own scale */
+@media (max-width:480px){
+  .lv-cards,.lh-cards{grid-template-columns:1fr;gap:16px}
+  .lv-card,.lh-card{min-height:0;padding:24px}
+}
 @media (max-width:734px){
   .tm-field{flex-direction:column;align-items:center}
   .tm-field > :first-child{width:100%;flex:none}
@@ -1266,9 +1288,7 @@ html:not(.no-reduced-motion) .mx{height:auto}
 .pk-projects .paddle{background:#D9D9D9 !important}
 .pk-projects .paddle svg{display:none}
 /* the chart card carries the frame's own chart image */
-.pk-chart{display:block;width:calc(569*var(--u));margin:calc(150*var(--u)) calc(-70*var(--u)) 0 calc(-67*var(--u));max-width:none}
 .pk-find-body{max-width:calc(395*var(--u))}
-@media (max-width:734px){ .pk-chart{width:calc(100% + 56px);margin:24px -28px 0} }
 
 /* The case-study heroes, as the frames draw them: the film is soft (blurred)
    and dimmed, with a darker band across its top 197px. */

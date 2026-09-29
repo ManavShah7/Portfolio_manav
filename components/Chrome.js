@@ -60,7 +60,7 @@ export function Footer() {
 // footer band. 70, left at 156, on whatever ground the section sits on.
 export function Outro({ x = 156, pt = 300, pb = 298, lines = ['Like my work?', 'Get in contact.'] }) {
   return (
-    <section className="du-sec" style={{ '--pt': pt, '--pb': pb }}>
+    <section className="du-sec ft-outro" style={{ '--pt': pt, '--pb': pb }}>
       <p className="p70 du-x" style={{ '--x': x }} data-reveal>
         <span className="ln">{lines[0]}</span>
         <a className="ln ft-contact" href={EMAIL}>{lines[1]}</a>
