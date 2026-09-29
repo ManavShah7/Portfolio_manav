@@ -965,7 +965,7 @@ html.reduced-motion video.loop{display:none}
 .tm-owner{display:grid;grid-template-columns:minmax(0,500fr) minmax(0,661fr);
   border-radius:calc(20*var(--u));overflow:hidden;background:#E62132;color:#fff;
   min-height:calc(532*var(--u))}
-.tm-owner-shot{height:100%}
+.tm-owner-shot{height:100%;width:100%;background-position:50% 22% !important}
 .tm-owner-quote{margin:0;align-self:center;padding:calc(56*var(--u))}
 .tm-voices{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
 .tm-voice{background:#f5f5f7;border-radius:calc(20*var(--u));padding:calc(72*var(--u)) calc(80*var(--u));
@@ -1359,6 +1359,22 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
   .ab-pillar{width:82vw}
 }
 
+/* ---- drag to look around (components/Orbit.js) ----------------------------
+   A sprite sheet of the pan from his own Street View capture. background-size
+   is cols x rows of 100%, so background-position steps in whole tiles and no
+   frame is ever half-shown. */
+.orbit{background-repeat:no-repeat;position:relative;cursor:grab;
+  touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none}
+.orbit.held{cursor:grabbing}
+.orbit:focus-visible{box-shadow:0 0 0 3px #2997FF}
+.orbit-hint{position:absolute;left:50%;bottom:4.5%;translate:-50% 0;
+  padding:.5em 1em;border-radius:99px;font-size:max(12px,calc(22*var(--u)));
+  font-weight:500;color:#fff;background:rgba(0,0,0,.42);white-space:nowrap;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:opacity .4s var(--ease-soft);pointer-events:none}
+.orbit.held .orbit-hint,.orbit:not(.ready) .orbit-hint{opacity:0}
+html.touch .orbit-hint::after{content:''}
+
 /* ---- the foot every updated frame draws ------------------------------------
    A #F5F5F7 band, 567 tall, four columns at 146 / 519 / 1120 / 1479. The
    label is 48 and the note under it 34, both measured off liveasy.png. */
@@ -1411,6 +1427,10 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
    shot's own height, so a re-export of any length still ends exactly on its
    last row. A shot no taller than the screen gets no roll and simply fills. */
 .fr-shot{display:block;width:100%;height:auto}
+/* The draggable view fills the screen rect. No background-size here: the
+   component sets it inline to cols x rows of 100%, which is what makes
+   background-position step in whole tiles. */
+.fr-orbit{position:absolute;inset:0;width:100%;height:100%}
 .fr-screen:not(.fr-rolls) > .fr-shot{height:100%;object-fit:cover}
 .fr-rolls > .fr-shot{will-change:transform}
 @keyframes frRoll{ from{transform:translateY(0)} to{transform:translateY(calc(var(--fr-roll) * -1))} }
@@ -1490,10 +1510,28 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
 /* the readable copy under the film, for no-timeline browsers and AT */
 .mx-read{position:absolute;inset:auto 0 0;padding:0 0 12vh;pointer-events:none}
 
+/* A constant log-rate: scale(t) = 400^(1-t), so every step of scroll changes
+   the scale by the same RATIO - which is what the eye reads as even. Apple's
+   own measured stops linger up at high scale and then snap (7.6 -> 1 across
+   their last 14%), and that snap is exactly what read as "not smooth". Their
+   numbers are still in apple-motion-2026.md if the theatrical version is ever
+   wanted back. */
 @keyframes mxShrink{
-  0%{transform:scale(400)}   14%{transform:scale(313)}  29%{transform:scale(196)}
-  43%{transform:scale(113)}  57%{transform:scale(57.5)} 71%{transform:scale(24.3)}
-  86%{transform:scale(7.6)}  100%{transform:scale(1)}
+  0%{transform:scale(400)} 3.57%{transform:scale(322.95)}
+  7.14%{transform:scale(260.73)} 10.71%{transform:scale(210.51)}
+  14.29%{transform:scale(169.96)} 17.86%{transform:scale(137.22)}
+  21.43%{transform:scale(110.78)} 25%{transform:scale(89.44)}
+  28.57%{transform:scale(72.21)} 32.14%{transform:scale(58.3)}
+  35.71%{transform:scale(47.07)} 39.29%{transform:scale(38)}
+  42.86%{transform:scale(30.68)} 46.43%{transform:scale(24.77)}
+  50%{transform:scale(20)} 53.57%{transform:scale(16.15)}
+  57.14%{transform:scale(13.04)} 60.71%{transform:scale(10.53)}
+  64.29%{transform:scale(8.498)} 67.86%{transform:scale(6.861)}
+  71.43%{transform:scale(5.539)} 75%{transform:scale(4.472)}
+  78.57%{transform:scale(3.611)} 82.14%{transform:scale(2.915)}
+  85.71%{transform:scale(2.354)} 89.29%{transform:scale(1.9)}
+  92.86%{transform:scale(1.534)} 96.43%{transform:scale(1.239)}
+  100%{transform:scale(1)}
 }
 @supports (animation-timeline:view()){
   html.no-reduced-motion .mx{view-timeline:--mx block}

@@ -3,6 +3,7 @@ import { CaseHero } from '@/components/Case'
 import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import { Media, Video } from '@/components/Media'
+import Orbit from '@/components/Orbit'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
 
@@ -27,8 +28,11 @@ export default function TimesMedia() {
     <Page title="Times Media" dark>
       <div className="tm du cine">
         <CaseHero clip={media('times-court')} className="tm-hero">
+          {/* each line rises out of its own box, a beat apart, over the film */}
           {C.intro.map((lines, i) => (
-            <p key={i} className="p48 tm-intro" data-reveal>{para(lines)}</p>
+            <p key={i} className="p48 tm-intro" data-reveal data-swipe>
+              <Lines lines={lines} swipe />
+            </p>
           ))}
         </CaseHero>
 
@@ -40,7 +44,10 @@ export default function TimesMedia() {
             </h2>
           </div>
           <div className="du-w tm-owner" style={{ '--mw': 1161, '--mt': 229 }} data-reveal>
-            <Media clip={V('owner')} ratio="1 / 1" className="tm-owner-shot" />
+            {/* no forced ratio: the column is 500 wide and the card 532 tall,
+                so a 1:1 square overflowed it by 32px and shoved the quote
+                across. It fills its own column and crops instead. */}
+            <Media clip={V('owner')} className="tm-owner-shot" />
             <blockquote className="p34 tm-owner-quote">{para(C.research.quote)}</blockquote>
           </div>
           <div className="du-w tm-voices" style={{ '--mw': 1161, '--mt': 97 }} data-stagger>
@@ -77,7 +84,7 @@ export default function TimesMedia() {
           </section>
 
           <div className="tm-run-pin" aria-hidden="true">
-            <Frame kind="ipad" w={703} />
+            <Frame kind="ipad" w={703} clip={V('problem')} />
           </div>
         </div>
 
@@ -90,7 +97,7 @@ export default function TimesMedia() {
           </div>
 
           <div className="du-w" style={{ '--mw': 1230, '--mt': 202 }} data-reveal>
-            <Frame kind="ipad" w={1300} data-sv="rise" />
+            <Frame kind="ipad" w={1300} shot={C.shots.admin} alt="The admin panel" data-sv="rise" />
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.solution.admin.lead, C.solution.admin.line)}
@@ -101,7 +108,7 @@ export default function TimesMedia() {
           </h3>
           <div className="tm-site">
             <div className="tm-site-media" data-reveal>
-              <Frame kind="mac" w={905} />
+              <Frame kind="mac" w={905} clip={V('hero')} />
             </div>
             <p className="p38 tm-site-copy" data-reveal>{para(C.solution.site)}</p>
           </div>
@@ -137,15 +144,20 @@ export default function TimesMedia() {
           <h2 className="p70 du-x" style={{ '--x': 256 }} data-reveal>
             <Lines lines={C.street.headline} />
           </h2>
-          {C.street.shots.map((sh, i) => (
-            <div key={sh.slot} className="du-w tm-shot" style={{ '--mw': 1221, '--mt': i ? 342 : 225 }} data-reveal>
-              <Frame kind="ipad" w={1221} />
-              <p className="p38 center tm-cap">{para(sh.line)}</p>
-            </div>
-          ))}
+          {/* The first of these is the real thing: drag it and the view pans
+              around the hoarding, from the pan in his own Street View capture.
+              The second is the reach heatmap. */}
+          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal>
+            <Frame kind="ipad" w={1221} orbit={C.shots.orbit} Orbit={Orbit} />
+            <p className="p38 center tm-cap">{para(C.street.shots[0].line)}</p>
+          </div>
+          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 342 }} data-reveal>
+            <Frame kind="ipad" w={1221} clip={V('reach')} />
+            <p className="p38 center tm-cap">{para(C.street.shots[1].line)}</p>
+          </div>
           <div className="du-w tm-field" style={{ '--mw': 1296, '--mt': 281 }} data-stagger>
-            <div data-reveal><Frame kind="ipad" w={883} /></div>
-            <div data-reveal><Frame kind="phone" w={251} /></div>
+            <div data-reveal><Frame kind="ipad" w={883} shot={C.shots.maint} alt="Maintenance requests in the admin panel" /></div>
+            <div data-reveal><Frame kind="phone" w={251} shot={C.shots.maintPhone} alt="The field agent raising a request" /></div>
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.street.field.lead, C.street.field.line)}
