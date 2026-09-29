@@ -26,7 +26,9 @@ export default function TimesMedia() {
   return (
     <Page title="Times Media" dark>
       <div className="tm du cine">
-        <CaseHero clip={media('times-court')} className="tm-hero" credits={C.credits}>
+        <CaseHero clip={media('times-court')} className="tm-hero"
+                  name="Times Media" line="No more slides. No more friction. Just business."
+                  credits={C.credits}>
           {/* each line rises out of its own box, a beat apart, over the film */}
           {C.intro.map((lines, i) => (
             <p key={i} className="p48 tm-intro" data-reveal data-swipe>

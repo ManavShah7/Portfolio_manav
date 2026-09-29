@@ -9,23 +9,30 @@ import { next } from '@/lib/work'
 // the film is sticky and holds for the length of the section, the product name
 // sits on it for the first screen, and the opening lines then scroll up over
 // the film at 1:1 while a flat black scrim darkens it on a linear ramp.
-// The credit row on the film's first screen: who, what they did, how long.
-// Left-aligned to the intro copy above it and sitting on a hairline, so it
-// reads as a caption on the film rather than a panel over it.
-function Credits({ items }) {
+// The title card on the film's first screen: the product's name, its one
+// line, then a hairline and the two facts that matter - what he did and for
+// how long. His own name is not here: the whole site is his, so saying it on
+// every hero is noise.
+function TitleCard({ name, line, credits }) {
   return (
-    <div className="pin-credits" data-reveal>
-      {items.map(c => (
-        <div key={c.label} className="pin-credit">
-          <span className="p20 pin-credit-label">{c.label}</span>
-          <span className="p30 pin-credit-value">{c.value}</span>
+    <div className="pin-card" data-reveal>
+      <h1 className="p80 pin-card-name">{name}</h1>
+      {line && <p className="p38 pin-card-line">{line}</p>}
+      {credits && (
+        <div className="pin-credits">
+          {credits.map(c => (
+            <div key={c.label} className="pin-credit">
+              <span className="p20 pin-credit-label">{c.label}</span>
+              <span className="p30 pin-credit-value">{c.value}</span>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   )
 }
 
-export function CaseHero({ clip, name, kind, fill, credits, className = '', children }) {
+export function CaseHero({ clip, name, line, kind, fill, credits, className = '', children }) {
   const still = clip?.poster || (clip && !clip.video ? clip.src : undefined)
   return (
     <section className={`pin ${className}`}>
@@ -36,9 +43,9 @@ export function CaseHero({ clip, name, kind, fill, credits, className = '', chil
         <div className="pin-scrim" />
       </div>
       <div className="pin-first">
-        {credits && <Credits items={credits} />}
+        {name && credits && <TitleCard name={name} line={line} credits={credits} />}
         {/* a page can open on the film alone - Peak's frame has no title on it */}
-        {name && (
+        {name && !credits && (
           <div className="wrap pin-title">
             <p className="t-eyebrow on-dark-2">{kind}</p>
             <h1 className="t-hero">{name}</h1>

@@ -457,23 +457,27 @@ html.reduced-motion video.loop{display:none}
 .on-dark-2{color:rgba(245,245,247,.72)}
 .pin-first{position:relative;height:100vh;height:100svh}
 
-/* ---- the credit row on a hero film ----------------------------------------
-   Three facts and nothing else, on a hairline at the foot of the first
-   screen, left-aligned to the copy that follows it. Values in white, labels
-   in a muted white so the eye reads the facts and not the scaffolding. */
-.pin-credits{position:absolute;left:calc(520*var(--u));right:var(--m);
-  bottom:calc(132*var(--u));display:flex;gap:calc(96*var(--u));
-  padding-top:calc(30*var(--u));border-top:1px solid rgba(255,255,255,.28)}
-.pin-credit{display:flex;flex-direction:column;gap:calc(8*var(--u))}
-.pin-credit-label{color:rgba(255,255,255,.58);font-weight:500;
-  letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+/* ---- the title card on a hero film ----------------------------------------
+   The product's name, its one line, a hairline, and the two facts worth
+   stating. Centred on the first screen. His own name is deliberately absent:
+   the site is his, so repeating it on every hero is noise. */
+.pin-card{position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:calc(1100*var(--u));max-width:calc(100% - 2*var(--m));text-align:center;color:#fff}
+.pin-card-name{font-weight:600;letter-spacing:-.015em}
+.pin-card-line{margin-top:calc(22*var(--u));color:rgba(255,255,255,.82);font-weight:500}
+.pin-credits{display:flex;justify-content:center;gap:calc(120*var(--u));
+  margin-top:calc(58*var(--u));padding-top:calc(34*var(--u));
+  border-top:1px solid rgba(255,255,255,.3)}
+.pin-credit{display:flex;flex-direction:column;gap:calc(10*var(--u))}
+.pin-credit-label{color:rgba(255,255,255,.6);font-weight:500;
+  letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
 .pin-credit-value{color:#fff;font-weight:600;white-space:nowrap}
 @media (max-width:1068px){
-  .pin-credits{left:var(--m);right:var(--m);bottom:56px;gap:32px;
-    padding-top:18px;flex-wrap:wrap}
+  .pin-card{width:auto;left:var(--m);right:var(--m);translate:0 -50%}
+  .pin-credits{gap:40px;margin-top:32px;padding-top:20px;flex-wrap:wrap}
   .pin-credit-value{white-space:normal}
 }
-@media (max-width:734px){ .pin-credits{gap:20px 28px;bottom:40px} }
+@media (max-width:734px){ .pin-credits{gap:18px 26px;flex-direction:column} }
 .pin-copy{padding:30vh 0 40vh}
 .intro-line{max-width:17em;text-wrap:pretty}
 .intro-line + .intro-line{margin-top:32vh}
@@ -1417,6 +1421,18 @@ html.touch .orbit-hint::after{content:''}
 .ft-col:hover .ft-note{color:#1D1D1F}
 .ft-contact{display:block}
 .ft-contact:hover{text-decoration:underline}
+/* The frame draws this at 70 with a lot of air, which at full height came out
+   660px tall and read as a slab. Same words, two thirds the size, and the
+   padding capped so it is a close rather than a chapter. */
+.ft-outro .p70{font-size:calc(52*var(--u));letter-spacing:-.005em}
+.ft-outro{padding-top:min(calc(var(--pt)*var(--u)),150px) !important;
+  padding-bottom:min(calc(var(--pb)*var(--u)),170px) !important}
+@media (max-width:1068px){
+  .ft-outro .p70{font-size:38px}
+  .ft-outro{padding-top:min(calc(var(--pt)*var(--u)),96px) !important;
+    padding-bottom:min(calc(var(--pb)*var(--u)),110px) !important}
+}
+@media (max-width:734px){ .ft-outro .p70{font-size:30px} }
 /* Lighthouse ends on 1864 design px of white, which is a held beat on a
    1900-wide laptop and most of a screen of nothing on a phone. */
 @media (max-width:1068px){ .ft-outro{padding-top:min(calc(var(--pt)*var(--u)),200px);
@@ -1444,8 +1460,14 @@ html.touch .orbit-hint::after{content:''}
    layer behind it is simply invisible. The rect is measured off the mockup,
    so it lands exactly on the glass; the small radius keeps the corners from
    squaring off the ones the device has. */
-.fr-screen{position:absolute;z-index:2;overflow:hidden;border-radius:.4%;
+.fr-screen{position:absolute;z-index:2;overflow:hidden;
   background:#fff center/cover no-repeat;line-height:0}
+/* Measured off the mockups: 50px on the phone's 426x922 screen, 22px on the
+   iPad's 1622x1005. The `/` form keeps both radii the same number of pixels,
+   which one percentage on a non-square box cannot. */
+.fr-phone .fr-screen{border-radius:11.74% / 5.42%}
+.fr-ipad .fr-screen{border-radius:1.36% / 2.19%}
+.fr-mac .fr-screen{border-radius:.5% / .8%}
 .fr-screen > video{display:block;width:100%;height:100%;object-fit:cover}
 
 /* ---- a whole page inside a screen ------------------------------------------
@@ -1611,9 +1633,10 @@ html:not(.no-reduced-motion) .mx{height:auto}
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .tm-voice-who{color:#1D1D1F;font-weight:500;margin-top:calc(30*var(--u))}
 
-/* the frame's carousel controls are plain grey dots */
-.pk-projects .paddle{background:#D9D9D9 !important}
-.pk-projects .paddle svg{display:none}
+/* The frame draws these as plain grey dots, which was reproduced faithfully -
+   but a control with no affordance reads as decoration, so the chevrons are
+   back. */
+.pk-projects .paddle{background:#D9D9D9}
 /* the chart card carries the frame's own chart image */
 .pk-find-body{max-width:calc(395*var(--u))}
 
@@ -1639,12 +1662,14 @@ html.no-reduced-motion .pk-hero .pin-scrim,html.no-reduced-motion .tm-hero .pin-
 /* in a flex track a block child takes its image's intrinsic width, so the
    slide has to carry the frame's width itself */
 .ow-slide{display:block;flex:none;width:calc(778*var(--u))}
-/* the project's name under its screen, with the chevron this codebase already
-   uses for "there is more this way" */
-.ow-name{display:flex;align-items:center;gap:calc(10*var(--u));
-  margin-top:calc(34*var(--u));font-weight:600;color:inherit}
-.ow-name .chev{color:#8A8A8E;transition:transform .3s cubic-bezier(0,0,.5,1)}
-html.no-touch .ow-slide:hover .ow-name .chev{transform:translateX(calc(6*var(--u)))}
-@media (max-width:1068px){ .ow-name{margin-top:18px;gap:8px} }
+/* the project's name ON its screen, over a scrim so it holds against video */
+.ow-slide{position:relative}
+.ow-name{position:absolute;z-index:3;left:calc(58*var(--u));bottom:calc(52*var(--u));
+  display:flex;align-items:center;gap:calc(12*var(--u));font-weight:600;color:#fff;
+  padding:calc(16*var(--u)) calc(30*var(--u));border-radius:99px;
+  background:rgba(0,0,0,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.ow-name .chev{transition:transform .3s cubic-bezier(0,0,.5,1)}
+html.no-touch .ow-slide:hover .ow-name .chev{transform:translateX(calc(7*var(--u)))}
+@media (max-width:1068px){ .ow-name{left:22px;bottom:20px;gap:8px;padding:9px 16px} }
 @media (max-width:1068px){ .ow-slide{width:min(760px,calc(100vw - 2 * var(--m)))} }
 @media (max-width:1068px){ .pk-find-body{font-size:17px !important;max-width:none} }
