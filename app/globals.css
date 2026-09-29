@@ -881,7 +881,9 @@ html.reduced-motion video.loop{display:none}
 .tm-run{position:relative}
 .tm-run-pin{position:absolute;left:calc(1038*var(--u));top:calc(640*var(--u));bottom:0;
   width:calc(703*var(--u));pointer-events:none}
-.tm-run-pin > *{position:sticky;top:calc(50vh - 225*var(--u))}
+/* `.fr` sets position:relative at the same specificity and lands later in
+   this file, so these need the extra class to keep the sticky. */
+.tm .tm-run-pin > *{position:sticky;top:calc(50vh - 225*var(--u))}
 .tm-broke-copy{max-width:calc(600*var(--u));margin-inline:calc(237*var(--u)) var(--m)}
 .tm-broke-copy > *{margin-top:calc(163*var(--u))}
 .tm-broke-copy > * + *{margin-top:calc(253*var(--u))}
@@ -896,7 +898,7 @@ html.reduced-motion video.loop{display:none}
   .tm-broke-copy,.tm-site{margin-inline:var(--m)}
   .tm-broke-copy{max-width:none}
   .tm-run-pin{position:static;width:auto;margin:0;padding:8px var(--m) 48px;background:#000}
-  .tm-run-pin > .dev{position:relative;top:auto}
+  .tm .tm-run-pin > *{position:relative;top:auto;width:100%}
   .tm-voice{min-height:0}
   .tm-hero .pin-copy{margin-left:var(--m);margin-right:var(--m)}
   .tm-intro{max-width:none}
@@ -1011,7 +1013,7 @@ html.reduced-motion video.loop{display:none}
 .lv-run{position:relative}
 .lv-run-pin{position:absolute;left:calc(190*var(--u));top:calc(718*var(--u));bottom:0;
   width:calc(760*var(--u));pointer-events:none}
-.lv-run-pin > *{position:sticky;top:calc(50vh - 229*var(--u))}
+.lv .lv-run-pin > *{position:sticky;top:calc(50vh - 229*var(--u))}
 /* The four points are spaced top-to-top in the frame (291, 336, 291), and
    they are not all the same number of lines, so each margin is the gap minus
    the block above it rather than one repeated value. */
@@ -1040,7 +1042,7 @@ html.reduced-motion video.loop{display:none}
   .lv-hero .pin-copy{margin-inline:var(--m)}
   .lv-intro{max-width:none}
   .lv-run-pin{position:static;width:auto;margin:0;padding:8px var(--m) 48px;background:#fff}
-  .lv-run-pin > *{position:relative;top:auto;width:100%}
+  .lv .lv-run-pin > *{position:relative;top:auto;width:100%}
   .lv-points{margin-inline:var(--m);max-width:none}
   .lv-points > *,.lv-points > :first-child{margin-top:48px}
   .lv-res-head{margin-top:96px}

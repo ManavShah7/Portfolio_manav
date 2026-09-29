@@ -14,7 +14,7 @@ import { Video } from './Media'
 // the very mockups the frames are drawn with (the home page's own set has a
 // different iPad - 1.70 against these 1.53 - which is why they are separate).
 const DEV = {
-  ipad:     { img: 'frame-ipad',     r: 2344 / 1528, screen: [5.5, 6.5, 90.2, 86.6] },
+  ipad:     { img: 'frame-ipad',     r: 1800 / 1173, screen: [5.5, 6.5, 90.2, 86.6] },
   phone:    { img: 'frame-phone',    r: 491 / 986,   screen: [6.1, 2.8, 88.6, 94.1] },
   mac:      { img: 'frame-mac',      r: 1542 / 940,  screen: [10.4, 3.6, 79.4, 84.2] },
   'ipad-p': { img: 'ipad-portrait',  r: 776 / 1128,  screen: [7.35, 4.34, 83.76, 90.34] },
