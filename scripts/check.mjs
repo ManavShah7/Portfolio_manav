@@ -14,7 +14,7 @@
 import { chromium } from 'playwright'
 
 const BASE = process.argv[2] || 'http://localhost:3000'
-const PAGES = ['/', '/work/peak', '/work/times-media', '/work/lighthouse', '/work/liveasy']
+const PAGES = ['/', '/about', '/work/peak', '/work/times-media', '/work/lighthouse', '/work/liveasy']
 const WIDTHS = [[1440, 900], [1024, 768], [390, 844]]
 
 const b = await chromium.launch()

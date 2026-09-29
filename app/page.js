@@ -1,6 +1,7 @@
 import Link from 'next/link'
 
 import Reveal from '@/components/Reveal'
+import Intro from '@/components/Intro'
 import { Lines } from '@/components/Chrome'
 import * as C from '@/lib/home-copy'
 
@@ -71,6 +72,7 @@ export default function Home() {
           ))}
         </section>
       </main>
+      <Intro />
       <Reveal />
     </>
   )

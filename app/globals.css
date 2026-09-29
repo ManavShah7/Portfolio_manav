@@ -1018,7 +1018,18 @@ html.reduced-motion video.loop{display:none}
 .hm-pink{background:linear-gradient(90deg,#C30126 0%,#F60169 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent}
 
-.hm-top{position:relative;height:calc(569*var(--u))}
+/* ---- the opening ----------------------------------------------------------
+   The film starts at full height with the header collapsed above it, then the
+   band contracts to its drawn 754 and the header opens. The transitions sit on
+   the BASE rules, so simply removing `html.intro` is what plays it.
+   Height rather than a transform on purpose: the film is `cover`, so it has to
+   reframe as the box changes instead of being scaled out of shape. */
+.hm-top{position:relative;height:calc(569*var(--u));overflow:hidden;
+  transition:height 1s var(--ease-soft),opacity .62s var(--ease-soft) .24s}
+html.intro .hm-top{height:0;opacity:0;transition:none}
+html.intro .hm-band{height:100vh;height:100svh;transition:none}
+html.intro .hm-band > p{transform:scale(1.18);transition:none}
+
 .hm-me{position:absolute;left:calc(194*var(--u));top:calc(150*var(--u))}
 .hm-me .p48{margin-top:calc(8*var(--u))}
 .hm-nav{position:absolute;right:calc(1900*var(--u) - 1580*var(--u));top:calc(132*var(--u));
@@ -1027,7 +1038,9 @@ html.reduced-motion video.loop{display:none}
 .hm-nav a:hover{color:#000}
 
 .hm-band{position:relative;overflow:hidden;height:calc(754*var(--u));
-  color:#fff;display:flex;align-items:center;justify-content:center}
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  transition:height 1s var(--ease-soft)}
+.hm-band > p{transition:transform 1s var(--ease-soft)}
 .hm-band-bg{position:absolute;inset:0;background:url(/media/home/home-gradient.webp) center/cover no-repeat}
 .hm-band p{position:relative}
 .hm-band p{margin:0}
@@ -1237,6 +1250,113 @@ html.reduced-motion video.loop{display:none}
   .lh-row > * + *{margin-top:28px}
   .lh-row-copy{width:auto;margin-top:28px}
   .lh-row-dev{width:100%}
+}
+
+/* =============================================================================
+   About me - to Manav's frame, in design units (.du). 7900 design px tall.
+   Never redeclare --u or --m here; they come from .du.
+   ========================================================================== */
+.ab{background:#fff;color:#1D1D1F}
+.ab .du-sec{background:#fff;position:relative;display:flow-root}
+.ab .center{text-align:center}
+
+/* the opening, on its own film - 799 tall, the quote centred on it */
+.ab-band{position:relative;height:calc(799*var(--u));overflow:hidden;
+  display:flex;align-items:center;justify-content:center;isolation:isolate}
+.ab-band-film{position:absolute;inset:0;z-index:-1}
+.ab-band-film > span,.ab-band-film > video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;background-size:cover;background-position:center;
+  /* 0.86 is measured, not chosen: it is where the band renders
+     rgb(237,56,136) against the frame's rgb(240,56,136) */
+  filter:brightness(var(--bri,.86))}
+/* The film is a flat #DB5F91 through its whole length, where the frame's band
+   is #F03888 - he re-coloured it in Figma. `color` takes the hue and
+   saturation of this layer and keeps the film's own luminosity, so the ink
+   structure survives and the hue is exactly his pink. Filters could not get
+   there: saturating a magenta pushes blue UP, and hue-rotate is a matrix
+   approximation that made it worse. */
+.ab-band-film::after{content:'';position:absolute;inset:0;
+  background:var(--band-pink,#EF3888);mix-blend-mode:color}
+.ab-quote{color:#fff;width:calc(1240*var(--u));position:relative}
+
+/* the two-column blocks: the artwork on the left, the words on the right */
+.ab .ab-two{display:grid;grid-template-columns:calc(877*var(--u)) 1fr;
+  align-items:start;padding-left:calc(178*var(--u));padding-right:var(--m)}
+/* the frame sets the lockup at x303, inset 125 into its own column */
+.ab-logo{width:calc(468*var(--u));height:auto;
+  margin:calc(94*var(--u)) 0 0 calc(125*var(--u))}
+.ab-head{margin-bottom:calc(52*var(--u))}
+.ab-body{max-width:calc(790*var(--u))}
+.ab-cta{display:inline-block;margin-top:calc(60*var(--u));color:#1D1D1F;text-decoration:none}
+.ab-cta:hover{color:#EF3888;text-decoration:underline;text-underline-offset:.18em}
+
+/* where it happened. Each card is one of his own ink washes, cut from a strip
+   of the card that carried no type and scaled to cover - they are abstract, so
+   nothing reads as stretched. */
+.ab-jobs{width:calc(657*var(--u))}
+.ab-job{border-radius:calc(20*var(--u));background-size:cover;background-position:center;
+  color:#fff;position:relative;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:calc(32*var(--u))}
+.ab-job-now{height:calc(335*var(--u))}
+.ab-job-row{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(14*var(--u));
+  margin-top:calc(14*var(--u))}
+.ab-job-row .ab-job{height:calc(197*var(--u));justify-content:center}
+.ab-job-name{font-weight:600}
+.ab-job-meta{display:flex;gap:calc(38*var(--u));margin-top:calc(6*var(--u));font-weight:500}
+.ab-job-meta span{white-space:nowrap;flex:none}
+
+/* the pillars: a wash on top, the words under it */
+.ab-gallery{margin-top:calc(129*var(--u));--inset:calc(161*var(--u)) !important}
+.ab-gallery .gallery-track{gap:calc(63*var(--u))}
+.ab-gallery .paddles{margin:calc(71*var(--u)) calc(159*var(--u)) 0 0}
+.ab-pillar{width:calc(486*var(--u));flex:none;border:1px solid #D2D2D7;
+  border-radius:calc(20*var(--u));overflow:hidden;background:#fff;
+  display:flex;flex-direction:column;min-height:calc(759*var(--u))}
+.ab-pillar-ink{display:block;height:calc(458*var(--u));flex:none;
+  background-size:cover;background-position:center}
+.ab-pillar-copy{padding:calc(40*var(--u)) calc(38*var(--u))}
+.ab-pillar-copy h3{margin-bottom:calc(16*var(--u))}
+.ab-pillar-copy p{color:#6E6E73;line-height:1.45}
+
+/* the collage: the frame butts and overlaps these rather than gridding them,
+   so each one carries its own rect in design px */
+/* --ch, not --h: each image sets its own --h inline and they would shadow the
+   wrapper's inside it */
+.ab-collage{position:relative;width:100%;height:calc(var(--ch)*var(--u));
+  margin-top:calc(var(--mt)*var(--u))}
+.ab-collage > img{position:absolute;object-fit:cover;
+  left:calc(var(--x)*var(--u));top:calc(var(--y)*var(--u));
+  width:calc(var(--w)*var(--u));height:calc(var(--h)*var(--u))}
+
+@media (max-width:1068px){
+  .ab-band{height:auto;min-height:62vh;padding:18vh var(--m)}
+  .ab-quote{width:auto}
+  .ab .ab-two{grid-template-columns:1fr;gap:48px;padding-inline:var(--m)}
+  .ab-logo{width:min(320px,62vw);margin:0}
+  .ab-body{max-width:none}
+  /* `nowrap` on the meta gives the card a 413px min-content width, and a 1fr
+     grid column will not shrink below that - it pushed the page 47px sideways
+     at 390. The two halves stack instead, and min-width:0 stops any other
+     child doing the same. */
+  .ab-jobs{width:auto;min-width:0}
+  .ab .ab-two > *{min-width:0}
+  .ab-job-meta{flex-direction:column;gap:calc(2*var(--u))}
+  .ab-job-meta span{white-space:normal}
+  .ab-job-now{height:auto;min-height:200px}
+  .ab-job-row .ab-job{height:auto;min-height:120px}
+  .ab-gallery{margin-top:40px}
+  .ab-gallery .paddles{margin:28px var(--m) 0 0}
+  .ab-pillar{width:min(430px,78vw);min-height:0}
+  .ab-pillar-ink{height:210px}
+  /* stacked, because the overlapping rects only work at the frame's width */
+  .ab-collage{height:auto;margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ab-collage > img{position:relative;left:auto;top:auto;width:100%;height:auto;
+    aspect-ratio:var(--w) / var(--h)}
+  .ab-collage > img:first-child{grid-column:1 / -1}
+}
+@media (max-width:734px){
+  .ab-job-row{grid-template-columns:1fr;gap:10px}
+  .ab-pillar{width:82vw}
 }
 
 /* ---- the foot every updated frame draws ------------------------------------
