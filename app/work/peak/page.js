@@ -5,6 +5,7 @@ import { CaseHero } from '@/components/Case'
 import { Media, Video } from '@/components/Media'
 import Gallery from '@/components/Gallery'
 import MotivationChart from '@/components/MotivationChart'
+import { SameQuestions, NoRoomToMiss } from '@/components/PeakProblem'
 import { media, slots } from '@/lib/clips'
 import { WORK } from '@/lib/work'
 import * as C from '@/lib/peak-copy'
@@ -84,6 +85,11 @@ export default function Peak() {
               {C.problem.cards.map((lines, i) => (
                 <div key={i} className="pk-card black pk-problem-card" data-reveal>
                   <p className="p27"><Lines lines={lines} /></p>
+                  {/* the frame leaves these cards empty under the heading;
+                      each graphic says what its heading claims */}
+                  {i === 0
+                    ? <SameQuestions {...C.problem.onboarding} />
+                    : <NoRoomToMiss {...C.problem.streak} />}
                 </div>
               ))}
             </div>

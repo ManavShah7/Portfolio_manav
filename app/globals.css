@@ -611,8 +611,59 @@ html.reduced-motion video.loop{display:none}
 .pk-problems{background:#1C1C1E;color:#F5F5F7}
 .pk-problem-big{height:calc(459*var(--u))}
 .pk-two{display:grid;grid-template-columns:1fr 1fr;gap:calc(32*var(--u));margin-top:calc(32*var(--u))}
-.pk-problem-card{height:calc(459*var(--u));padding:calc(56*var(--u))}
+/* The frame draws these 459 tall and that is what they are at 1900, but the
+   graphics inside carry a 13px type floor that does not shrink with --u, so
+   between 1069 and ~1250 the content is taller than 459 design px. min-height
+   lets the card grow to hold it rather than clipping the last row. */
+.pk-problem-card{min-height:calc(459*var(--u));padding:calc(56*var(--u))}
 @media (max-width:734px){ .pk-problem-big{height:56vw} .pk-two{grid-template-columns:1fr} .pk-problem-card{height:auto;min-height:200px;padding:24px} }
+
+/* ---- the graphics in the problem cards (components/PeakProblem.js) --------
+   The frame leaves both cards empty under their headings. These are drawn in
+   the page's own greys at the page's own scale, so they hold proportion from
+   1900 down to a phone. `em` throughout, off a design-unit font-size, so one
+   number scales the whole graphic. */
+.pq{font-size:max(13px,calc(18*var(--u)));margin-top:calc(40*var(--u));position:relative;
+  color:#F5F5F7;line-height:1.3}
+.pq-q{color:#86868B}
+
+/* the onboarding form, with two more sheets behind it */
+.pq-sheet{position:absolute;left:50%;translate:-50% 0;border:1px solid rgba(255,255,255,.1);
+  border-radius:.7em;background:#0B0B0C}
+.pq-sheet-2{top:-.55em;width:92%;height:calc(100% + .55em)}
+.pq-sheet-3{top:-1.1em;width:84%;height:calc(100% + 1.1em)}
+.pq-form{position:relative;border:1px solid rgba(255,255,255,.14);border-radius:.7em;
+  background:#131315;padding:.75em .95em}
+.pq-head{display:block;font-weight:600;padding-bottom:.55em;
+  border-bottom:1px solid rgba(255,255,255,.08)}
+.pq-row{display:flex;justify-content:space-between;align-items:baseline;gap:1em;
+  padding:.5em 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.pq-row:last-child{border-bottom:0;padding-bottom:.1em}
+.pq-a{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pq-a i{font-style:normal;font-weight:400;color:#86868B;margin-left:.3em}
+
+/* the streak: one miss and it is back to zero */
+.pq-streak{display:flex;justify-content:space-between;align-items:baseline;gap:1em}
+.pq-count{font-size:1.5em;font-weight:600;font-variant-numeric:tabular-nums;color:#FF383C}
+.pq-count s{color:#6E6E73;text-decoration-thickness:.06em;margin-right:.45em;font-weight:500}
+.pq-week{display:grid;grid-template-columns:repeat(7,1fr);gap:.4em;margin-top:1.1em;
+  text-align:center;color:#86868B;font-size:max(12px,.82em)}
+.pq-day{display:flex;flex-direction:column;align-items:center;gap:.5em}
+.pq-day i{width:1.9em;height:1.9em;border-radius:50%;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.14)}
+.pq-day i svg{width:64%;height:64%}
+.pq-day.is-done i{background:#F5F5F7;border-color:#F5F5F7;color:#0B0B0C}
+.pq-day.is-miss i{background:rgba(255,56,60,.14);border-color:#FF383C;color:#FF383C}
+.pq-day.is-open i{border-style:dashed}
+.pq-alone{display:flex;align-items:center;gap:.8em;margin-top:1.4em;padding-top:1.1em;
+  border-top:1px solid rgba(255,255,255,.08)}
+.pq-slots{display:flex}
+.pq-slots span{width:1.9em;height:1.9em;border-radius:50%;border:1px dashed rgba(255,255,255,.22)}
+.pq-slots span + span{margin-left:-.4em}
+.pq-slots span:nth-child(2){opacity:.72} .pq-slots span:nth-child(3){opacity:.48}
+
+@media (max-width:1068px){ .pq{font-size:15px;margin-top:24px} }
+@media (max-width:734px){ .pq{font-size:15px;margin-top:20px} }
 
 /* research */
 .pk .p70 + .pk-aside{margin-top:calc(18*var(--u))}
