@@ -21,8 +21,8 @@ const WARM = '#E6813E'
 const COOL = '#077B67'
 const WARM_INK = '#BF6216' // the same hue, darkened until label text is legible on white
 
-const W = 1000, H = 820
-const L = 10, R = 990, T = 10, B = 810
+const W = 1000, H = 950
+const L = 10, R = 990, T = 10, B = 940
 
 const motivation = t => 0.18 + 0.82 * Math.exp(-3.2 * t)
 const results = t => 0.04 + 0.88 / (1 + Math.exp(-9 * (t - 0.62)))
@@ -94,7 +94,7 @@ export default function MotivationChart() {
 
             {/* the one moment the card is about: results overtake motivation */}
             <circle className="pk-chart-x" cx={X(crossing).toFixed(1)} cy={Y(results(crossing)).toFixed(1)}
-                    r="9" fill="#1D1D1F" stroke="#FFFFFF" strokeWidth="5" />
+                    r="10" fill="#1D1D1F" stroke="#FFFFFF" strokeWidth="6" />
           </svg>
 
           <span className="pk-ck-s" style={{ ...at(0.30, motivation, 0.16), color: WARM_INK }}>Motivation</span>

@@ -1,4 +1,5 @@
 import { Lines, Footer, Nav, RESUME } from '@/components/Chrome'
+import Jobs from '@/components/Jobs'
 import Reveal from '@/components/Reveal'
 import Gallery from '@/components/Gallery'
 import { Video } from '@/components/Media'
@@ -11,6 +12,8 @@ export const metadata = {
 }
 
 const INK = n => `/media/about/${n}.webp`
+// a pillar's film, if he has dropped one in yet - null until then
+const pillarClip = i => media(`about-pillar-${i + 1}`)
 const PINK = '#EF3888'
 const band = media('about-band')
 
@@ -46,27 +49,13 @@ export default function About() {
 
         {/* ---- experience, beside where it happened ---- */}
         <section className="du-sec ab-two" style={{ '--pt': 287, '--pb': 0 }}>
-          <div className="ab-jobs" data-stagger>
-            <div className="ab-job ab-job-now" data-reveal
-                 style={{ backgroundImage: `url(${INK(C.experience.now.ink)})` }}>
-              <p className="p40 ab-job-name">{C.experience.now.name}</p>
-              <p className="p26 ab-job-meta">
-                <span>{C.experience.now.role}</span><span>{C.experience.now.when}</span>
-              </p>
-            </div>
-            <div className="ab-job-row">
-              {C.experience.past.map(j => (
-                <div key={j.name.join(' ')} className="ab-job" data-reveal
-                     style={{ backgroundImage: `url(${INK(j.ink)})` }}>
-                  <p className="p32 ab-job-name"><Lines lines={j.name} /></p>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* the ink URLs are resolved here: a function cannot cross from a
+              server component into a client one */}
+          <Jobs jobs={C.experience.jobs.map(j => ({ ...j, img: INK(j.ink) }))} />
           <div data-reveal>
             <h2 className="p55 ab-head" style={{ color: PINK }}>{C.experience.head}</h2>
             <p className="p45 ab-body"><Lines lines={C.experience.body} /></p>
-            <a className="p45 ab-cta" href={RESUME} download>{C.experience.cta}</a>
+            <a className="p26 ab-cta" href={RESUME} download>{C.experience.cta}</a>
           </div>
         </section>
 
@@ -76,9 +65,14 @@ export default function About() {
             {C.pillars.head}
           </h2>
           <Gallery label="Design pillars" className="ab-gallery pk-light-paddles" paddles="right" always>
-            {C.pillars.cards.map(c => (
+            {C.pillars.cards.map((c, i) => (
               <article key={c.title.join(' ')} className="ab-pillar" data-reveal>
-                <span className="ab-pillar-ink" style={{ backgroundImage: `url(${INK(c.ink)})` }} />
+                {/* the ink is the fallback; a clip at about-pillar-N takes its
+                    place the moment the file is there (lib/about-copy.js) */}
+                <span className="ab-pillar-ink" style={{ backgroundImage: `url(${pillarClip(i)?.poster || INK(c.ink)})` }}>
+                  {pillarClip(i)?.video &&
+                    <Video src={pillarClip(i).src} poster={pillarClip(i).poster} />}
+                </span>
                 <div className="ab-pillar-copy">
                   <h3 className="p32"><Lines lines={c.title} /></h3>
                   <p className="p24">{c.body.join(' ')}</p>

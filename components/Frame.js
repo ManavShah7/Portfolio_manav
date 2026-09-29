@@ -42,7 +42,14 @@ const screenRatio = d => (d.r * d.screen[2]) / d.screen[3]
 export default function Frame({ kind, w, clip, still, shot, alt = '',
                                 className = '', style, ...rest }) {
   const d = DEV[kind]
-  const [l, t, sw, sh] = d.screen
+  // The mockup's inner edge is antialiased, so a rectangle that stops at the
+  // last fully-white pixel leaves a pale hairline all the way round. Grow the
+  // box by a little under 1% of its own size on every side; the corner radii
+  // are percentages of the box, so they grow with it.
+  const OVER = 0.009
+  const [ml, mt, mw, mh] = d.screen
+  const l = ml - mw * OVER, t = mt - mh * OVER
+  const sw = mw * (1 + 2 * OVER), sh = mh * (1 + 2 * OVER)
   const poster = still || clip?.poster || (clip && !clip.video ? clip.src : undefined)
   // under 2% is not a scroll, it is a rounding difference - rolling it would
   // only add a will-change and an animation for no visible travel

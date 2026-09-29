@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import Reveal from '@/components/Reveal'
 import Intro from '@/components/Intro'
-import { Lines, Footer, Outro, Chev } from '@/components/Chrome'
+import { Lines, Footer, Outro } from '@/components/Chrome'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/home-copy'
@@ -53,7 +53,16 @@ export default function Home() {
             // each device plays its own case study's film - the same clip the
             // project's slide carries at the foot of every case study
             const clip = media(`other-${d.slug}`) || (d.still ? { src: d.still } : null)
-            const [l, t, w, h] = d.screen
+            // The screen rectangle is measured off the mockup, and the mockup's
+            // inner edge is antialiased - so a rectangle that stops exactly at
+            // the last fully-white pixel leaves a pale hairline all the way
+            // round. OVER grows the box by a little under 1% of its own size on
+            // every side; the corner radii are percentages of the box, so they
+            // grow with it and the film still lands inside the rounded screen.
+            const OVER = 0.009
+            const [sl, st, sw, sh] = d.screen
+            const l = sl - sw * OVER, t = st - sh * OVER
+            const w = sw * (1 + 2 * OVER), h = sh * (1 + 2 * OVER)
             return (
               <Link key={d.slug} href={`/work/${d.slug}`} className={`hm-dev ${d.cls}`}
                     aria-label={`${d.name} case study`} data-reveal>
@@ -62,12 +71,11 @@ export default function Home() {
                         style={{ left: `${l}%`, top: `${t}%`, width: `${w}%`, height: `${h}%`,
                                  backgroundImage: `url(${clip.poster || clip.src})` }}>
                     {clip.video && <Video src={clip.src} poster={clip.poster} />}
-                    {/* the name ON the screen, the way each case study's own
-                        carousel names its slides. It used to appear on hover,
-                        which meant a phone saw four unlabelled mockups. It
-                        lives inside the screen, not the device, because the
-                        bezel is a different width on each of the four. */}
-                    <span className="hm-dev-name p30">{d.name} <Chev /></span>
+                    {/* just the name, on the screen. It used to appear on
+                        hover, which meant a phone saw four unlabelled
+                        mockups. It lives inside the screen, not the device,
+                        because the bezel is a different width on each. */}
+                    <span className="hm-dev-name p30">{d.name}</span>
                   </span>
                 )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}

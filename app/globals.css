@@ -232,14 +232,18 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.08);color:#1D1D1F}
 .nav-in{height:100%;display:flex;align-items:center;justify-content:space-between;
   padding-inline:max(var(--m),calc(190*var(--u)))}
+/* Weight, not size, is what read as heavy here: apple.com's own global nav is
+   400 at 12px and this was 600 at 28 design px. The name keeps a little more
+   than the links so the two sides still rank, but nothing is bold. */
 .nav-back{display:inline-flex;align-items:center;gap:calc(10*var(--u));
-  font-size:max(15px,calc(28*var(--u)));font-weight:600;letter-spacing:-.004em;color:inherit}
+  font-size:max(14px,calc(26*var(--u)));font-weight:500;letter-spacing:-.002em;color:inherit}
 .nav-back-chev{font-size:1.25em;line-height:0;opacity:.5;
   transition:transform .3s cubic-bezier(0,0,.5,1),opacity .3s}
 html.no-touch .nav-back:hover .nav-back-chev{transform:translateX(-3px);opacity:1}
-.nav-links{display:flex;gap:max(22px,calc(54*var(--u)));
-  font-size:max(14px,calc(24*var(--u)));font-weight:500}
+.nav-links{display:flex;gap:max(22px,calc(52*var(--u)));
+  font-size:max(13px,calc(23*var(--u)));font-weight:400;letter-spacing:0}
 .nav-links a{color:#6E6E73;transition:color .2s var(--ease)}
+.nav-links a[aria-current]{font-weight:500}
 .nav-links a:hover,.nav-links a[aria-current]{color:#1D1D1F}
 @media (max-width:1068px){ .nav-in{padding-inline:var(--m)} }
 
@@ -966,13 +970,16 @@ html.reduced-motion video.loop{display:none}
    full bleed was left over from when this was a flat image, and it put the
    plot's right edge and its end dot hard against the card. Below 1069 the
    card is narrow enough that the chart sits inside the padding instead. */
-.pk-chart{display:block;max-width:none;
-  width:calc(527*var(--u));margin:calc(70*var(--u)) calc(-41*var(--u)) calc(6*var(--u))}
+/* No fixed width: the chart fills its card and bleeds 46 of the card's own 70
+   of padding, which is what makes the plot big enough to be the card's content
+   rather than an illustration sitting in it. */
+.pk-chart{display:block;max-width:none;width:auto;
+  margin:calc(70*var(--u)) calc(-60*var(--u)) calc(6*var(--u))}
 /* The plot is a box with a gutter: High and Low hang in the gutter, pinned to
    the exact rows they name (their `top` comes from the same geometry the SVG
    is drawn with), and Time sits under the right edge. Nothing is eyeballed and
    nothing can fall off the card. */
-.pk-chart-plot{padding-left:calc(88*var(--u));padding-bottom:calc(48*var(--u))}
+.pk-chart-plot{padding-left:calc(76*var(--u));padding-bottom:calc(48*var(--u))}
 /* the box is the SVG's exact rectangle, so every label's percentage is the
    same percentage the geometry uses */
 .pk-chart-box{position:relative}
@@ -1003,8 +1010,8 @@ html.js.no-reduced-motion .in .pk-ck-s{opacity:1;transition:opacity .6s ease .95
 html.js.no-reduced-motion .in .pk-chart-x{opacity:1;transition:opacity .5s ease 1.15s}
 
 @media (max-width:1068px){
-  .pk-chart{width:100%;max-width:100%;margin:34px 0 0}
-  .pk-chart-plot{padding-left:52px;padding-bottom:28px}
+  .pk-chart{width:auto;max-width:none;margin:34px calc(-44*var(--u)) 0}
+  .pk-chart-plot{padding-left:46px;padding-bottom:28px}
   .pk-chart-tick{font-size:14px}
   .pk-ck-y{margin-right:10px}
   .pk-ck-time{margin-top:8px}
@@ -1160,11 +1167,11 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
    own height. */
 /* the name, on the screen, in a glass pill - the same object .ow-name is on
    the case studies' own carousels, so a device reads the same everywhere */
-.hm-dev-name{position:absolute;z-index:3;left:calc(22*var(--u));bottom:calc(20*var(--u));
-  display:inline-flex;align-items:center;gap:calc(6*var(--u));
-  padding:calc(11*var(--u)) calc(22*var(--u));border-radius:999px;
-  background:rgba(0,0,0,.42);color:#fff;font-weight:600;white-space:nowrap;
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.hm-dev-name{position:absolute;z-index:3;left:calc(30*var(--u));bottom:calc(26*var(--u));
+  color:#fff;font-weight:500;white-space:nowrap;letter-spacing:-.004em;
+  /* the films run from a night street to a bright sea, so the name carries its
+     own shadow rather than a pill - the least chrome that stays legible */
+  text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 16px rgba(0,0,0,.35)}
 .hm-d1 .hm-dev-screen{border-radius:1.25% / 2.2%}
 .hm-d2 .hm-dev-screen{border-radius:11.74% / 5.41%}
 .hm-d3 .hm-dev-screen{border-radius:2.15% / 1.37%}
@@ -1426,8 +1433,15 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
   margin:calc(94*var(--u)) 0 0 calc(125*var(--u))}
 .ab-head{margin-bottom:calc(52*var(--u))}
 .ab-body{max-width:calc(790*var(--u))}
-.ab-cta{display:inline-block;margin-top:calc(60*var(--u));color:#1D1D1F;text-decoration:none}
-.ab-cta:hover{color:#EF3888;text-decoration:underline;text-underline-offset:.18em}
+/* It was body-sized dark text under a paragraph of body-sized dark text, so
+   nothing said it was the one thing to click. Apple's own blue, at label size
+   in a pill - smaller than it was and far harder to miss. */
+.ab-cta{display:inline-flex;align-items:center;margin-top:calc(54*var(--u));
+  background:#0071E3;color:#fff;text-decoration:none;font-weight:500;
+  border-radius:999px;padding:calc(15*var(--u)) calc(34*var(--u));
+  transition:background .2s var(--ease)}
+.ab-cta:hover{background:#0077ED;color:#fff}
+.ab-cta:active{background:#006EDB}
 
 /* where it happened. Each card is one of his own ink washes, cut from a strip
    of the card that carried no type and scaled to cover - they are abstract, so
@@ -1435,24 +1449,37 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
 .ab-jobs{width:calc(657*var(--u))}
 .ab-job{border-radius:calc(20*var(--u));background-size:cover;background-position:center;
   color:#fff;position:relative;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:calc(32*var(--u))}
+  padding:calc(32*var(--u));text-align:left;border:0;font:inherit;appearance:none}
+/* the three that are not the big one are the control: they say so by lifting
+   under the pointer, and they hand the big slot over when clicked */
+.ab-job-pick{cursor:pointer;transition:transform .3s cubic-bezier(.16,1,.3,1),
+  box-shadow .3s var(--ease)}
+html.no-touch .ab-job-pick:hover{transform:translateY(calc(-6*var(--u)));
+  box-shadow:0 calc(12*var(--u)) calc(30*var(--u)) rgba(0,0,0,.16)}
+.ab-job-pick:focus-visible{outline:2px solid #0071E3;outline-offset:calc(4*var(--u))}
+.ab-job-now{transition:background-image .3s linear}
 .ab-job-now{height:calc(335*var(--u))}
 .ab-job-row{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(14*var(--u));
   margin-top:calc(14*var(--u))}
 .ab-job-row .ab-job{height:calc(197*var(--u));justify-content:center}
 .ab-job-name{font-weight:600}
-.ab-job-meta{display:flex;gap:calc(38*var(--u));margin-top:calc(6*var(--u));font-weight:500}
+.ab-job-meta{display:flex;flex-wrap:wrap;gap:calc(4*var(--u)) calc(30*var(--u));
+  margin-top:calc(8*var(--u));font-weight:500}
 .ab-job-meta span{white-space:nowrap;flex:none}
 
 /* the pillars: a wash on top, the words under it */
 .ab-gallery{margin-top:calc(129*var(--u));--inset:calc(161*var(--u)) !important}
 .ab-gallery .gallery-track{gap:calc(63*var(--u))}
 .ab-gallery .paddles{margin:calc(71*var(--u)) calc(159*var(--u)) 0 0}
-.ab-pillar{width:calc(486*var(--u));flex:none;border:1px solid #D2D2D7;
-  border-radius:calc(20*var(--u));overflow:hidden;background:#fff;
+/* No stroke and the site's own grey, the same fill every other card on the
+   site sits on - a hairline box in the middle of a white page read as a form
+   field rather than a card. */
+.ab-pillar{width:calc(486*var(--u));flex:none;
+  border-radius:calc(20*var(--u));overflow:hidden;background:var(--fill);
   display:flex;flex-direction:column;min-height:calc(759*var(--u))}
-.ab-pillar-ink{display:block;height:calc(458*var(--u));flex:none;
-  background-size:cover;background-position:center}
+.ab-pillar-ink{display:block;position:relative;height:calc(458*var(--u));flex:none;
+  background-size:cover;background-position:center;overflow:hidden}
+.ab-pillar-ink > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ab-pillar-copy{padding:calc(40*var(--u)) calc(38*var(--u))}
 .ab-pillar-copy h3{margin-bottom:calc(16*var(--u))}
 .ab-pillar-copy p{color:#6E6E73;line-height:1.45}
@@ -1530,13 +1557,20 @@ html.touch .orbit-hint::after{content:''}
 /* ---- the foot every updated frame draws ------------------------------------
    A #F5F5F7 band, 567 tall, four columns at 146 / 519 / 1120 / 1479. The
    label is 48 and the note under it 34, both measured off liveasy.png. */
-.ft{background:#F5F5F7;color:#1D1D1F;padding:calc(189*var(--u)) 0 calc(293*var(--u))}
+/* The frame draws this band 567 tall with 48 labels, which comes out as the
+   biggest thing on some pages. Same four columns, two thirds the type and a
+   third of the air - it is the foot of the page, not a section of it. */
+.ft{background:#F5F5F7;color:#1D1D1F;padding:calc(104*var(--u)) 0 calc(112*var(--u))}
 .ft-row{display:grid;grid-template-columns:373fr 601fr 359fr 421fr;padding-left:calc(146*var(--u));
   padding-right:var(--m)}
 .ft-col{display:block;text-decoration:none;color:inherit}
 .ft-label{display:block;font-weight:600;white-space:nowrap}
+/* the ramp is `.du .pNN`, two classes, and this band carries `.du` - so the
+   override has to be two classes too or it never lands */
+.ft .ft-label{font-size:calc(32*var(--u));letter-spacing:-.008em}
 .ft-label .chev{font-weight:400}
-.ft-note{display:block;color:#6E6E73;margin-top:calc(26*var(--u));white-space:nowrap}
+.ft-note{display:block;color:#6E6E73;margin-top:calc(12*var(--u));white-space:nowrap}
+.ft .ft-note{font-size:calc(23*var(--u))}
 .ft-col:hover .ft-label{color:#000}
 .ft-col:hover .ft-note{color:#1D1D1F}
 .ft-contact{display:block}
@@ -1560,13 +1594,14 @@ html.touch .orbit-hint::after{content:''}
 @media (max-width:734px){ .ft-outro{padding-top:min(calc(var(--pt)*var(--u)),120px);
   padding-bottom:min(calc(var(--pb)*var(--u)),96px)} }
 @media (max-width:1068px){
-  .ft{padding:72px 0 80px}
-  .ft-row{grid-template-columns:1fr 1fr;gap:40px 24px;padding-inline:var(--m)}
+  .ft{padding:56px 0 60px}
+  .ft .ft-label{font-size:21px} .ft .ft-note{font-size:15px} .ft-note{margin-top:6px}
+  .ft-row{grid-template-columns:1fr 1fr;gap:28px 24px;padding-inline:var(--m)}
   .ft-note{white-space:normal;word-break:break-word}
 }
 @media (max-width:734px){
-  .ft{padding:56px 0 64px}
-  .ft-row{grid-template-columns:1fr;gap:28px}
+  .ft{padding:44px 0 48px}
+  .ft-row{grid-template-columns:1fr 1fr;gap:22px 18px}
 }
 
 /* ---- devices as the frames draw them (components/Frame.js) ----------------
