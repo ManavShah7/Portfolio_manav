@@ -1052,6 +1052,79 @@ html.reduced-motion video.loop{display:none}
   .lv-row .fr{width:100% !important}
 }
 
+/* =============================================================================
+   Lighthouse AI - to Manav's frame, in design units (.du). 16061 design px.
+   Never redeclare --u or --m here; they come from .du.
+   ========================================================================== */
+.lh{background:#fff;color:#1D1D1F}
+.lh .du-sec{background:#fff;position:relative;display:flow-root}
+.lh .du-sec.bg-fill{background:#F5F5F7}
+.lh .du-sec.bg-dark{background:#000;color:#F5F5F7}
+.lh .center{text-align:center}
+.lh .ac{color:var(--ac)}
+
+.lh-intro{max-width:calc(1000*var(--u))}
+.lh-intro + .lh-intro{margin-top:calc(118*var(--u))}
+.lh-intro:last-child{margin-top:calc(88*var(--u))}
+.lh-hero .pin-copy{padding:calc(185*var(--u)) 0 calc(114*var(--u));
+  width:auto;max-width:none;margin:0 var(--m) 0 calc(508*var(--u))}
+
+/* the laptop at night: the photo takes the right 903 of the band, the line
+   sits on the black beside it */
+.lh-desk{position:relative;background:#000;color:#F5F5F7;height:calc(998*var(--u));overflow:hidden}
+.lh-desk-shot{position:absolute;right:0;top:0;width:calc(903*var(--u));height:100%;object-fit:cover}
+.lh-desk-copy{position:absolute;left:calc(146*var(--u));top:calc(286*var(--u));width:calc(720*var(--u))}
+
+/* the turn, on the water the sea photo comes out of */
+.lh-turn{background:linear-gradient(#0D1214 0%,#1E3035 12%,#426D78 44%,#598FA0 78%,#588FA0 100%);
+  color:#fff;height:calc(681*var(--u));display:flex;align-items:center;justify-content:center;
+  padding:0 var(--m)}
+.lh-sea{display:block;width:100%;height:calc(799*var(--u));object-fit:cover}
+
+.lh-shot{margin-top:calc(160*var(--u));position:relative;border-radius:calc(20*var(--u));overflow:hidden}
+.lh-shot img{display:block;width:100%;height:auto}
+.lh-shot figcaption{position:absolute;left:calc(92*var(--u));top:calc(82*var(--u));
+  right:calc(92*var(--u));color:#fff}
+.lh-cards{display:grid;grid-template-columns:1fr 1fr;gap:calc(34*var(--u))}
+.lh-card{background:#fff;border-radius:calc(20*var(--u));height:calc(450*var(--u));
+  padding:calc(54*var(--u)) calc(50*var(--u))}
+
+/* the people, on the green. The band is the export's own swirl with the line
+   painted back out of it, so the words below are live text. */
+.lh-green{height:calc(1162*var(--u));background:url(/media/lighthouse-green.webp) center/cover no-repeat;
+  color:#fff;position:relative}
+.lh-green-head{position:absolute;left:calc(398*var(--u));top:calc(155*var(--u));right:var(--m)}
+
+/* a device and its line. The first row puts the copy first, which is how the
+   frame mirrors it - no row-reverse, so every margin stays the physical one. */
+.lh-row{display:flex;align-items:flex-start;margin-top:calc(var(--mt)*var(--u))}
+.lh-row > :first-child{margin-left:calc(var(--cx,var(--dx))*var(--u));flex:none}
+.lh-row > * + *{margin-left:calc(var(--cgap)*var(--u));flex:none}
+.lh-row-dev{width:min(calc(var(--dw)*var(--u)),100%);flex:none}
+.lh-row-copy{width:calc(var(--cw)*var(--u));margin-top:calc(var(--cy)*var(--u))}
+.lh-row:not(.flip) > .lh-row-dev:first-child{margin-left:calc(var(--dx)*var(--u))}
+
+@media (max-width:1068px){
+  .lh-hero .pin-copy{margin-inline:var(--m)}
+  .lh-intro{max-width:none}
+  .lh-desk{height:auto;display:flex;flex-direction:column-reverse}
+  .lh-desk-shot{position:relative;width:100%;height:auto;aspect-ratio:903/998;max-height:60vh}
+  .lh-desk-copy{position:relative;left:auto;top:auto;width:auto;margin:40px var(--m) 56px}
+  .lh-turn{height:auto;padding:18vh var(--m)}
+  .lh-sea{height:44vh}
+  .lh-shot figcaption{left:24px;top:24px;right:24px}
+  .lh-cards{gap:24px}
+  .lh-card{height:auto;min-height:180px;padding:28px}
+  .lh-green{height:auto;min-height:60vh;padding:88px 0}
+  .lh-green-head{position:relative;left:auto;top:auto;margin-inline:var(--m)}
+  .lh-row{flex-direction:column;align-items:stretch;margin:80px var(--m) 0}
+  .lh-row > :first-child,.lh-row > * + *,
+  .lh-row:not(.flip) > .lh-row-dev:first-child{margin-left:0}
+  .lh-row > * + *{margin-top:28px}
+  .lh-row-copy{width:auto;margin-top:28px}
+  .lh-row-dev{width:100%}
+}
+
 /* ---- the foot every updated frame draws ------------------------------------
    A #F5F5F7 band, 567 tall, four columns at 146 / 519 / 1120 / 1479. The
    label is 48 and the note under it 34, both measured off liveasy.png. */

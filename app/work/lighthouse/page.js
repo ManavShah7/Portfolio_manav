@@ -1,28 +1,113 @@
-import { Page } from '@/components/Chrome'
-import Story from '@/components/Story'
-import { slots } from '@/lib/clips'
+import { Page, Lines, Outro, para } from '@/components/Chrome'
+import { CaseHero } from '@/components/Case'
+import Frame from '@/components/Frame'
+import { media } from '@/lib/clips'
 import * as C from '@/lib/lighthouse-copy'
 
 export const metadata = {
   title: 'Lighthouse AI',
-  description: 'Lighthouse AI - Navi, the playbook and the Chrome extension. Case study by Manav Shah.',
+  description: 'Lighthouse AI - Navi, a plan that grows with you, and a Knowledge Base. Case study by Manav Shah.',
 }
 
-const V = slots('lighthouse')
-const GREEN = '#34C759'
-const FILL = 'radial-gradient(120% 100% at 30% 0%,#7BE38F 0%,#1FAF3C 38%,#0B6B22 78%,#053312 100%)'
+const IMG = n => `/media/lighthouse-${n}.webp`
+const GREEN = '#029322'
 
+// Built to Manav's frame in design units: `--u` is one design px, so every
+// number below is read straight off lighthouse.png. Type pitches measured on
+// it - intro 57, the photo copy 60, the statement 94, the headings 85, the
+// captions 48 - and Figma's auto leading means size = pitch / 1.2.
+//
+// Every device is drawn empty, which is how the frame has it. The photography
+// is cut out of the export itself; where the frame set type over a photo, the
+// words were painted back out so they can be live text here.
 export default function Lighthouse() {
-  const S = C.solution
   return (
     <Page title="Lighthouse AI" dark>
-      <Story C={C} slug="lighthouse" name="Lighthouse AI" kind="Web app and Chrome extension · Product Design Intern"
-             accent={GREEN} hero={V('hero') || V('green')} band={V('green')} bandFill={FILL}
-             features={[
-               { head: S.navi.head, body: S.navi.body, caption: S.navi.caption, clip: V('navi') },
-               { head: S.playbook.head, body: S.playbook.body, clip: V('playbook') },
-               { head: S.ext.head, body: S.ext.body, clip: V('extension') },
-             ]} />
+      <div className="lh du">
+        <CaseHero clip={media('lighthouse-hero') || media('times-court')} className="lh-hero">
+          {C.intro.map((lines, i) => (
+            <p key={i} className="p48 lh-intro" data-reveal><Lines lines={lines} /></p>
+          ))}
+        </CaseHero>
+
+        {/* ---- the laptop at night: the photo holds the right half, the line
+                sits on the black beside it ---- */}
+        <section className="lh-desk">
+          <p className="p50 lh-desk-copy" data-reveal><Lines lines={C.access} /></p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="lh-desk-shot" src={IMG('desk')} alt="" loading="lazy" />
+        </section>
+
+        {/* ---- the turn, on the water the sea photo comes out of ---- */}
+        <section className="lh-turn">
+          <p className="p70 center" data-reveal><Lines lines={C.lost} /></p>
+        </section>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="lh-sea" src={IMG('buoy')} alt="" loading="lazy" />
+
+        {/* ---- research ---- */}
+        <section className="du-sec bg-fill" style={{ '--pt': 170, '--pb': 241 }}>
+          <h2 className="p65 center du-w" style={{ '--mw': 1400 }} data-reveal>
+            <Lines lines={C.research.headline} />
+          </h2>
+          <figure className="lh-shot du-w" style={{ '--mw': 884, '--mt': 160 }} data-reveal>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={IMG('hours')} alt="" loading="lazy" />
+            <figcaption className="p45"><Lines lines={C.research.shot} /></figcaption>
+          </figure>
+          <div className="du-w lh-cards" style={{ '--mw': 888, '--mt': 31 }} data-stagger>
+            {C.research.cards.map((lines, i) => (
+              <div key={i} className="lh-card" data-reveal>
+                <p className="p32"><Lines lines={lines} /></p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- the people, on the green ---- */}
+        <section className="lh-green">
+          <h2 className="p60 lh-green-head" data-reveal><Lines lines={C.talked} /></h2>
+        </section>
+
+        {/* ---- the solution ---- */}
+        <section className="du-sec" style={{ '--pt': 362, '--pb': 0 }}>
+          <h2 className="p80 center du-w" style={{ '--mw': 1400, color: GREEN }} data-reveal>
+            <Lines lines={C.solution.headline} />
+          </h2>
+
+          <h3 className="p70 du-x" style={{ '--x': 234, marginTop: 'calc(363 * var(--u))' }} data-reveal>
+            <Lines lines={C.solution.navi.head} />
+          </h3>
+          <div className="du-w" style={{ '--mw': 1215, '--mt': 113 }} data-reveal>
+            <Frame kind="ipad" w={1215} />
+          </div>
+          <p className="p40 center du-w" style={{ '--mw': 1100, '--mt': 78 }} data-reveal>
+            {para(C.solution.navi.caption)}
+          </p>
+
+          {C.solution.rows.map((row, i) => {
+            const dev = <div key="d" className="lh-row-dev" data-reveal><Frame kind="ipad" w={row.dw} /></div>
+            const copy = <p key="c" className="p60 lh-row-copy" style={{ '--ac': GREEN }} data-reveal>
+              <Lines lines={row.lines} /></p>
+            return (
+              <div key={i} className="lh-row" data-stagger
+                   style={{ '--mt': row.mt, '--dx': row.dx, '--dw': row.dw,
+                            '--cx': row.cx, '--cgap': row.cgap, '--cw': row.cw, '--cy': row.cy }}>
+                {row.copyFirst ? [copy, dev] : [dev, copy]}
+              </div>
+            )
+          })}
+
+          <h3 className="p70 center du-w" style={{ '--mw': 1400, '--mt': 317, '--ac': GREEN }} data-reveal>
+            <Lines lines={C.solution.guide} />
+          </h3>
+          <div className="du-w" style={{ '--mw': 882, '--mt': 107 }} data-reveal>
+            <Frame kind="ipad" w={882} />
+          </div>
+        </section>
+
+        <Outro x={156} pt={1864} pb={299} />
+      </div>
     </Page>
   )
 }
