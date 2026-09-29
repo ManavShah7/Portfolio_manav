@@ -39,7 +39,10 @@ export default function Frame({ kind, w, clip, still, shot, orbit, Orbit, alt = 
   const d = DEV[kind]
   const [l, t, sw, sh] = d.screen
   const poster = still || clip?.poster || (clip && !clip.video ? clip.src : undefined)
-  const roll = shot ? Math.max(0, 1 - shot.r / screenRatio(d)) : 0
+  // under 2% is not a scroll, it is a rounding difference - rolling it would
+  // only add a will-change and an animation for no visible travel
+  const raw = shot ? 1 - shot.r / screenRatio(d) : 0
+  const roll = raw > 0.02 ? raw : 0
   const filled = Boolean(poster || clip?.video || shot || orbit)
   return (
     <div className={`fr fr-${kind} ${className}`}

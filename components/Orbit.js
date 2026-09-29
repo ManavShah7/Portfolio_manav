@@ -1,28 +1,25 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 
-// Drag to look around a board, the way apple.com spins a product: a sprite
-// sheet of frames swapped by `background-position`, not a video seek. The
-// frames come from the pan in his own Street View capture, so this is the
-// actual view from that hoarding rather than a render.
+// Drag to look around a board, the way apple.com spins a product: frames from
+// the pan in his own Street View capture, so this is the actual view from that
+// hoarding rather than a render.
 //
-// A sheet rather than 21 separate requests, and background-position rather
-// than `video.currentTime`, because a drag has to answer instantly - a seek
-// can stall on the first frames of a decode and a stuttering "interactive"
-// view is worse than none. The sheet is only fetched when the section is
-// close, so it costs nothing to anyone who does not reach it.
+// The frames are one sheet, moved by `transform: translate3d`. The first
+// version set `background-position` on a `background-size: 400% 600%` backdrop
+// of a 9-megapixel sheet, which made the browser rescale and REPAINT that
+// image on every single frame - which is exactly why it felt glitchy. A
+// transform on an <img> is composited instead: no repaint, no rescale, and the
+// sheet is only fetched when the section is close.
 export default function Orbit({ src, poster, frames, cols, tile, alt, className = '' }) {
   const box = useRef(null)
-  const [i, setI] = useState(0)
-  // the live index lives in a ref as well as state: the drag handlers must not
-  // be in a effect that re-subscribes when `i` changes, or the first frame
-  // change tears the listeners down mid-gesture and the drag freezes
   const iRef = useRef(0)
+  const [i, setI] = useState(0)
   const put = n => { iRef.current = n; setI(n) }
-  const [on, setOn] = useState(false)     // sheet loaded and ready
+  const [on, setOn] = useState(false)
   const [held, setHeld] = useState(false)
+  const rows = Math.ceil(frames / cols)
 
-  // only load the sheet when it is near
   useEffect(() => {
     const el = box.current
     if (!el) return
@@ -37,13 +34,14 @@ export default function Orbit({ src, poster, frames, cols, tile, alt, className 
     return () => io.disconnect()
   }, [src])
 
-  // the drag. Horizontal only, and the page keeps the gesture until the
-  // movement is clearly sideways, so a thumb scrolling past is never trapped.
+  // Horizontal only, and the page keeps the gesture until the movement is
+  // clearly sideways, so a thumb scrolling past is never trapped. `i` is
+  // deliberately NOT a dependency: it would re-subscribe on the first frame
+  // change and drop the pointer mid-gesture.
   useEffect(() => {
     const el = box.current
     if (!el || !on) return
     let id = null, x0 = 0, y0 = 0, base = 0, claimed = false
-
     const down = e => {
       if (id !== null) return
       id = e.pointerId; x0 = e.clientX; y0 = e.clientY; base = iRef.current; claimed = false
@@ -54,15 +52,13 @@ export default function Orbit({ src, poster, frames, cols, tile, alt, className 
       const dx = e.clientX - x0, dy = e.clientY - y0
       if (!claimed) {
         if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return
-        if (Math.abs(dy) > Math.abs(dx)) { up(e); return }   // they are scrolling
+        if (Math.abs(dy) > Math.abs(dx)) { up(e); return }
         claimed = true
         el.setPointerCapture?.(id)
       }
-      // a full sweep of the box is one full pan
       const span = el.clientWidth || 1
       let n = Math.round(base - (dx / span) * frames)
-      n = ((n % frames) + frames) % frames
-      put(n)
+      put(((n % frames) + frames) % frames)
       e.preventDefault()
     }
     const up = e => {
@@ -86,18 +82,18 @@ export default function Orbit({ src, poster, frames, cols, tile, alt, className 
     }
   }, [on, frames])
 
-  const rows = Math.ceil(frames / cols)
+  const c = i % cols, r = Math.floor(i / cols)
   return (
     <div ref={box} className={`orbit ${className}${held ? ' held' : ''}${on ? ' ready' : ''}`}
-         role="img" aria-label={alt} tabIndex={0}
-         style={{
-           backgroundImage: `url(${on ? src : poster})`,
-           backgroundSize: on ? `${cols * 100}% ${rows * 100}%` : 'cover',
-           backgroundPosition: on
-             ? `${(i % cols) * (100 / (cols - 1))}% ${Math.floor(i / cols) * (100 / (rows - 1))}%`
-             : 'center',
-           aspectRatio: tile,
-         }}>
+         role="img" aria-label={alt} tabIndex={0} style={{ aspectRatio: tile }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className="orbit-still" src={poster} alt="" aria-hidden="true" />
+      {on && (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img className="orbit-sheet" src={src} alt="" aria-hidden="true"
+             style={{ width: `${cols * 100}%`, height: `${rows * 100}%`,
+                      transform: `translate3d(${-c * (100 / cols)}%, ${-r * (100 / rows)}%, 0)` }} />
+      )}
       <span className="orbit-hint" aria-hidden="true">Drag to look around</span>
     </div>
   )
