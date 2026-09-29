@@ -92,9 +92,16 @@ const mark = l => typeof l === 'string' && l.includes('*')
   ? l.split(/\*([^*]+)\*/).map((part, i) => i % 2 ? <span key={i} className="ac">{part}</span> : part)
   : l
 
-export function Lines({ lines, as: Tag = 'span', className }) {
+// `swipe` nests the content in a second span, which the clipped line reveal
+// needs: `.ln` does the clipping and the inner span is what rises. Off by
+// default, because it changes the DOM every headline on the site renders into.
+export function Lines({ lines, as: Tag = 'span', className, swipe }) {
   const rows = Array.isArray(lines) ? lines : [lines]
-  return rows.map((l, i) => <Tag key={i} className={`ln${className ? ' ' + className : ''}`}>{mark(l)}</Tag>)
+  return rows.map((l, i) => (
+    <Tag key={i} className={`ln${className ? ' ' + className : ''}`}>
+      {swipe ? <span>{mark(l)}</span> : mark(l)}
+    </Tag>
+  ))
 }
 
 // A paragraph authored as a line array for the canvas build. On a page that

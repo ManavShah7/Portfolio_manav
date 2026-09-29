@@ -66,7 +66,7 @@ export default function Peak() {
 
   return (
     <Page title="Peak" dark>
-      <div className="pk du">
+      <div className="pk du cine">
         {/* ---- the film, and the four opening lines on black ---- */}
         <CaseHero clip={media('peak-hero')} className="pk-hero">
           {C.intro.map((lines, i) => (
@@ -125,18 +125,20 @@ export default function Peak() {
                 <div key={i} className={`pk-card white pk-find pk-find-${i}`} style={{ '--ac': '#077B67' }} data-reveal>
                   <p className="p38"><Lines lines={c.head} /></p>
                   {c.body && <p className="p26 w500 pk-find-body">{para(c.body)}</p>}
-                  {c.chart && <>
-                    <MotivationChart />
-                    <div className="pk-phase">
-                      {C.findings.phases.map(ph => (
-                        <div key={ph.title}>
-                          <span style={{ background: ph.dot }} aria-hidden="true" />
-                          <h4>{ph.title}</h4>
-                          <p>{ph.body}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </>}
+                  {c.chart && <MotivationChart />}
+                </div>
+              ))}
+            </div>
+            {/* The frame runs the four phases as one row under the plot, but it
+                can only fit them in the chart column by setting the body at
+                ~10 design px. They read at a real size across the full 1180
+                instead, which is also what was overflowing the card. */}
+            <div className="pk-phase" data-stagger>
+              {C.findings.phases.map(ph => (
+                <div key={ph.title} data-reveal>
+                  <span style={{ background: ph.dot }} aria-hidden="true" />
+                  <h4>{ph.title}</h4>
+                  <p>{ph.body}</p>
                 </div>
               ))}
             </div>

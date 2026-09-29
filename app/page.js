@@ -11,7 +11,7 @@ const IMG = n => `/media/home/${n}.webp`
 export default function Home() {
   return (
     <>
-      <main className="hm du">
+      <main className="hm du cine">
         {/* ---- header ---- */}
         <header className="hm-top">
           <div className="hm-me" data-reveal>
@@ -28,7 +28,12 @@ export default function Home() {
                 without it the band was white and so was the line. ---- */}
         <section className="hm-band">
           <span className="hm-band-bg" aria-hidden="true" data-sv="zoom" />
-          <p className="p46 center" data-reveal><Lines lines={C.hero} /></p>
+          {/* the clipped line reveal, Apple Music's .swipe-up-reveal: each
+              line rises out of its own box, 300ms apart. Theatrical, so it is
+              used here and nowhere else - this is the first line anyone reads. */}
+          <p className="p46 center" data-reveal data-swipe>
+            <Lines lines={C.hero} swipe />
+          </p>
         </section>
 
         {/* ---- the work: every screen the frame draws is a case study ---- */}

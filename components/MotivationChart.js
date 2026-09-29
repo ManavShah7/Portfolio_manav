@@ -17,7 +17,7 @@
 const LIME = '#8A9A1F'
 const MAGENTA = '#D3058B'
 
-const L = 6, R = 994, T = 26, B = 580
+const L = 6, R = 994, T = 26, B = 900
 
 const motivation = t => 0.18 + 0.82 * Math.exp(-3.2 * t)
 const results = t => 0.04 + 0.88 / (1 + Math.exp(-9 * (t - 0.62)))
@@ -46,7 +46,7 @@ export default function MotivationChart() {
           <span className="pk-chart-tick">High</span>
           <span className="pk-chart-tick">Low</span>
         </div>
-        <svg viewBox="0 0 1000 606" role="img"
+        <svg viewBox="0 0 1000 926" role="img"
              aria-label="Motivation starts high and falls away while results start low and rise. The two cross at around six weeks.">
           <defs>
             <linearGradient id="pkFillA" x1="0" y1="0" x2="0" y2="1">

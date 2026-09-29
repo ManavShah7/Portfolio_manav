@@ -22,7 +22,7 @@ const ORANGE = '#E03000'
 export default function Liveasy() {
   return (
     <Page title="Liveasy" dark>
-      <div className="lv du">
+      <div className="lv du cine">
         <CaseHero clip={media('liveasy-hero') || media('times-court')} className="lv-hero">
           {C.intro.map((lines, i) => (
             <p key={i} className="p45 lv-intro" data-reveal><Lines lines={lines} /></p>

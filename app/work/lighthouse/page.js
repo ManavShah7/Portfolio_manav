@@ -23,7 +23,7 @@ const GREEN = '#029322'
 export default function Lighthouse() {
   return (
     <Page title="Lighthouse AI" dark>
-      <div className="lh du">
+      <div className="lh du cine">
         <CaseHero clip={media('lighthouse-hero') || media('times-court')} className="lh-hero">
           {C.intro.map((lines, i) => (
             <p key={i} className="p48 lh-intro" data-reveal><Lines lines={lines} /></p>

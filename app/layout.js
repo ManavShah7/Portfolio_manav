@@ -16,7 +16,11 @@ export const viewport = { themeColor: '#FFFFFF' }
 // No smooth-scroll library. apple.com never eases the page scroll itself; wheel
 // and trackpad input stay native, and the damping lives on the things that move.
 const BOOT = `(function(){var d=document.documentElement;d.classList.add('js');
-d.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches?'reduced-motion':'no-reduced-motion')})()`
+d.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches?'reduced-motion':'no-reduced-motion');
+/* hover effects are gated on this the way apple.com gates theirs, so a phone
+   never lands in a stuck hover state after a tap */
+if(!matchMedia('(hover: hover) and (pointer: fine)').matches)d.classList.add('touch');
+else d.classList.add('no-touch')})()`
 
 export default function RootLayout({ children }) {
   return (

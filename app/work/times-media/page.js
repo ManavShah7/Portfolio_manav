@@ -25,7 +25,7 @@ const cap = (lead, rest) => <><b>{lead}</b>{rest}</>
 export default function TimesMedia() {
   return (
     <Page title="Times Media" dark>
-      <div className="tm du">
+      <div className="tm du cine">
         <CaseHero clip={media('times-court')} className="tm-hero">
           {C.intro.map((lines, i) => (
             <p key={i} className="p48 tm-intro" data-reveal>{para(lines)}</p>

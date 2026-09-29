@@ -277,6 +277,55 @@ html.js.no-reduced-motion [data-reveal].moving{will-change:opacity,transform}
 [data-reveal="fade"]{--ry:0px}
 [data-reveal="far"]{--ry:96px}
 
+/* ---- the follower ----------------------------------------------------------
+   Inside `.cine` the entrance is driven per frame instead of transitioned
+   (components/Reveal.js). The driver writes opacity and transform inline, so
+   there must be NO transition here or the two fight each other: the softness
+   is the value chasing its target, not a curve. The start state is the same
+   hidden one, and JS-off or reduced-motion never reaches either. */
+/* `:not([data-swipe])` matters: this rule and `[data-reveal].in` have equal
+   specificity and this one is later, so without the exclusion it pinned a
+   swipe element at opacity 0 - and since the follower deliberately skips
+   those, nothing ever wrote an inline opacity to bring it back. */
+html.js.no-reduced-motion .cine [data-reveal]:not([data-swipe]){
+  opacity:0;transform:translate3d(0,60px,0);transition:none
+}
+/* The arrived state MUST restore opacity and transform. The driver clears the
+   inline values when a block arrives, so without this it falls back to the
+   hidden rule above and the whole page fades out behind you. `.in` is the
+   driver's own marker, which is why a guard that checks for `.in` cannot see
+   it - only reading computed opacity can. */
+html.js.no-reduced-motion .cine [data-reveal]:not([data-swipe]).in{
+  transition:none;opacity:.999;transform:none
+}
+
+/* ---- the masked line reveal (apple.com/apple-music's .swipe-up-reveal) -----
+   Each line clips, and its words rise from 100% of the line box - so the
+   travel scales with the type size for free - 300ms apart. Theatrical, which
+   is why it is opt-in on a hero line and never on body copy. */
+html.js.no-reduced-motion [data-swipe] .ln{overflow:hidden}
+html.js.no-reduced-motion [data-swipe] .ln > span{display:inline-block;
+  transform:translateY(100%);transition:transform .5s ease}
+html.js.no-reduced-motion [data-swipe].in .ln > span{transform:none}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(1) > span{transition-delay:.05s}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(2) > span{transition-delay:.35s}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(3) > span{transition-delay:.65s}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(4) > span{transition-delay:.95s}
+/* the mask would otherwise crop descenders and any accent's overshoot */
+html.js.no-reduced-motion [data-swipe] .ln{padding:0 .06em .1em;margin:0 -.06em -.1em}
+
+/* ---- card hover ------------------------------------------------------------
+   Apple grows a card by a constant NUMBER OF PIXELS, not a percentage, so a
+   small card and a large one move the same amount: --card-grow / the card's
+   own width. `cubic-bezier(0,0,.5,1)` is out-only - instant response, soft
+   landing - and `html.no-touch` keeps a phone out of a stuck hover state. */
+html.no-touch a.pk-ipad,html.no-touch a.ow-slide,html.no-touch a.hm-dev,
+html.no-touch a.hm-wall-item,html.no-touch .tile-next{
+  transition:transform .3s cubic-bezier(0,0,.5,1)
+}
+html.no-touch a.pk-ipad:hover,html.no-touch a.ow-slide:hover,html.no-touch a.hm-dev:hover,
+html.no-touch .tile-next:hover{transform:scale(1.012)}
+
 /* ---- scroll-linked ---------------------------------------------------------
    Big content moves with the scroll, linearly - the way apple.com maps it -
    so it is never mid-animation on its own and never late. Native view
@@ -685,7 +734,9 @@ html.reduced-motion video.loop{display:none}
 
 /* findings */
 .pk-inset{padding-left:calc(37*var(--u));margin-bottom:calc(90*var(--u))}
-.pk-bento{display:grid;grid-template-columns:565fr 583fr;grid-template-rows:calc(402*var(--u)) calc(663*var(--u));gap:calc(28*var(--u))}
+.pk-bento{display:grid;grid-template-columns:565fr 583fr;
+  grid-template-rows:minmax(calc(402*var(--u)),auto) minmax(calc(390*var(--u)),auto);
+  gap:calc(28*var(--u))}
 .pk-find{padding:calc(66*var(--u)) calc(70*var(--u))}
 .pk-find-body{color:#6E6E73;margin-top:calc(26*var(--u));line-height:1.45}
 .pk-find-1{grid-column:2;grid-row:1 / span 2}
@@ -835,12 +886,12 @@ html.reduced-motion video.loop{display:none}
    Text wears ink tokens, never the series colour; the axis rules are solid
    hairlines one shade off the surface. Every label is HTML at a real size -
    SVG <text> would scale with the viewBox and set at 6-9px in this card. */
-/* The frame runs the chart out to the card's edges - 569 wide inside a 585
-   card, so the negative margins cancel its padding. Below 1069 the card is
-   narrow enough that the bleed pushed the axis labels off it, so the chart
-   sits inside the padding there instead. */
+/* The frame insets the chart 29 from the card's edges, not out to them - the
+   full bleed was left over from when this was a flat image, and it put the
+   plot's right edge and its end dot hard against the card. Below 1069 the
+   card is narrow enough that the chart sits inside the padding instead. */
 .pk-chart{display:block;max-width:none;
-  width:calc(569*var(--u));margin:calc(150*var(--u)) calc(-70*var(--u)) 0 calc(-67*var(--u))}
+  width:calc(527*var(--u));margin:calc(64*var(--u)) calc(-41*var(--u)) 0}
 /* a two-column grid: the scale on the left, the plot beside it, Time beneath.
    Laid out rather than absolutely positioned, so a label can never fall off
    the edge of the card. */
@@ -866,13 +917,13 @@ html.reduced-motion video.loop{display:none}
 
 /* the four phases the curve passes through - the words that make the chart
    readable without relying on its colours */
-.pk-phase{display:grid;grid-template-columns:repeat(2,1fr);gap:calc(40*var(--u)) calc(34*var(--u));margin-top:calc(52*var(--u))}
+.pk-phase{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(34*var(--u));margin-top:calc(56*var(--u))}
 .pk-phase h4{font-size:calc(26*var(--u));font-weight:600;margin-bottom:calc(10*var(--u))}
 .pk-phase p{font-size:calc(23*var(--u));font-weight:400;color:#6E6E73;line-height:1.42}
 .pk-phase span{display:block;width:calc(34*var(--u));height:calc(34*var(--u));border-radius:50%;
   margin-bottom:calc(14*var(--u))}
 @media (max-width:1068px){
-  .pk-phase{grid-template-columns:repeat(2,1fr);gap:18px;margin-top:24px}
+  .pk-phase{grid-template-columns:repeat(2,1fr);gap:28px 18px;margin-top:32px}
   .pk-phase h4{font-size:15px;margin-bottom:4px}
   .pk-phase p{font-size:13px}
   .pk-phase span{width:22px;height:22px;margin-bottom:8px}

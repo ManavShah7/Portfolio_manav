@@ -38,7 +38,13 @@ for (const path of PAGES) {
     }
     await p.waitForTimeout(1600)
     const r = await p.evaluate(() => {
-      const hidden = [...document.querySelectorAll('[data-reveal]')].filter(e => !e.classList.contains('in')).length
+      // Computed opacity, not the `.in` class. `.in` is a marker the driver
+      // sets itself, so a bug that leaves an element transparent AFTER it
+      // arrives is invisible to a class check - which is exactly what
+      // happened when the follower cleared its inline opacity and fell back
+      // to the hidden rule. What a visitor can see is the only honest test.
+      const hidden = [...document.querySelectorAll('[data-reveal]')]
+        .filter(e => parseFloat(getComputedStyle(e).opacity) < 0.9).length
       const wide = document.documentElement.scrollWidth - innerWidth
       let tiny = []
       const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
@@ -61,7 +67,8 @@ for (const path of PAGES) {
     await p.waitForTimeout(900)
     const left = await p.evaluate(() =>
       [...document.querySelectorAll('[data-reveal]')].filter(e =>
-        e.getBoundingClientRect().top < innerHeight && !e.classList.contains('in')).length)
+        e.getBoundingClientRect().top < innerHeight
+        && parseFloat(getComputedStyle(e).opacity) < 0.9).length)
     if (left) fail(where, `${left} block(s) left invisible after a flick`)
 
     if (errs.length) fail(where, errs.slice(0, 3).join(' | '))
