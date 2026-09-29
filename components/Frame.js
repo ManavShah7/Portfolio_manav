@@ -14,8 +14,12 @@ import { Video } from './Media'
 // the very mockups the frames are drawn with (the home page's own set has a
 // different iPad - 1.70 against these 1.53 - which is why they are separate).
 const DEV = {
-  ipad:     { img: 'frame-ipad',     r: 1800 / 1173, screen: [5.5, 6.5, 90.2, 86.6] },
-  phone:    { img: 'frame-phone',    r: 491 / 986,   screen: [6.1, 2.8, 88.6, 94.1] },
+  // The phone and iPad rects are MEASURED off the mockups (the longest run of
+  // near-white per row), not eyeballed. The phone's was badly out - top 2.8%
+  // against a real 7.0%, height 94.1% against 88.74% - so a filled screen bled
+  // over its bezel top and bottom, which is what made it look broken.
+  ipad:     { img: 'frame-ipad',     r: 1800 / 1173, screen: [5.56, 6.48, 90.00, 87.55] },
+  phone:    { img: 'frame-phone',    r: 491 / 986,   screen: [6.92, 7.00, 86.76, 88.74] },
   mac:      { img: 'frame-mac',      r: 1542 / 940,  screen: [10.4, 3.6, 79.4, 84.2] },
   'ipad-p': { img: 'ipad-portrait',  r: 776 / 1128,  screen: [7.35, 4.34, 83.76, 90.34] },
   'ipad-h': { img: 'ipad-landscape', r: 1866 / 1098, screen: [5.31, 7.38, 90.41, 87.52] },

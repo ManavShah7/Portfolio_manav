@@ -1371,7 +1371,10 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
 /* the sheet is cols x rows of the box and is moved by whole tiles. A
    transform composites; the background-position version repainted a rescaled
    9-megapixel image every frame, which is what felt glitchy. */
-.orbit-sheet{transform-origin:0 0;will-change:transform;image-rendering:auto}
+/* max-width:none is load-bearing: the global `img{max-width:100%}` reset
+   clamps a 400% width straight back to the container, which squeezed all four
+   columns of the sheet into the box side by side. */
+.orbit-sheet{transform-origin:0 0;will-change:transform;max-width:none;max-height:none}
 .orbit.held{cursor:grabbing}
 .orbit:focus-visible{box-shadow:0 0 0 3px #2997FF}
 .orbit-hint{position:absolute;left:50%;bottom:4.5%;translate:-50% 0;
