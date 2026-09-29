@@ -64,7 +64,11 @@ for (const path of PAGES) {
     // the flick: straight to the bottom in one jump, from a fresh load
     await p.goto(BASE + path, { waitUntil: 'networkidle' })
     await p.evaluate(() => scrollTo(0, document.documentElement.scrollHeight))
-    await p.waitForTimeout(900)
+    // long enough for a staggered group to finish: the fourth item in a group
+    // waits 450ms for its turn and then fades for 800ms. The check is "left
+    // invisible", not "not yet finished", so sampling at 900ms flagged the
+    // last footer column while it was correctly still on its way in.
+    await p.waitForTimeout(1800)
     const left = await p.evaluate(() =>
       [...document.querySelectorAll('[data-reveal]')].filter(e =>
         e.getBoundingClientRect().top < innerHeight
