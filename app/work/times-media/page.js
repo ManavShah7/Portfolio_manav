@@ -135,7 +135,7 @@ export default function TimesMedia() {
           {/* the line again, in the ink the frame gives it, for anyone whose
               browser has no scroll timeline and for screen readers */}
           <div className="mx-read">
-            <p className="p70 center" style={{ color: RED }}><Lines lines={C.waves} /></p>
+            <p className="p70 center mx-line" style={{ '--band-ink': RED }}><Lines lines={C.waves} /></p>
           </div>
         </section>
 

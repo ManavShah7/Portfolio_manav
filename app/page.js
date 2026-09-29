@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import Reveal from '@/components/Reveal'
 import Intro from '@/components/Intro'
-import { Lines, Footer, Outro } from '@/components/Chrome'
+import { Lines, Footer, Outro, Chev } from '@/components/Chrome'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/home-copy'
@@ -37,9 +37,11 @@ export default function Home() {
           {/* the clipped line reveal, Apple Music's .swipe-up-reveal: each
               line rises out of its own box, 300ms apart. Theatrical, so it is
               used here and nowhere else - this is the first line anyone reads. */}
-          <p className="p46 center" data-reveal data-swipe>
+          {/* the page's h1: it is the first and largest thing anyone reads,
+              and the site had no h1 at all before */}
+          <h1 className="p46 center hm-band-line" data-reveal data-swipe>
             <Lines lines={C.hero} swipe />
-          </p>
+          </h1>
         </section>
 
         {/* ---- the work: every screen the frame draws is a case study ---- */}
@@ -60,6 +62,12 @@ export default function Home() {
                         style={{ left: `${l}%`, top: `${t}%`, width: `${w}%`, height: `${h}%`,
                                  backgroundImage: `url(${clip.poster || clip.src})` }}>
                     {clip.video && <Video src={clip.src} poster={clip.poster} />}
+                    {/* the name ON the screen, the way each case study's own
+                        carousel names its slides. It used to appear on hover,
+                        which meant a phone saw four unlabelled mockups. It
+                        lives inside the screen, not the device, because the
+                        bezel is a different width on each of the four. */}
+                    <span className="hm-dev-name p30">{d.name} <Chev /></span>
                   </span>
                 )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}

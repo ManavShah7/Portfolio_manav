@@ -1004,8 +1004,8 @@ html.js.no-reduced-motion .in .pk-chart-x{opacity:1;transition:opacity .5s ease 
 
 @media (max-width:1068px){
   .pk-chart{width:100%;max-width:100%;margin:34px 0 0}
-  .pk-chart-plot{padding-left:48px;padding-bottom:28px}
-  .pk-chart-tick{font-size:13px}
+  .pk-chart-plot{padding-left:52px;padding-bottom:28px}
+  .pk-chart-tick{font-size:14px}
   .pk-ck-y{margin-right:10px}
   .pk-ck-time{margin-top:8px}
   .pk-ck-s{font-size:14px}
@@ -1124,7 +1124,7 @@ html.js.no-reduced-motion .in .pk-chart-x{opacity:1;transition:opacity .5s ease 
   transition:height 1s var(--ease-soft),opacity .62s var(--ease-soft) .24s}
 html.intro .hm-top{height:0;opacity:0;transition:none}
 html.intro .hm-band{height:100vh;height:100svh;transition:none}
-html.intro .hm-band > p{transform:scale(1.18);transition:none}
+html.intro .hm-band-line{transform:scale(1.18);transition:none}
 
 .hm-me{position:absolute;left:calc(194*var(--u));top:calc(150*var(--u))}
 .hm-me .p48{margin-top:calc(8*var(--u))}
@@ -1136,10 +1136,9 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
 .hm-band{position:relative;overflow:hidden;height:calc(754*var(--u));
   color:#fff;display:flex;align-items:center;justify-content:center;
   transition:height 1s var(--ease-soft)}
-.hm-band > p{transition:transform 1s var(--ease-soft)}
+.hm-band-line{transition:transform 1s var(--ease-soft)}
 .hm-band-bg{position:absolute;inset:0;background:url(/media/home/home-gradient.webp) center/cover no-repeat}
-.hm-band p{position:relative}
-.hm-band p{margin:0}
+.hm-band-line{position:relative;margin:0}
 
 /* the frame leaves 137 between the band and the first device, and the row
    runs 1460..2620 */
@@ -1159,6 +1158,13 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
    number of PIXELS on a rectangle that is not square. The x value is the one
    measured on the mockup; the y value is that same distance over the screen's
    own height. */
+/* the name, on the screen, in a glass pill - the same object .ow-name is on
+   the case studies' own carousels, so a device reads the same everywhere */
+.hm-dev-name{position:absolute;z-index:3;left:calc(22*var(--u));bottom:calc(20*var(--u));
+  display:inline-flex;align-items:center;gap:calc(6*var(--u));
+  padding:calc(11*var(--u)) calc(22*var(--u));border-radius:999px;
+  background:rgba(0,0,0,.42);color:#fff;font-weight:600;white-space:nowrap;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .hm-d1 .hm-dev-screen{border-radius:1.25% / 2.2%}
 .hm-d2 .hm-dev-screen{border-radius:11.74% / 5.41%}
 .hm-d3 .hm-dev-screen{border-radius:2.15% / 1.37%}
@@ -1207,15 +1213,24 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
   .hm-band{height:auto;padding:22vh var(--m);min-height:52vh}
   .hm-devices{height:auto;display:grid;grid-template-columns:1fr 1fr;gap:56px 24px;
     align-items:center;padding:0 var(--m)}
+  /* At the frame's own width these four are drawn at very different sizes and
+     that reads as a composition. Dropped into two equal columns they have to
+     be scaled back to the same ROUGH optical size or the phone - the smallest
+     real device - ends up the biggest thing on the page. */
   .hm-dev{position:relative;left:auto;top:auto;width:100%}
-  .hm-d2{width:56%;justify-self:center}
-  .hm-d3{width:72%;justify-self:center}
+  .hm-d2{width:34%;justify-self:center}
+  .hm-d3{width:58%;justify-self:center}
   .hm-purpose{height:auto;display:grid;gap:24px;padding:80px var(--m)}
   .hm-purpose-head,.hm-purpose-body{position:static}
 }
 /* on a phone the collage would be a postage stamp, so it becomes two columns */
 @media (max-width:734px){
+  /* one column, so the two-column ratios no longer apply - each device is
+     sized against the full width instead, and the phone has to stay big
+     enough for its own label */
   .hm-devices{grid-template-columns:1fr}
+  .hm-d2{width:46%}
+  .hm-d3{width:74%}
   /* Five across on a phone would set each tile at 70px. The rows dissolve
      (`display:contents`) and the whole wall becomes a two-column masonry, so
      every tile is half the screen and still keeps its own aspect. */
@@ -1473,10 +1488,13 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
   .ab-pillar{width:min(430px,78vw);min-height:0}
   .ab-pillar-ink{height:210px}
   /* stacked, because the overlapping rects only work at the frame's width */
-  .ab-collage{height:auto;margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  /* a grid made every row as tall as its tallest tile and left the short
+     one sitting over white; a masonry just stacks them */
+  .ab-collage{height:auto;margin-top:40px;columns:2;column-gap:8px}
   .ab-collage > img{position:relative;left:auto;top:auto;width:100%;height:auto;
+    display:block;margin-bottom:8px;break-inside:avoid;
     aspect-ratio:var(--w) / var(--h)}
-  .ab-collage > img:first-child{grid-column:1 / -1}
+  .ab-collage > img:first-child{column-span:all}
 }
 @media (max-width:734px){
   .ab-job-row{grid-template-columns:1fr;gap:10px}
@@ -1638,8 +1656,13 @@ html.touch .orbit-hint::after{content:''}
    own measured values rather than an ease. */
 /* --mx-run is the whole section; the sticky stage takes 100vh of it, so the
    shrink is driven by what is left. 220vh gave 120vh of scroll and read slow;
-   170vh gives 70vh, which is a little under twice the pace. */
-.mx{position:relative;background:#000;height:var(--mx-run,170vh)}
+   70vh is a little under twice the pace and is what the shrink still runs at.
+   The section is 210vh rather than 170 so there are 40vh LEFT OVER after the
+   shrink: at 170 the stage released at the exact scroll position the line
+   reached scale 1, so the resolved line - the whole point of the effect - was
+   never held on screen for a single pixel of scroll. Now it lands, holds, and
+   only then scrolls away. */
+.mx{position:relative;background:#000;height:var(--mx-run,210vh)}
 .mx-stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate;background:#000}
 .mx-still,.mx-film{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   background-size:cover;background-position:center}
@@ -1661,6 +1684,7 @@ html.touch .orbit-hint::after{content:''}
 .mx-text .ln{display:block}
 /* the readable copy under the film, for no-timeline browsers and AT */
 .mx-read{position:absolute;inset:auto 0 0;padding:0 0 12vh;pointer-events:none}
+.mx-line{color:var(--band-ink)}
 
 /* A constant log-rate: scale(t) = 400^(1-t), so every step of scroll changes
    the scale by the same RATIO - which is what the eye reads as even. Apple's
@@ -1689,19 +1713,44 @@ html.touch .orbit-hint::after{content:''}
   html.no-reduced-motion .mx{view-timeline:--mx block}
   html.no-reduced-motion .mx-text{
     animation:mxShrink linear both;animation-timeline:--mx;
-    animation-range:contain 0% contain 100%;
+    /* 70vh of the 110vh contain range - `both` holds the last frame for the
+       other 40vh, which is the beat the line is legible in */
+    animation-range:contain 0% contain 63.6%;
   }
   /* with the mask doing the work the spelled-out line is redundant */
   html.no-reduced-motion .mx-read{display:none}
 }
-/* no scroll timeline, or reduced motion: the film sits behind the line as it
-   did before, rather than a headline frozen at 400x */
+/* ---- when the mask cannot do the work --------------------------------------
+   Three cases end up here: no scroll timeline, reduced motion, and a phone.
+   On a phone the masked line cannot win - `--mx-em` is 12-13 em-widths, so at
+   390 the resolved line sets at 22px after two screens of scrolling.
+   All three get the same thing: the film, full bleed, with the line laid over
+   it. The line has to be WHITE on a scrim there, not the band's own ink: the
+   band ink is a mid orange or red, which reads on black and vanishes on its
+   own film - which is exactly what reduced motion was showing. */
 html.reduced-motion .mx-mask,
 html:not(.no-reduced-motion) .mx-mask{display:none}
 html.reduced-motion .mx-stage,
-html:not(.no-reduced-motion) .mx-stage{position:relative;height:60vh}
+html:not(.no-reduced-motion) .mx-stage{position:relative;height:62vh}
 html.reduced-motion .mx,
 html:not(.no-reduced-motion) .mx{height:auto}
+html.reduced-motion .mx-stage::after,
+html:not(.no-reduced-motion) .mx-stage::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
+html.reduced-motion .mx-read,
+html:not(.no-reduced-motion) .mx-read{display:grid;position:absolute;inset:0;z-index:1;
+  place-items:center;padding:0 var(--m)}
+html.reduced-motion .mx-line,
+html:not(.no-reduced-motion) .mx-line{color:#fff}
+
+@media (max-width:734px){
+  .mx{height:auto}
+  .mx-stage{position:relative;height:62vh}
+  .mx-mask{display:none}
+  .mx-stage::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
+  html.no-reduced-motion .mx-read{display:grid;position:absolute;inset:0;
+    z-index:1;place-items:center;padding:0 var(--m)}
+  .mx-line{color:#fff}
+}
 
 @media (max-width:1068px){
   .tm-dev,.tm-dev.du-x{width:auto;margin-left:var(--m);margin-right:var(--m)}

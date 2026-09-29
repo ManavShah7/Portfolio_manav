@@ -90,7 +90,7 @@ export default function Liveasy() {
             </div>
           </div>
           <div className="mx-read">
-            <p className="p80 center" style={{ color: ORANGE }}><Lines lines={C.band} /></p>
+            <p className="p80 center mx-line" style={{ '--band-ink': ORANGE }}><Lines lines={C.band} /></p>
           </div>
         </section>
 

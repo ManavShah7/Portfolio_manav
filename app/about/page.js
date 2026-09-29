@@ -37,7 +37,9 @@ export default function About() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="ab-logo" src={C.about.logo.src} alt={C.about.logo.alt} data-reveal />
           <div data-reveal>
-            <h2 className="p55 ab-head" style={{ color: PINK }}>{C.about.head}</h2>
+            {/* the page's h1 - "About Me" is what this page is, and the page
+                had no h1 at all before */}
+            <h1 className="p55 ab-head" style={{ color: PINK }}>{C.about.head}</h1>
             <p className="p45 ab-body"><Lines lines={C.about.body} /></p>
           </div>
         </section>
