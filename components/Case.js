@@ -14,13 +14,16 @@ import { next } from '@/lib/work'
 // how long. His own name is not here: the whole site is his, so saying it on
 // every hero is noise.
 function TitleCard({ name, line, credits }) {
+  // a credit with no value is one Manav has not given me yet - drawn as
+  // nothing at all rather than as a placeholder anyone can read
+  const shown = (credits || []).filter(c => c.value)
   return (
     <div className="pin-card" data-reveal>
       <h1 className="p80 pin-card-name">{name}</h1>
       {line && <p className="p38 pin-card-line">{line}</p>}
-      {credits && (
+      {shown.length > 0 && (
         <div className="pin-credits">
-          {credits.map(c => (
+          {shown.map(c => (
             <div key={c.label} className="pin-credit">
               <span className="p20 pin-credit-label">{c.label}</span>
               <span className="p30 pin-credit-value">{c.value}</span>

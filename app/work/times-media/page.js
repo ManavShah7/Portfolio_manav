@@ -24,7 +24,7 @@ const cap = (lead, rest) => <><b>{lead}</b>{rest}</>
 
 export default function TimesMedia() {
   return (
-    <Page title="Times Media" dark>
+    <Page title="Times Media" dark here="times-media">
       <div className="tm du cine">
         <CaseHero clip={media('times-court')} className="tm-hero"
                   name="Times Media" line="No more slides. No more friction. Just business."

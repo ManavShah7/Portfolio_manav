@@ -1,4 +1,4 @@
-import { Lines, Footer, RESUME } from '@/components/Chrome'
+import { Lines, Footer, Nav, RESUME } from '@/components/Chrome'
 import Reveal from '@/components/Reveal'
 import Gallery from '@/components/Gallery'
 import { Video } from '@/components/Media'
@@ -21,6 +21,7 @@ const band = media('about-band')
 export default function About() {
   return (
     <>
+      <Nav here="about" />
       <main className="ab du cine">
         {/* ---- the opening, on its own film ---- */}
         <section className="ab-band">

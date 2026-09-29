@@ -1,5 +1,6 @@
 import { Page, Lines, Outro, para } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
+import OtherWork from '@/components/OtherWork'
 import Frame from '@/components/Frame'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/lighthouse-copy'
@@ -20,9 +21,40 @@ const GREEN = '#029322'
 // Every device is drawn empty, which is how the frame has it. The photography
 // is cut out of the export itself; where the frame set type over a photo, the
 // words were painted back out so they can be live text here.
-export default function Lighthouse() {
+// Manav has pulled this one back to rework it. The whole case study below is
+// still here and still correct - flip this one switch and it returns exactly
+// as it was. Until then the route answers honestly instead of 404ing, and
+// hands people the rest of the work.
+const MAINTENANCE = true
+
+function Maintenance() {
   return (
-    <Page title="Lighthouse AI" dark>
+    <Page title="Lighthouse AI" here="lighthouse">
+      <div className="lh-wip du cine">
+        <section className="du-sec" style={{ '--pt': 300, '--pb': 40 }}>
+          <div className="du-x" style={{ '--x': 190 }}>
+            <p className="p28 w500 lh-wip-eyebrow" data-reveal>Lighthouse AI</p>
+            <h1 className="p70 lh-wip-head" data-reveal>
+              <Lines lines={['This case study is', 'being rewritten.']} />
+            </h1>
+            <p className="p30 w500 lh-wip-body" data-reveal>
+              {para(['It will be back here shortly. In the meantime, the rest of',
+                     'the work is below.'])}
+            </p>
+          </div>
+        </section>
+
+        <OtherWork slug="lighthouse" headX={190} other={{ pt: 180, pb: 0 }} />
+        <Outro x={190} pt={164} pb={220} />
+      </div>
+    </Page>
+  )
+}
+
+export default function Lighthouse() {
+  if (MAINTENANCE) return <Maintenance />
+  return (
+    <Page title="Lighthouse AI" dark here="lighthouse">
       <div className="lh du cine">
         <CaseHero clip={media('lighthouse-hero') || media('times-court')} className="lh-hero">
           {C.intro.map((lines, i) => (

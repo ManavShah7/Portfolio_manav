@@ -223,6 +223,26 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
    Glass, like apple.com's: translucent fill + saturate/blur. backdrop-filter is
    set INLINE in the component - from a stylesheet the minifier only emits the
    -webkit- form, which Chrome ignores. */
+/* ---- the one navigation bar -----------------------------------------------
+   Sticky, glass, on every page but home (which draws its own header). The
+   left side is the way back and says so with a chevron; the right is where
+   anyone actually wants to go. Nothing else - a case study should not carry a
+   menu. backdrop-filter is inline (see GLASS in components/Chrome.js). */
+.nav{position:sticky;top:0;z-index:60;height:calc(76*var(--u));min-height:52px;
+  background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.08);color:#1D1D1F}
+.nav-in{height:100%;display:flex;align-items:center;justify-content:space-between;
+  padding-inline:max(var(--m),calc(190*var(--u)))}
+.nav-back{display:inline-flex;align-items:center;gap:calc(10*var(--u));
+  font-size:max(15px,calc(28*var(--u)));font-weight:600;letter-spacing:-.004em;color:inherit}
+.nav-back-chev{font-size:1.25em;line-height:0;opacity:.5;
+  transition:transform .3s cubic-bezier(0,0,.5,1),opacity .3s}
+html.no-touch .nav-back:hover .nav-back-chev{transform:translateX(-3px);opacity:1}
+.nav-links{display:flex;gap:max(22px,calc(54*var(--u)));
+  font-size:max(14px,calc(24*var(--u)));font-weight:500}
+.nav-links a{color:#6E6E73;transition:color .2s var(--ease)}
+.nav-links a:hover,.nav-links a[aria-current]{color:#1D1D1F}
+@media (max-width:1068px){ .nav-in{padding-inline:var(--m)} }
+
 .gnav{position:sticky;top:0;z-index:50;height:var(--nav);
   background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.08)}
 .gnav.dark{background:rgba(22,22,23,.72);border-bottom-color:rgba(255,255,255,.08);color:var(--on-dark)}
@@ -463,6 +483,19 @@ html.reduced-motion video.loop{display:none}
    the site is his, so repeating it on every hero is noise. */
 .pin-card{position:absolute;left:50%;top:50%;translate:-50% -50%;
   width:calc(1100*var(--u));max-width:calc(100% - 2*var(--m));text-align:center;color:#fff}
+/* The card carries its own shade. Peak's film is near-white where the title
+   sits, and dimming the whole frame to fix that would throw away the film -
+   so this is a soft radial wash under the words only. `translate` on .pin-card
+   already makes a stacking context, so z-index:-1 lands behind the text and
+   still in front of the film. Width is capped at 100%: on a phone the card is
+   the viewport minus its margins, and anything wider pushed the page sideways
+   (96px at 390, 290px at 1024). Clipping it with `overflow:hidden` on
+   .pin-first is not an option - that would make .pin-first a scroll container
+   and re-scope the view() timeline the title animates on. */
+.pin-card::before{content:'';position:absolute;left:50%;top:50%;
+  translate:-50% -50%;width:100%;height:280%;border-radius:50%;z-index:-1;
+  pointer-events:none;background:radial-gradient(closest-side,
+    rgba(0,0,0,.46),rgba(0,0,0,.34) 52%,rgba(0,0,0,0) 100%)}
 .pin-card-name{font-weight:600;letter-spacing:-.015em}
 .pin-card-line{margin-top:calc(22*var(--u));color:rgba(255,255,255,.82);font-weight:500}
 .pin-credits{display:flex;justify-content:center;gap:calc(120*var(--u));
@@ -588,10 +621,15 @@ html.reduced-motion video.loop{display:none}
    1069, so every laptop sees the frame in proportion. Tablet and phone get a
    fixed unit for spacing and their own type sizes.
    ========================================================================== */
-.du{--u:1px;--m:40px}
-@media (min-width:1069px){ .du{--u:min(1px,calc(100vw / 1900))} }
-@media (max-width:1068px){ .du{--u:.6px} }
-@media (max-width:734px){ .du{--u:.46px;--m:24px} }
+/* The design unit is declared on :root, not only on `.du`. Chrome and the
+   site-wide nav live OUTSIDE any `.du` scope, and a `calc(54*var(--u))` with
+   `--u` undefined is invalid at computed-value time - the whole declaration is
+   dropped. That is exactly how the nav lost its gaps, its padding and its type
+   size: every rule that touched `--u` or `--m` silently evaporated. */
+:root,.du{--u:1px;--m:40px}
+@media (min-width:1069px){ :root,.du{--u:min(1px,calc(100vw / 1900))} }
+@media (max-width:1068px){ :root,.du{--u:.6px} }
+@media (max-width:734px){ :root,.du{--u:.46px;--m:24px} }
 
 /* Type, as the frame sets it: SF Pro, Figma's auto leading (1.2).
    Tracking is NOT Figma's flat 0. SF is drawn to be tracked as a function of
@@ -681,6 +719,19 @@ html.reduced-motion video.loop{display:none}
 /* problems */
 .pk-problems{background:#1C1C1E;color:#F5F5F7}
 .pk-problem-big{height:calc(459*var(--u))}
+/* Three apps, three phones, cropped by the card's own edge the way the frame
+   draws them - the middle one taller so the row has a centre. */
+.pk-problem-head{color:#F5F5F7;margin:calc(54*var(--u)) auto 0;max-width:calc(700*var(--u))}
+/* inset + justify rather than left:50% + translate: the transform property is
+   already in use by the entrance system and a translate here would fight it */
+.pk-trio{position:absolute;left:0;right:0;bottom:calc(-132*var(--u));
+  display:flex;align-items:flex-end;justify-content:center;gap:calc(52*var(--u))}
+.pk-trio .fr{flex:none}
+@media (max-width:1068px){
+  .pk-problem-head{margin-top:28px}
+  .pk-trio{gap:20px;bottom:-64px}
+  .pk-trio .fr{width:min(120px,22vw) !important}
+}
 .pk-two{display:grid;grid-template-columns:1fr 1fr;gap:calc(32*var(--u));margin-top:calc(32*var(--u))}
 /* The frame draws these 459 tall and that is what they are at 1900, but the
    graphics inside carry a 13px type floor that does not shrink with --u, so
@@ -761,7 +812,10 @@ html.reduced-motion video.loop{display:none}
   gap:calc(28*var(--u))}
 .pk-find{padding:calc(66*var(--u)) calc(70*var(--u))}
 .pk-find-body{color:#6E6E73;margin-top:calc(26*var(--u));line-height:1.45}
-.pk-find-1{grid-column:2;grid-row:1 / span 2}
+.pk-find-1{grid-column:2;grid-row:1 / span 2;display:flex;flex-direction:column}
+/* the card is two rows tall and the chart is not - so the leftover height
+   is split above and below it rather than all falling to the bottom */
+.pk-find-1 .pk-chart{margin-top:auto;margin-bottom:auto}
 .pk-find-2{grid-column:1;grid-row:2}
 .pk-ceiling{margin-top:calc(30*var(--u));height:calc(525*var(--u));display:grid;place-items:center;color:#FFFFFF;
   background:linear-gradient(135deg,#8E2DE2,#C300B4 50%,#FF0F7B)}
@@ -913,28 +967,48 @@ html.reduced-motion video.loop{display:none}
    plot's right edge and its end dot hard against the card. Below 1069 the
    card is narrow enough that the chart sits inside the padding instead. */
 .pk-chart{display:block;max-width:none;
-  width:calc(527*var(--u));margin:calc(64*var(--u)) calc(-41*var(--u)) 0}
-/* a two-column grid: the scale on the left, the plot beside it, Time beneath.
-   Laid out rather than absolutely positioned, so a label can never fall off
-   the edge of the card. */
-.pk-chart-plot{display:grid;grid-template-columns:auto minmax(0,1fr);
-  grid-template-rows:auto auto;column-gap:calc(16*var(--u));row-gap:calc(8*var(--u))}
-.pk-chart-scale{display:flex;flex-direction:column;justify-content:space-between;
-  align-items:flex-end;padding:calc(4*var(--u)) 0}
-.pk-chart-plot > svg{display:block;width:100%;height:auto;
-  border-left:1.5px solid #D8D8DC;border-bottom:1.5px solid #D8D8DC}
-.pk-chart-tick{font-size:calc(24*var(--u));font-weight:500;color:#8A8A8E;white-space:nowrap}
-.pk-chart-time{grid-column:2;text-align:right}
-.pk-chart-key{display:flex;gap:calc(38*var(--u));margin-top:calc(30*var(--u));
-  font-size:calc(25*var(--u));color:#6E6E73;font-weight:500}
-.pk-chart-key span{display:inline-flex;align-items:center;gap:calc(11*var(--u))}
-.pk-chart-key i{width:calc(22*var(--u));height:calc(6*var(--u));border-radius:99px;flex:none}
+  width:calc(527*var(--u));margin:calc(70*var(--u)) calc(-41*var(--u)) calc(6*var(--u))}
+/* The plot is a box with a gutter: High and Low hang in the gutter, pinned to
+   the exact rows they name (their `top` comes from the same geometry the SVG
+   is drawn with), and Time sits under the right edge. Nothing is eyeballed and
+   nothing can fall off the card. */
+.pk-chart-plot{padding-left:calc(88*var(--u));padding-bottom:calc(48*var(--u))}
+/* the box is the SVG's exact rectangle, so every label's percentage is the
+   same percentage the geometry uses */
+.pk-chart-box{position:relative}
+.pk-chart-box > svg{display:block;width:100%;height:auto;overflow:visible}
+.pk-chart-tick{font-size:calc(24*var(--u));font-weight:500;color:#8A8A8E;
+  letter-spacing:-.01em;white-space:nowrap;line-height:1}
+.pk-ck-y{position:absolute;right:100%;margin-right:calc(18*var(--u));text-align:right;
+  transform:translateY(-50%)}
+.pk-ck-time{position:absolute;right:0;top:100%;margin-top:calc(14*var(--u))}
+/* the series named on the curve itself - no legend to read back and forth to */
+.pk-ck-s{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;
+  font-size:calc(26*var(--u));font-weight:600;letter-spacing:-.014em}
+.pk-chart-rule{stroke:#EDEDF0;stroke-width:2}
+.pk-chart-base{stroke:#DFDFE4;stroke-width:2}
+
+/* The line draws itself in behind the card's own entrance: the curve is the
+   content here, and a curve that arrives finished says less than one that
+   travels. Everything is gated on the motion switch like the rest of the site. */
+html.js.no-reduced-motion .pk-chart-line{
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+html.js.no-reduced-motion .in .pk-chart-line{stroke-dashoffset:0;
+  transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1) var(--dd,0s)}
+html.js.no-reduced-motion .pk-chart-fill,
+html.js.no-reduced-motion .pk-ck-s,
+html.js.no-reduced-motion .pk-chart-x{opacity:0}
+html.js.no-reduced-motion .in .pk-chart-fill{opacity:1;transition:opacity 1s ease .45s}
+html.js.no-reduced-motion .in .pk-ck-s{opacity:1;transition:opacity .6s ease .95s}
+html.js.no-reduced-motion .in .pk-chart-x{opacity:1;transition:opacity .5s ease 1.15s}
+
 @media (max-width:1068px){
-  .pk-chart{width:100%;max-width:100%;margin:32px 0 0}
-  .pk-chart-plot{column-gap:10px;row-gap:6px}
+  .pk-chart{width:100%;max-width:100%;margin:34px 0 0}
+  .pk-chart-plot{padding-left:48px;padding-bottom:28px}
   .pk-chart-tick{font-size:13px}
-  .pk-chart-key{gap:20px;margin-top:16px;font-size:14px}
-  .pk-chart-key i{width:16px;height:4px}
+  .pk-ck-y{margin-right:10px}
+  .pk-ck-time{margin-top:8px}
+  .pk-ck-s{font-size:14px}
 }
 
 /* the four phases the curve passes through - the words that make the chart
@@ -1081,11 +1155,14 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
 .hm-dev-screen{position:absolute;z-index:2;overflow:hidden;background:#fff;
   background-size:cover;background-position:center;border-radius:calc(6*var(--u))}
 .hm-dev-screen video{display:block;width:100%;height:100%;object-fit:cover}
-.hm-dev-name{position:absolute;left:0;top:calc(100% + 14*var(--u));color:#626262;
-  opacity:0;transform:translateY(calc(-6*var(--u)));
-  transition:opacity .4s ease,transform .4s ease;white-space:nowrap}
-.hm-dev:hover{transform:translateY(calc(-10*var(--u)))}
-.hm-dev:hover .hm-dev-name,.hm-dev:focus-visible .hm-dev-name{opacity:1;transform:none}
+/* Each screen's corners, in the two-value form so both radii come out the same
+   number of PIXELS on a rectangle that is not square. The x value is the one
+   measured on the mockup; the y value is that same distance over the screen's
+   own height. */
+.hm-d1 .hm-dev-screen{border-radius:1.25% / 2.2%}
+.hm-d2 .hm-dev-screen{border-radius:11.74% / 5.41%}
+.hm-d3 .hm-dev-screen{border-radius:2.15% / 1.37%}
+.hm-d4 .hm-dev-screen{border-radius:.5% / .8%}
 .hm-dev:focus-visible{outline:2px solid #C30126;outline-offset:calc(8*var(--u));border-radius:calc(8*var(--u))}
 .hm-d1{left:calc(284*var(--u));top:0;width:calc(933*var(--u))}
 .hm-d2{left:calc(1309*var(--u));top:calc(121*var(--u));width:calc(215*var(--u))}
@@ -1100,11 +1177,26 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
    It is a picture, so it scales with the window at every width rather than
    switching to the tablet unit. The tiles are cropped slightly larger than
    their cells and drift inside them, so the motion never opens a gap. */
-.hm-wall{--wu:calc(100vw / 1900);position:relative;height:calc(1189*var(--wu));background:#D9D9D9;overflow:hidden}
-.hm-wall-item{position:absolute;margin:0;overflow:hidden;
-  left:calc(var(--x)*var(--wu));top:calc(var(--y)*var(--wu));
-  width:calc(var(--w)*var(--wu));height:calc(var(--h)*var(--wu))}
-.hm-wall-item img{display:block;width:100%;height:calc(100% + 30px);margin-top:-15px;object-fit:cover}
+/* The wall was thirteen rectangles placed by hand off the frame, and at any
+   width but the frame's own they overlapped each other and ran off both edges.
+   It is a masonry now: every tile keeps its own aspect (--w / --h, the numbers
+   read off the frame) and the columns do the placing, so the gaps are equal
+   everywhere and nothing can ever collide. Full bleed, as the frame has it,
+   with the gap repeated as the outer inset. */
+.hm-wall{--wg:calc(14*var(--u));background:#D9D9D9;padding:var(--wg);
+  display:flex;flex-direction:column;gap:var(--wg)}
+/* A justified row: flex-basis 0 with flex-grow set to the tile's own aspect
+   hands each tile a width proportional to that aspect, and `aspect-ratio`
+   turns that width back into a height - which comes out identical for every
+   tile in the row, by construction rather than by hand. `flex-start` matters:
+   stretching would override the aspect and collapse the row to nothing. */
+.hm-wall-row{display:flex;gap:var(--wg);align-items:flex-start}
+.hm-wall-item{margin:0;overflow:hidden;border-radius:calc(12*var(--u));
+  flex:var(--a) 1 0;min-width:0;aspect-ratio:var(--w)/var(--h)}
+/* The overhang is exactly the tile's own drift, above and below - the least
+   crop that still means a drifting tile can never show the grey behind it. */
+.hm-wall-item img{display:block;width:100%;object-fit:cover;
+  height:calc(100% + var(--drift,0px) * 2);margin-top:calc(var(--drift,0px) * -1)}
 .hm-wall-item:hover img{filter:brightness(1.04)}
 
 @media (max-width:1068px){
@@ -1118,17 +1210,27 @@ html.intro .hm-band > p{transform:scale(1.18);transition:none}
   .hm-dev{position:relative;left:auto;top:auto;width:100%}
   .hm-d2{width:56%;justify-self:center}
   .hm-d3{width:72%;justify-self:center}
-  .hm-dev-name{opacity:1;transform:none;position:static;display:block;margin-top:16px}
   .hm-purpose{height:auto;display:grid;gap:24px;padding:80px var(--m)}
   .hm-purpose-head,.hm-purpose-body{position:static}
 }
 /* on a phone the collage would be a postage stamp, so it becomes two columns */
 @media (max-width:734px){
   .hm-devices{grid-template-columns:1fr}
-  .hm-wall{height:auto;columns:2;column-gap:8px;padding:8px}
-  .hm-wall-item{position:relative;left:auto;top:auto;width:auto;height:auto;margin-bottom:8px;break-inside:avoid;border-radius:6px}
-  .hm-wall-item img{height:auto;margin:0;aspect-ratio:var(--w)/var(--h)}
+  /* Five across on a phone would set each tile at 70px. The rows dissolve
+     (`display:contents`) and the whole wall becomes a two-column masonry, so
+     every tile is half the screen and still keeps its own aspect. */
+  .hm-wall{--wg:8px;display:block;columns:2;column-gap:8px}
+  .hm-wall-row{display:contents}
+  .hm-wall-item{flex:none;width:auto;margin-bottom:8px;break-inside:avoid;border-radius:6px}
+  .hm-wall-item img{height:100%;margin:0}
 }
+
+/* ---- Lighthouse, held back for a rewrite ---------------------------------
+   The plainest page on the site on purpose: it is a note, not a case study. */
+.lh-wip-eyebrow{color:#6E6E73}
+.lh-wip-head{margin-top:calc(18*var(--u));max-width:calc(1100*var(--u))}
+.lh-wip-body{color:#6E6E73;margin-top:calc(28*var(--u));max-width:calc(760*var(--u))}
+@media (max-width:1068px){ .lh-wip-head,.lh-wip-body{max-width:none} }
 
 /* =============================================================================
    Liveasy - to Manav's frame, in design units (.du). 11051 design px tall.

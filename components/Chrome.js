@@ -9,16 +9,21 @@ export const EMAIL = 'mailto:shah.manavd@northeastern.edu'
 // backdrop-filter is set inline (see .gnav in globals.css for why).
 const GLASS = { backdropFilter: 'saturate(180%) blur(20px)', WebkitBackdropFilter: 'saturate(180%) blur(20px)' }
 
-export function Nav({ title, dark = false }) {
+// One bar on every page but home, which draws its own header. Left is always
+// the way back - his name, with a chevron so it reads as "up a level" rather
+// than as a logo. Right is where anyone actually wants to go next.
+export function Nav({ here }) {
   return (
-    <nav className={`gnav${dark ? ' dark' : ''}`} style={GLASS} aria-label="Site">
-      <div className="wrap gnav-in">
-        <Link href="/" className="gnav-brand">{title || 'Manav Shah'}</Link>
-        <div className="gnav-links">
-          <Link href="/#work">Work</Link>
-          <Link href="/#about" className="gnav-hide-sm">About</Link>
-          <a href={EMAIL} className="gnav-hide-sm">Contact</a>
-          <a href={RESUME} download className="gnav-cta">Resume</a>
+    <nav className="nav" style={GLASS} aria-label="Site">
+      <div className="nav-in">
+        <Link href="/" className="nav-back">
+          <span className="nav-back-chev" aria-hidden="true">‹</span>
+          <span>Manav Shah</span>
+        </Link>
+        <div className="nav-links">
+          <Link href="/about" aria-current={here === 'about' ? 'page' : undefined}>About</Link>
+          <a href={RESUME} download>Resume</a>
+          <a href={EMAIL}>Contact</a>
         </div>
       </div>
     </nav>
@@ -73,9 +78,10 @@ export function Outro({ x = 156, pt = 300, pb = 298, lines = ['Like my work?', '
 // entrance driver. There is still no global nav - a case study opens on its
 // film - so `Nav` is kept here but not mounted. `title` and `dark` stay in the
 // signature so the pages do not all have to change.
-export function Page({ title, dark, children }) {
+export function Page({ title, dark, here, children }) {
   return (
     <>
+      <Nav here={here} />
       <main>{children}</main>
       <Footer />
       <Reveal />

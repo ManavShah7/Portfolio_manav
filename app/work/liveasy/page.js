@@ -1,9 +1,13 @@
 import { Page, Lines, Outro } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
+import OtherWork from '@/components/OtherWork'
 import Frame from '@/components/Frame'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/liveasy-copy'
+import { WORK } from '@/lib/work'
+
+const ME = WORK.find(w => w.slug === 'liveasy')
 
 export const metadata = {
   title: 'Liveasy',
@@ -21,9 +25,10 @@ const ORANGE = '#E03000'
 // Every device is drawn empty, which is how the frame has it.
 export default function Liveasy() {
   return (
-    <Page title="Liveasy" dark>
+    <Page title="Liveasy" dark here="liveasy">
       <div className="lv du cine">
-        <CaseHero clip={media('liveasy-hero') || media('times-court')} className="lv-hero">
+        <CaseHero clip={media('liveasy-hero') || media('times-court')} className="lv-hero"
+                  name={ME.name} line={ME.line} credits={C.credits}>
           {C.intro.map((lines, i) => (
             <p key={i} className="p45 lv-intro" data-reveal><Lines lines={lines} /></p>
           ))}
@@ -109,7 +114,8 @@ export default function Liveasy() {
           })}
         </section>
 
-        <Outro x={156} pt={334} pb={267} />
+        <OtherWork slug="liveasy" headX={156} other={{ pt: 334, pb: 0 }} />
+        <Outro x={156} pt={164} pb={267} />
       </div>
     </Page>
   )

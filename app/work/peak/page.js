@@ -1,13 +1,17 @@
 import Link from 'next/link'
 
-import { Page, Lines, para, EMAIL } from '@/components/Chrome'
+import { Page, Lines, para, EMAIL, Outro } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
 import { Media, Video } from '@/components/Media'
 import Gallery from '@/components/Gallery'
+import Frame from '@/components/Frame'
+import OtherWork from '@/components/OtherWork'
 import MotivationChart from '@/components/MotivationChart'
 import { SameQuestions, NoRoomToMiss } from '@/components/PeakProblem'
 import { media, slots } from '@/lib/clips'
 import { WORK } from '@/lib/work'
+
+const ME = WORK.find(w => w.slug === 'peak')
 import * as C from '@/lib/peak-copy'
 
 export const metadata = {
@@ -65,10 +69,14 @@ export default function Peak() {
   const others = WORK.filter(w => w.slug !== 'peak')
 
   return (
-    <Page title="Peak" dark>
+    <Page title="Peak" dark here="peak">
       <div className="pk du cine">
         {/* ---- the film, and the four opening lines on black ---- */}
-        <CaseHero clip={media('peak-hero')} className="pk-hero">
+        {/* the same title card Times Media opens on: the product in the
+            middle of its own film, and the two facts about the work. His name
+            is not on it - the whole site is his. */}
+        <CaseHero clip={media('peak-hero')} className="pk-hero"
+                  name={ME.name} line={ME.line} credits={C.credits}>
           {C.intro.map((lines, i) => (
             <p key={i} className="p45 pk-intro" data-reveal><Lines lines={lines} /></p>
           ))}
@@ -78,9 +86,16 @@ export default function Peak() {
         <section className="pk-sec pk-problems" style={{ '--pt': 138, '--pb': 93 }}>
           <h2 className="p60 center" data-reveal><Lines lines={C.problem.headline} /></h2>
           <div className="pk-w" style={{ '--mw': 886, '--mt': 60 }}>
-            {V('problem')
-              ? <Media clip={V('problem')} className="pk-card pk-problem-big" data-sv="grow" />
-              : <div className="pk-card black pk-problem-big" data-reveal />}
+            {/* three apps, three phones - the card said it in words and drew
+                nothing, so it says it with the devices */}
+            <div className="pk-card black pk-problem-big" data-reveal>
+              <p className="p27 center pk-problem-head"><Lines lines={C.problem.friction} /></p>
+              <div className="pk-trio" aria-hidden="true">
+                <Frame kind="phone" w={196} />
+                <Frame kind="phone" w={232} />
+                <Frame kind="phone" w={196} />
+              </div>
+            </div>
             <div className="pk-two" data-stagger>
               {C.problem.cards.map((lines, i) => (
                 <div key={i} className="pk-card black pk-problem-card" data-reveal>
@@ -126,19 +141,6 @@ export default function Peak() {
                   <p className="p38"><Lines lines={c.head} /></p>
                   {c.body && <p className="p26 w500 pk-find-body">{para(c.body)}</p>}
                   {c.chart && <MotivationChart />}
-                </div>
-              ))}
-            </div>
-            {/* The frame runs the four phases as one row under the plot, but it
-                can only fit them in the chart column by setting the body at
-                ~10 design px. They read at a real size across the full 1180
-                instead, which is also what was overflowing the card. */}
-            <div className="pk-phase" data-stagger>
-              {C.findings.phases.map(ph => (
-                <div key={ph.title} data-reveal>
-                  <span style={{ background: ph.dot }} aria-hidden="true" />
-                  <h4>{ph.title}</h4>
-                  <p>{ph.body}</p>
                 </div>
               ))}
             </div>
@@ -241,21 +243,8 @@ export default function Peak() {
           </Gallery>
         </section>
 
-        {/* ---- the other projects, each on an iPad ---- */}
-        <section className="pk-sec" style={{ '--pt': 236, '--pb': 0 }}>
-          <h2 className="p70 pk-x pk-other" style={{ '--x': 195 }} data-reveal><Lines lines={C.whatsNext.other} /></h2>
-          <Gallery label="Other projects" className="pk-gallery pk-light-paddles pk-projects" paddles="center" always>
-            {others.map(w => <NextSlide key={w.slug} w={w} />)}
-          </Gallery>
-        </section>
-
-        {/* ---- contact ---- */}
-        <section className="pk-sec" style={{ '--pt': 219, '--pb': 751 }}>
-          <p className="p70 pk-x" style={{ '--x': 240 }} data-reveal>
-            <span className="ln">{C.end.contact[0]}</span>
-            <a className="ln pk-contact" href={EMAIL}>{C.end.contact[1]}</a>
-          </p>
-        </section>
+        <OtherWork slug="peak" head={C.whatsNext.other} headX={195} other={{ pt: 236, pb: 0 }} />
+        <Outro x={195} pt={164} pb={220} />
       </div>
     </Page>
   )

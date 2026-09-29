@@ -2,7 +2,9 @@ import Link from 'next/link'
 
 import Reveal from '@/components/Reveal'
 import Intro from '@/components/Intro'
-import { Lines } from '@/components/Chrome'
+import { Lines, Footer, Outro } from '@/components/Chrome'
+import { Video } from '@/components/Media'
+import { media } from '@/lib/clips'
 import * as C from '@/lib/home-copy'
 
 // Built to Manav's frame in design units (.du), the same as the case studies:
@@ -20,7 +22,10 @@ export default function Home() {
             <p className="p48 hm-pink">{C.me.name}</p>
           </div>
           <nav className="hm-nav" aria-label="Site" data-reveal>
-            {C.nav.map(n => <a key={n.label} className="p30 c-2" href={n.href}>{n.label}</a>)}
+            {C.nav.map(n => (
+              <a key={n.label} className="p30 c-2" href={n.href}
+                 {...(n.download ? { download: true } : null)}>{n.label}</a>
+            ))}
           </nav>
         </header>
 
@@ -42,14 +47,26 @@ export default function Home() {
             them empty, so the mockups carry their own blank screens and
             nothing is composited on top. */}
         <section className="hm-devices" aria-label="Selected work" data-stagger>
-          {C.devices.map(d => (
-            <Link key={d.slug} href={`/work/${d.slug}`} className={`hm-dev ${d.cls}`}
-                  aria-label={`${d.name} case study`} data-reveal>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={IMG(d.img)} alt="" />
-              <span className="hm-dev-name p30">{d.name}</span>
-            </Link>
-          ))}
+          {C.devices.map(d => {
+            // each device plays its own case study's film - the same clip the
+            // project's slide carries at the foot of every case study
+            const clip = media(`other-${d.slug}`) || (d.still ? { src: d.still } : null)
+            const [l, t, w, h] = d.screen
+            return (
+              <Link key={d.slug} href={`/work/${d.slug}`} className={`hm-dev ${d.cls}`}
+                    aria-label={`${d.name} case study`} data-reveal>
+                {clip && (
+                  <span className="hm-dev-screen"
+                        style={{ left: `${l}%`, top: `${t}%`, width: `${w}%`, height: `${h}%`,
+                                 backgroundImage: `url(${clip.poster || clip.src})` }}>
+                    {clip.video && <Video src={clip.src} poster={clip.poster} />}
+                  </span>
+                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={IMG(d.img)} alt="" />
+              </Link>
+            )
+          })}
         </section>
 
         {/* ---- purpose ---- */}
@@ -58,20 +75,29 @@ export default function Home() {
           <p className="p45 hm-purpose-body" data-reveal><Lines lines={C.purpose.body} /></p>
         </section>
 
-        {/* ---- the wall: the frame's collage, tile for tile. Each tile rises
-                in with the stagger and then drifts at its own rate while the
-                wall crosses the screen ---- */}
-        <section className="hm-wall" aria-label="Selected work" data-stagger>
-          {C.work.map(({ n, r: [x, y, w, h], d }) => (
-            <figure key={n} className="hm-wall-item" data-reveal
-                    style={{ '--x': x, '--y': y, '--w': w, '--h': h }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={IMG(n)} alt="" loading="lazy" data-sv="drift"
-                   style={{ '--drift': `${Math.round(d / 6)}px` }} />
-            </figure>
+        {/* ---- the wall: three justified rows of the UI work. Inside a row
+                the tiles share the width in proportion to their own aspect,
+                so every tile in a row is the same height and both ends of the
+                row are flush - no overlaps, no crops, equal gaps. ---- */}
+        <section className="hm-wall" aria-label="Other design work" data-stagger>
+          {C.wall.map((row, i) => (
+            <div key={i} className="hm-wall-row">
+              {row.map(({ n, r: [w, h], d }) => (
+                <figure key={n} className="hm-wall-item" data-reveal
+                        style={{ '--w': w, '--h': h, '--a': (w / h).toFixed(4) }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={IMG(n)} alt="" loading="lazy" data-sv="drift"
+                       style={{ '--drift': `${Math.round(d / 8)}px` }} />
+                </figure>
+              ))}
+            </div>
           ))}
         </section>
+        {/* the same close every other page has: home used to end on the
+            collage with no way to reach him */}
+        <Outro x={190} pt={196} pb={216} />
       </main>
+      <Footer />
       <Intro />
       <Reveal />
     </>
