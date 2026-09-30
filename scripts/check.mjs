@@ -75,7 +75,10 @@ for (const path of PAGES) {
         const cs = getComputedStyle(ln)
         if (!cs.whiteSpace.includes('nowrap')) continue
         const have = ln.getBoundingClientRect().width
-        if (!have) continue                       // display:none, e.g. .mx-read
+        // display:none, and the 1px box of the visually-hidden pattern that
+        // keeps the masked band's line in the accessibility tree. Nothing a
+        // reader can actually see is under 8px wide.
+        if (have < 8) continue
         probe.style.font = cs.font
         probe.style.letterSpacing = cs.letterSpacing
         probe.textContent = ln.textContent
@@ -126,7 +129,7 @@ for (const w of LINE_WIDTHS) {
         const cs = getComputedStyle(ln)
         if (!cs.whiteSpace.includes('nowrap')) continue
         const have = ln.getBoundingClientRect().width
-        if (!have) continue
+        if (have < 8) continue                    // hidden, or visually hidden
         probe.style.font = cs.font
         probe.style.letterSpacing = cs.letterSpacing
         probe.textContent = ln.textContent

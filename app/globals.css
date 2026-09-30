@@ -1246,13 +1246,21 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
   .hm-devices{grid-template-columns:1fr}
   .hm-d2{width:46%}
   .hm-d3{width:74%}
-  /* Five across on a phone would set each tile at 70px. The rows dissolve
-     (`display:contents`) and the whole wall becomes a two-column masonry, so
-     every tile is half the screen and still keeps its own aspect. */
-  .hm-wall{--wg:8px;display:block;columns:2;column-gap:8px}
-  .hm-wall-row{display:contents}
-  .hm-wall-item{flex:none;width:auto;margin-bottom:8px;break-inside:avoid;border-radius:6px}
-  .hm-wall-item img{height:100%;margin:0}
+  /* Five across on a phone would set each tile at 70px, so the rows WRAP into
+     pairs instead. A 40% basis is what forces two per line - two fit, three
+     would need 120% - and inside a line the same aspect-proportional grow does
+     the justifying it does on a laptop, so a pair is still one flush band.
+     This used to dissolve the rows with `display:contents` inside a two-column
+     multicol, which Safari ignores: every tile stacked into column one and the
+     right half of the wall was empty grey on every iPhone.
+     The BASIS is proportional to the aspect as well as the grow. That is what
+     keeps a wrapped line justified: width = k*a + (free/Sum a)*a, which is
+     proportional to `a` outright, so every tile on a line still comes out the
+     same height. A flat basis does not - the leftover is shared by grow but
+     the basis is not, and the pair ends up ragged. */
+  .hm-wall{--wg:8px}
+  .hm-wall-row{flex-wrap:wrap}
+  .hm-wall-item{flex:var(--a) 1 calc(var(--a) * 34%);border-radius:6px}
 }
 
 /* ---- Lighthouse, held back for a rewrite ---------------------------------
@@ -1525,13 +1533,19 @@ html.no-touch .ab-job-pick:hover{transform:translateY(calc(-6*var(--u)));
   .ab-pillar{width:min(430px,78vw);min-height:0}
   .ab-pillar-ink{height:210px}
   /* stacked, because the overlapping rects only work at the frame's width */
-  /* a grid made every row as tall as its tallest tile and left the short
-     one sitting over white; a masonry just stacks them */
-  .ab-collage{height:auto;margin-top:40px;columns:2;column-gap:8px}
-  .ab-collage > img{position:relative;left:auto;top:auto;width:100%;height:auto;
-    display:block;margin-bottom:8px;break-inside:avoid;
+  /* A grid made every row as tall as its tallest tile and left the short one
+     sitting over white. A multicol fixed that in Chrome and broke in Safari,
+     which does not balance the columns after a `column-span:all` spanner. So
+     it is the same justified-pair flex the home wall uses: a 40% basis puts
+     two on a line and the aspect-proportional grow makes the pair one flush
+     band. The F1 shot leads at full width. */
+  .ab-collage{height:auto;margin-top:40px;display:flex;flex-wrap:wrap;gap:8px;
+    align-items:flex-start}
+  .ab-collage > img{position:static;left:auto;top:auto;display:block;
+    width:auto;height:auto;min-width:0;
+    flex:calc(var(--w) / var(--h)) 1 calc(var(--w) / var(--h) * 34%);
     aspect-ratio:var(--w) / var(--h)}
-  .ab-collage > img:first-child{column-span:all}
+  .ab-collage > img:first-child{flex-basis:100%}
 }
 @media (max-width:734px){
   .ab-job-row{grid-template-columns:1fr;gap:10px}
@@ -1769,8 +1783,14 @@ html.touch .orbit-hint::after{content:''}
        other 40vh, which is the beat the line is legible in */
     animation-range:contain 0% contain 63.6%;
   }
-  /* with the mask doing the work the spelled-out line is redundant */
-  html.no-reduced-motion .mx-read{display:none}
+  /* With the mask doing the work the spelled-out line is redundant to LOOK at
+     - but `display:none` took it out of the accessibility tree too, and the
+       line inside the mask is aria-hidden, so the band's whole headline was
+       announced to nobody. Hidden the way a skip link is: off-canvas, still
+       read. */
+  html.no-reduced-motion .mx-read{position:absolute;width:1px;height:1px;
+    margin:-1px;padding:0;border:0;overflow:hidden;white-space:nowrap;
+    clip-path:inset(50%)}
 }
 /* ---- when the mask cannot do the work --------------------------------------
    Three cases end up here: no scroll timeline, reduced motion, and a phone.
@@ -1799,8 +1819,12 @@ html:not(.no-reduced-motion) .mx-line{color:#fff}
   .mx-stage{position:relative;height:62vh}
   .mx-mask{display:none}
   .mx-stage::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.5)}
+  /* white-space has to go back to normal: the visually-hidden rule that keeps
+     this line in the accessibility tree on a laptop sets `nowrap`, and here
+     the same element is the line people actually read. */
   html.no-reduced-motion .mx-read{display:grid;position:absolute;inset:0;
-    z-index:1;place-items:center;padding:0 var(--m)}
+    z-index:1;place-items:center;padding:0 var(--m);white-space:normal;
+    width:auto;height:auto;margin:0;overflow:visible;clip-path:none}
   .mx-line{color:#fff}
 }
 
