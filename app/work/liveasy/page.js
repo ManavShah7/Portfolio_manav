@@ -1,4 +1,4 @@
-import { Page, Lines, Outro } from '@/components/Chrome'
+import { Page, Lines, Outro, para } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
 import OtherWork from '@/components/OtherWork'
 import Frame from '@/components/Frame'
@@ -74,9 +74,10 @@ export default function Liveasy() {
             <Lines lines={C.research.headline} />
           </h2>
           <div className="lv-cards" data-stagger>
-            {C.research.cards.map((lines, i) => (
+            {C.research.cards.map((c, i) => (
               <div key={i} className="lv-card" data-reveal>
-                <p className="p38"><Lines lines={lines} /></p>
+                <p className="p38"><Lines lines={c.title} /></p>
+                <p className="p32 w500 lv-card-body">{para(c.body)}</p>
               </div>
             ))}
           </div>

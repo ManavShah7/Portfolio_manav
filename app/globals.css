@@ -1349,8 +1349,12 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
 .lv-res-head{margin-top:calc(177*var(--u))}
 .lv-cards{display:grid;grid-template-columns:1fr 1fr;gap:calc(52*var(--u)) calc(43*var(--u));
   width:calc(941*var(--u));margin:calc(197*var(--u)) var(--m) 0 calc(458*var(--u))}
+/* min-height, not height: the frame draws 450 and that is the floor, but the
+   third pillar's body runs to six lines at some widths and a fixed height
+   would clip it. Grid rows stretch, so the pair still match. */
 .lv-card{background:#fff;color:#1D1D1F;border-radius:calc(27*var(--u));
-  height:calc(450*var(--u));padding:calc(59*var(--u)) calc(58*var(--u))}
+  min-height:calc(450*var(--u));padding:calc(59*var(--u)) calc(58*var(--u))}
+.lv-card-body{margin-top:calc(20*var(--u))}
 
 /* the redesign rows: a device and its line. The middle row puts the copy
    first in the DOM, which is how the frame mirrors it - no row-reverse, so
