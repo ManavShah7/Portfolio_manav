@@ -108,7 +108,6 @@ export function PhoneApp({ n }) {
           </>
         )}
       </span>
-      <span className="pa-tabs">{[0, 1, 2, 3].map(i => <i key={i} />)}</span>
      </span>
     </span>
   )

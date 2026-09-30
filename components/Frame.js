@@ -21,7 +21,14 @@ const DEV = {
   // notch simply sits over it, so a shot fitted to 7.00% sat low and short.
   ipad:     { img: 'frame-ipad',     r: 1800 / 1173, screen: [5.50, 6.48, 90.11, 87.55] },
   phone:    { img: 'frame-phone',    r: 491 / 986,   screen: [6.92, 3.25, 86.76, 93.51] },
-  mac:      { img: 'frame-mac',      r: 1542 / 940,  screen: [10.4, 3.6, 79.4, 84.2] },
+  // Re-measured off the mockup itself as the bounding box of its saturated
+  // pixels - the wallpaper is colourful, the bezel black, the body grey, so
+  // the screen's own edge is unambiguous. It lands on a screen aspect of
+  // 1.5408 against a real MacBook Pro 14" panel's 1.5397, which is the check
+  // that it is right. The old rect began 8px INSIDE the bezel and ran 16px
+  // wider than the screen, so the shot covered the bezel on both sides and
+  // the laptop read as frameless.
+  mac:      { img: 'frame-mac',      r: 1542 / 940,  screen: [10.89, 3.62, 78.34, 83.40] },
   'ipad-p': { img: 'ipad-portrait',  r: 776 / 1128,  screen: [7.35, 4.34, 83.76, 90.34] },
   'ipad-h': { img: 'ipad-landscape', r: 1866 / 1098, screen: [5.31, 7.38, 90.41, 87.52] },
   'mac-h':  { img: 'macbook',        r: 1656 / 1022, screen: [9.66, 3.33, 80.68, 84.74] },
@@ -46,7 +53,11 @@ export default function Frame({ kind, w, clip, still, shot, alt = '',
   // last fully-white pixel leaves a pale hairline all the way round. Grow the
   // box by a little under 1% of its own size on every side; the corner radii
   // are percentages of the box, so they grow with it.
-  const OVER = 0.009
+  // The bezel on that MacBook is 18px of a 1208px screen - 1.49% - so 0.9% a
+  // side was eating two thirds of it. Held to a fifth of the thinnest bezel on
+  // any of these mockups, which still covers more than a pixel of antialiased
+  // edge at every size the site renders them at.
+  const OVER = 0.003
   const [ml, mt, mw, mh] = d.screen
   const l = ml - mw * OVER, t = mt - mh * OVER
   const sw = mw * (1 + 2 * OVER), sh = mh * (1 + 2 * OVER)

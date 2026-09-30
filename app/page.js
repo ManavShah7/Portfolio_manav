@@ -10,6 +10,9 @@ import * as C from '@/lib/home-copy'
 // Built to Manav's frame in design units (.du), the same as the case studies:
 // --u is one design px, so every number here is read straight off the export.
 const IMG = n => `/media/home/${n}.webp`
+// the film behind the opening line, if he has dropped one in - the frame's
+// gradient is the fallback and the poster
+const heroFilm = media('home-hero')
 
 export default function Home() {
   return (
@@ -29,11 +32,16 @@ export default function Home() {
           </nav>
         </header>
 
-        {/* ---- the line, on the gradient the frame draws. The gradient is
-                its own layer so it can breathe as the band crosses the screen;
-                without it the band was white and so was the line. ---- */}
+        {/* ---- the line, on his film. The film is its own layer so it can
+                breathe as the band crosses the screen, and the poster stays on
+                the layer as a background - so it reads the same before the
+                clip loads and instead of it under reduced motion (rule 5).
+                The still is the frame's own gradient where no clip is. ---- */}
         <section className="hm-band">
-          <span className="hm-band-bg" aria-hidden="true" data-sv="zoom" />
+          <span className="hm-band-bg" aria-hidden="true" data-sv="zoom"
+                style={{ backgroundImage: `url(${heroFilm?.poster || IMG('home-gradient')})` }}>
+            {heroFilm?.video && <Video src={heroFilm.src} poster={heroFilm.poster} eager />}
+          </span>
           {/* the clipped line reveal, Apple Music's .swipe-up-reveal: each
               line rises out of its own box, 300ms apart. Theatrical, so it is
               used here and nowhere else - this is the first line anyone reads. */}

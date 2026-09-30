@@ -736,18 +736,23 @@ html.reduced-motion video.loop{display:none}
 
 /* problems */
 .pk-problems{background:#1C1C1E;color:#F5F5F7}
-.pk-problem-big{height:calc(459*var(--u))}
+/* 459 in the frame, but the frame draws the phones empty. With screens in
+   them the taller middle phone's top rose to within 5u of the headline - they
+   all but touched - so the card carries the extra height instead of the
+   devices being shrunk. 176u puts the middle phone's top a clear 56u under
+   the headline, and the crop lands at 122u. */
+.pk-problem-big{height:calc(520*var(--u))}
 /* Three apps, three phones, cropped by the card's own edge the way the frame
    draws them - the middle one taller so the row has a centre. */
 .pk-problem-head{color:#F5F5F7;margin:calc(54*var(--u)) auto 0;max-width:calc(700*var(--u))}
 /* inset + justify rather than left:50% + translate: the transform property is
    already in use by the entrance system and a translate here would fight it */
-.pk-trio{position:absolute;left:0;right:0;bottom:calc(-132*var(--u));
+.pk-trio{position:absolute;left:0;right:0;bottom:calc(-122*var(--u));
   display:flex;align-items:flex-end;justify-content:center;gap:calc(52*var(--u))}
 .pk-trio .fr{flex:none}
 @media (max-width:1068px){
   .pk-problem-head{margin-top:28px}
-  .pk-trio{gap:20px;bottom:-64px}
+  .pk-trio{gap:20px;bottom:-58px}
   .pk-trio .fr{width:min(120px,22vw) !important}
 }
 .pk-two{display:grid;grid-template-columns:1fr 1fr;gap:calc(32*var(--u));margin-top:calc(32*var(--u))}
@@ -811,7 +816,12 @@ html.reduced-motion video.loop{display:none}
 .pa{position:absolute;inset:0;container-type:inline-size;background:#0B0B0C;overflow:hidden}
 /* every `cqw` below is on a descendant of the container, never on the
    container itself - see the note in components/PeakProblem.js */
-.pa-in{position:absolute;inset:0;display:flex;flex-direction:column;padding:8cqw 7cqw 7cqw}
+/* The card crops these at roughly 70% of the screen, so the layout runs from
+   the TOP and stops short of that line. It used to push a tab bar and a row of
+   stats to the bottom with `margin-top:auto`, all of which fell below the crop
+   - which is why the third phone looked empty: its bar chart was off-card. */
+.pa-in{position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:8cqw 7cqw 0;gap:6cqw}
 /* three hues, so they are plainly three apps - but held back, because this
    is the problem card and the headline over it has to stay the loudest thing
    in the frame */
@@ -820,17 +830,17 @@ html.reduced-motion video.loop{display:none}
 .pa-bar{flex:none;align-self:center;width:24cqw;height:2cqw;border-radius:1cqw;
   background:rgba(255,255,255,.22)}
 .pa-title{flex:none;width:52cqw;height:5cqw;border-radius:1.6cqw;
-  background:rgba(255,255,255,.5);margin-top:8cqw}
-.pa-body{flex:1;display:flex;flex-direction:column;margin:7cqw 0}
-.pa-1 .pa-body{justify-content:space-between}
-.pa-2 .pa-body{justify-content:center;gap:9cqw}
-.pa-3 .pa-body{justify-content:space-between}
+  background:rgba(255,255,255,.5);margin-top:4cqw}
+/* flex:none, so the body is exactly as tall as its own rows: a body that
+   stretched to fill the screen put its last row under the crop */
+.pa-body{flex:none;display:flex;flex-direction:column;gap:6cqw;margin-top:2cqw}
 .pa-row{display:flex;align-items:center;justify-content:space-between;gap:3cqw;
   height:13cqw;flex:none;padding:0 4cqw;border-radius:3cqw;background:rgba(255,255,255,.07)}
 .pa-row i{display:block;flex:1;height:2.6cqw;border-radius:1.3cqw;background:rgba(255,255,255,.26)}
 .pa-row em{display:block;flex:none;width:13cqw;height:5.4cqw;border-radius:2.7cqw;
   background:var(--tint);opacity:.9}
-.pa-ring{display:block;width:58cqw;height:58cqw;align-self:center;rotate:-90deg}
+.pa-ring{display:block;width:60cqw;height:60cqw;align-self:center;rotate:-90deg;
+  margin:2cqw 0 4cqw}
 .pa-ring circle{fill:none;stroke:rgba(255,255,255,.09);stroke-width:8}
 /* r=40, so the circumference is 251.3; 65% of it drawn */
 .pa-ring .pa-ring-v{stroke:var(--tint);stroke-linecap:round;
@@ -838,14 +848,11 @@ html.reduced-motion video.loop{display:none}
 .pa-stats{display:flex;gap:3.4cqw}
 .pa-stats i{flex:1;height:8cqw;border-radius:2.6cqw;background:rgba(255,255,255,.09)}
 .pa-stats i:first-child{background:var(--tint);opacity:.8}
-.pa-lede{display:block;width:34cqw;height:12cqw;border-radius:3cqw;background:rgba(255,255,255,.12)}
-.pa-bars{display:flex;align-items:flex-end;gap:2.6cqw;height:46cqw}
+.pa-lede{display:block;width:34cqw;height:13cqw;border-radius:3cqw;background:rgba(255,255,255,.12)}
+.pa-bars{display:flex;align-items:flex-end;gap:2.6cqw;height:52cqw}
 .pa-bars i{flex:1;height:var(--h);border-radius:1.6cqw;background:rgba(255,255,255,.14)}
 .pa-bars i:nth-child(4){background:var(--tint);opacity:.9}
-.pa-tabs{display:flex;flex:none;justify-content:space-between;padding:0 3cqw;
-  border-top:1px solid rgba(255,255,255,.08);padding-top:5cqw}
-.pa-tabs i{display:block;width:7cqw;height:7cqw;border-radius:2.2cqw;background:rgba(255,255,255,.14)}
-.pa-tabs i:first-child{background:var(--tint);opacity:.85}
+
 
 @media (max-width:1068px){ .pq{font-size:15px;margin-top:24px} }
 @media (max-width:734px){ .pq{font-size:15px;margin-top:20px} }
@@ -873,8 +880,12 @@ html.reduced-motion video.loop{display:none}
 
 /* findings */
 .pk-inset{padding-left:calc(37*var(--u));margin-bottom:calc(90*var(--u))}
-.pk-bento{display:grid;grid-template-columns:565fr 583fr;
-  grid-template-rows:minmax(calc(402*var(--u)),auto) minmax(calc(390*var(--u)),auto);
+/* The frame measures 565/583 and 402/390 - within 3% of equal, which reads as
+   a mistake rather than a decision: two columns 14px apart in width and two
+   rows 8px apart in height. Squared up. The cards either side carry the same
+   two-line heading over the same body, so equal rows stay equal. */
+.pk-bento{display:grid;grid-template-columns:1fr 1fr;
+  grid-template-rows:repeat(2,minmax(calc(396*var(--u)),auto));
   gap:calc(28*var(--u))}
 .pk-find{padding:calc(66*var(--u)) calc(70*var(--u))}
 .pk-find-body{color:#6E6E73;margin-top:calc(26*var(--u));line-height:1.45}
@@ -1218,7 +1229,9 @@ html.intro .hm-band-line{scale:1.18}
 .hm-band-line,
 html.js.no-reduced-motion [data-reveal].hm-band-line.in{
   transition:opacity .6s ease,transform .6s ease,scale 1s var(--ease-soft)}
-.hm-band-bg{position:absolute;inset:0;background:url(/media/home/home-gradient.webp) center/cover no-repeat}
+.hm-band-bg{position:absolute;inset:0;overflow:hidden;
+  background-position:center;background-size:cover;background-repeat:no-repeat}
+.hm-band-bg > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hm-band-line{position:relative;margin:0}
 
 /* the frame leaves 137 between the band and the first device, and the row
@@ -1368,7 +1381,11 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 /* 387 in the frame, less the 210 of tail the pinned section above now
    carries so the laptop can let go before this arrives */
 .lv-res-head{margin-top:calc(177*var(--u))}
-.lv-cards{display:grid;grid-template-columns:1fr 1fr;gap:calc(52*var(--u)) calc(43*var(--u));
+/* `1fr` rows, not auto: the second pair's body runs a line longer than the
+   first's, so auto rows left the bottom two cards 29px taller than the top
+   two. All four match the tallest now. */
+.lv-cards{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
+  gap:calc(52*var(--u)) calc(43*var(--u));
   width:calc(941*var(--u));margin:calc(197*var(--u)) var(--m) 0 calc(458*var(--u))}
 /* min-height, not height: the frame draws 450 and that is the floor, but the
    third pillar's body runs to six lines at some widths and a fixed height

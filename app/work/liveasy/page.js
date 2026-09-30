@@ -69,7 +69,10 @@ export default function Liveasy() {
 
         {/* ---- the four pillars. Same black ground, so the seam with the
                 section above does not show. ---- */}
-        <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 0 }}>
+        {/* --pb was 0, so the last pair of cards ended exactly on the orange
+            band's first pixel - no gap at all, the cards read as sitting on
+            top of it rather than above it. */}
+        <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 150 }}>
           <h2 className="p64 du-x lv-res-head" style={{ '--x': 261 }} data-reveal>
             <Lines lines={C.research.headline} />
           </h2>
