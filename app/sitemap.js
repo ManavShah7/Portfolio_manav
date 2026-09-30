@@ -9,6 +9,7 @@ export default function sitemap() {
   return [
     page('', 1),
     page('/about', 0.8),
-    ...WORK.map(w => page(`/work/${w.slug}`, 0.7)),
+    // a case study that is being rewritten is not worth pointing a crawler at
+    ...WORK.filter(w => !w.wip).map(w => page(`/work/${w.slug}`, 0.7)),
   ]
 }

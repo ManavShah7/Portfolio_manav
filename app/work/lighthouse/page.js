@@ -5,7 +5,19 @@ import Frame from '@/components/Frame'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/lighthouse-copy'
 
-export const metadata = {
+// Manav has pulled this one back to rework it. The whole case study below is
+// still here and still correct - flip this one switch and it returns exactly
+// as it was. Until then the route answers honestly instead of 404ing, and
+// hands people the rest of the work. `wip` in lib/work.js keeps the same URL
+// out of the sitemap.
+const MAINTENANCE = true
+
+export const metadata = MAINTENANCE ? {
+  title: 'Lighthouse AI',
+  description: 'This case study is being rewritten.',
+  // no point sending a search result to a page that is not the case study
+  robots: { index: false, follow: true },
+} : {
   title: 'Lighthouse AI',
   description: 'Lighthouse AI - Navi, a plan that grows with you, and a Knowledge Base. Case study by Manav Shah.',
 }
@@ -21,12 +33,6 @@ const GREEN = '#029322'
 // Every device is drawn empty, which is how the frame has it. The photography
 // is cut out of the export itself; where the frame set type over a photo, the
 // words were painted back out so they can be live text here.
-// Manav has pulled this one back to rework it. The whole case study below is
-// still here and still correct - flip this one switch and it returns exactly
-// as it was. Until then the route answers honestly instead of 404ing, and
-// hands people the rest of the work.
-const MAINTENANCE = true
-
 function Maintenance() {
   return (
     <Page title="Lighthouse AI" here="lighthouse">

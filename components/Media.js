@@ -13,7 +13,17 @@ export function Video({ src, poster, className = '', style, label, eager = false
   useEffect(() => {
     const v = ref.current
     if (!v) return
-    if (document.documentElement.classList.contains('reduced-motion')) return
+    // Less motion means the still, and the still alone. CSS already hides the
+    // clip, but a hidden <video preload="auto" autoplay> still pulls megabytes
+    // down - the eager ones start before React is even on the page. Cut the
+    // source so the download stops rather than merely goes unwatched.
+    if (document.documentElement.classList.contains('reduced-motion')) {
+      v.pause()
+      v.removeAttribute('autoplay')
+      v.preload = 'none'
+      if (v.getAttribute('src')) { v.removeAttribute('src'); v.load() }
+      return
+    }
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) {
         if (v.preload !== 'auto') { v.preload = 'auto' }

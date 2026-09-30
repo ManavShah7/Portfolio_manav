@@ -40,7 +40,7 @@ const screenRatio = d => (d.r * d.screen[2]) / d.screen[3]
 // height: 1 - (shot aspect / screen aspect). Derived, not eyeballed, so a
 // re-export at any length still lands exactly on its own end.
 export default function Frame({ kind, w, clip, still, shot, alt = '',
-                                className = '', style, ...rest }) {
+                                className = '', style, children, ...rest }) {
   const d = DEV[kind]
   // The mockup's inner edge is antialiased, so a rectangle that stops at the
   // last fully-white pixel leaves a pale hairline all the way round. Grow the
@@ -55,7 +55,7 @@ export default function Frame({ kind, w, clip, still, shot, alt = '',
   // only add a will-change and an animation for no visible travel
   const raw = shot ? 1 - shot.r / screenRatio(d) : 0
   const roll = raw > 0.02 ? raw : 0
-  const filled = Boolean(poster || clip?.video || shot)
+  const filled = Boolean(poster || clip?.video || shot || children)
   return (
     <div className={`fr fr-${kind} ${className}`}
          style={{ aspectRatio: d.r,
@@ -70,6 +70,9 @@ export default function Frame({ kind, w, clip, still, shot, alt = '',
             /* eslint-disable-next-line @next/next/no-img-element */
             ? <img className="fr-shot" src={shot.src} alt="" loading="lazy" />
             : clip?.video && <Video src={clip.src} poster={clip.poster} />}
+          {/* a screen can also be drawn rather than recorded - see
+              components/PeakProblem.js */}
+          {children}
         </span>
       )}
       {/* eslint-disable-next-line @next/next/no-img-element */}

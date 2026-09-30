@@ -7,7 +7,7 @@ import Gallery from '@/components/Gallery'
 import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import MotivationChart from '@/components/MotivationChart'
-import { SameQuestions, NoRoomToMiss } from '@/components/PeakProblem'
+import { SameQuestions, NoRoomToMiss, PhoneApp } from '@/components/PeakProblem'
 import { media, slots } from '@/lib/clips'
 import { WORK } from '@/lib/work'
 
@@ -91,9 +91,9 @@ export default function Peak() {
             <div className="pk-card black pk-problem-big" data-reveal>
               <p className="p27 center pk-problem-head"><Lines lines={C.problem.friction} /></p>
               <div className="pk-trio" aria-hidden="true">
-                <Frame kind="phone" w={196} />
-                <Frame kind="phone" w={232} />
-                <Frame kind="phone" w={196} />
+                <Frame kind="phone" w={196}><PhoneApp n={1} /></Frame>
+                <Frame kind="phone" w={232}><PhoneApp n={2} /></Frame>
+                <Frame kind="phone" w={196}><PhoneApp n={3} /></Frame>
               </div>
             </div>
             <div className="pk-two" data-stagger>

@@ -793,6 +793,51 @@ html.reduced-motion video.loop{display:none}
 .pq-slots span + span{margin-left:-.4em}
 .pq-slots span:nth-child(2){opacity:.72} .pq-slots span:nth-child(3){opacity:.48}
 
+/* ---- the three drawn app screens over the problem card -------------------
+   The mockup ships with a blank white screen, and three of those on a black
+   card read as three failed images. Each is drawn as a different app so the
+   row says what the line above it says: a logger, a ring, a step chart.
+   `cqw` off the screen's own width, so nothing here needs a media query, and
+   no type at all - at ~130px wide any label would break the 12px floor. */
+.pa{position:absolute;inset:0;container-type:inline-size;background:#0B0B0C;overflow:hidden}
+/* every `cqw` below is on a descendant of the container, never on the
+   container itself - see the note in components/PeakProblem.js */
+.pa-in{position:absolute;inset:0;display:flex;flex-direction:column;padding:8cqw 7cqw 7cqw}
+/* three hues, so they are plainly three apps - but held back, because this
+   is the problem card and the headline over it has to stay the loudest thing
+   in the frame */
+.pa-1{--tint:#B2661F} .pa-2{--tint:#2C6FB5} .pa-3{--tint:#249C45}
+/* the notch's own pill, so the screen reads as a screen */
+.pa-bar{flex:none;align-self:center;width:24cqw;height:2cqw;border-radius:1cqw;
+  background:rgba(255,255,255,.22)}
+.pa-title{flex:none;width:52cqw;height:5cqw;border-radius:1.6cqw;
+  background:rgba(255,255,255,.5);margin-top:8cqw}
+.pa-body{flex:1;display:flex;flex-direction:column;margin:7cqw 0}
+.pa-1 .pa-body{justify-content:space-between}
+.pa-2 .pa-body{justify-content:center;gap:9cqw}
+.pa-3 .pa-body{justify-content:space-between}
+.pa-row{display:flex;align-items:center;justify-content:space-between;gap:3cqw;
+  height:13cqw;flex:none;padding:0 4cqw;border-radius:3cqw;background:rgba(255,255,255,.07)}
+.pa-row i{display:block;flex:1;height:2.6cqw;border-radius:1.3cqw;background:rgba(255,255,255,.26)}
+.pa-row em{display:block;flex:none;width:13cqw;height:5.4cqw;border-radius:2.7cqw;
+  background:var(--tint);opacity:.9}
+.pa-ring{display:block;width:58cqw;height:58cqw;align-self:center;rotate:-90deg}
+.pa-ring circle{fill:none;stroke:rgba(255,255,255,.09);stroke-width:8}
+/* r=40, so the circumference is 251.3; 65% of it drawn */
+.pa-ring .pa-ring-v{stroke:var(--tint);stroke-linecap:round;
+  stroke-dasharray:251.3;stroke-dashoffset:88}
+.pa-stats{display:flex;gap:3.4cqw}
+.pa-stats i{flex:1;height:8cqw;border-radius:2.6cqw;background:rgba(255,255,255,.09)}
+.pa-stats i:first-child{background:var(--tint);opacity:.8}
+.pa-lede{display:block;width:34cqw;height:12cqw;border-radius:3cqw;background:rgba(255,255,255,.12)}
+.pa-bars{display:flex;align-items:flex-end;gap:2.6cqw;height:46cqw}
+.pa-bars i{flex:1;height:var(--h);border-radius:1.6cqw;background:rgba(255,255,255,.14)}
+.pa-bars i:nth-child(4){background:var(--tint);opacity:.9}
+.pa-tabs{display:flex;flex:none;justify-content:space-between;padding:0 3cqw;
+  border-top:1px solid rgba(255,255,255,.08);padding-top:5cqw}
+.pa-tabs i{display:block;width:7cqw;height:7cqw;border-radius:2.2cqw;background:rgba(255,255,255,.14)}
+.pa-tabs i:first-child{background:var(--tint);opacity:.85}
+
 @media (max-width:1068px){ .pq{font-size:15px;margin-top:24px} }
 @media (max-width:734px){ .pq{font-size:15px;margin-top:20px} }
 
@@ -1522,7 +1567,11 @@ html.no-touch .ab-job-pick:hover{transform:translateY(calc(-6*var(--u)));
      grid column will not shrink below that - it pushed the page 47px sideways
      at 390. The two halves stack instead, and min-width:0 stops any other
      child doing the same. */
-  .ab-jobs{width:auto;min-width:0}
+  /* Stacked, the words have to come first: "Experience", the paragraph, then
+     the roles. Side by side the words are the SECOND column, so DOM order puts
+     them after the cards - right at the frame's width, backwards on a phone,
+     where the four company cards arrived before anything said what they were. */
+  .ab-jobs{width:auto;min-width:0;order:1}
   .ab .ab-two > *{min-width:0}
   .ab-job-meta{flex-direction:column;gap:calc(2*var(--u))}
   .ab-job-meta span{white-space:normal}

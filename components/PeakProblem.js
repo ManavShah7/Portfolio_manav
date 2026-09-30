@@ -62,3 +62,54 @@ export function NoRoomToMiss({ label, was, now, days, state, friends }) {
     </div>
   )
 }
+
+// The three phones standing on the problem card. Left as the mockup has them
+// they are three blank white screens on a black card - which reads as three
+// images that failed to load, not as "three apps everyday". So each one is
+// drawn, and drawn as a *different* app: a logger, a ring, a step chart.
+//
+// No type anywhere. At 1440 these screens are about 130px wide, so any label
+// would land under the 12px floor the guard enforces. At this size an app is
+// its silhouette, which is the whole point being made.
+//
+// `cqw` throughout, off the screen's own width, so one set of rules holds from
+// 1900 down to the phone breakpoint without a single media query.
+export function PhoneApp({ n }) {
+  return (
+    <span className={`pa pa-${n}`} aria-hidden="true">
+     {/* the padding has to sit on a child, not on the query container: a
+         `cqw` written on the container itself resolves against the container
+         ABOVE it - here the viewport - so 7cqw of side padding came out as
+         100px on a 200px screen and squeezed every child to zero width. */}
+     <span className="pa-in">
+      <span className="pa-bar" />
+      <span className="pa-title" />
+      <span className="pa-body">
+        {n === 1 && [0, 1, 2, 3, 4].map(i => (
+          <span key={i} className="pa-row"><i /><em /></span>
+        ))}
+        {n === 2 && (
+          <>
+            <svg className="pa-ring" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" />
+              <circle cx="50" cy="50" r="40" className="pa-ring-v" />
+            </svg>
+            <span className="pa-stats">{[0, 1, 2].map(i => <i key={i} />)}</span>
+          </>
+        )}
+        {n === 3 && (
+          <>
+            <span className="pa-lede" />
+            <span className="pa-bars">
+              {[46, 72, 34, 88, 58, 26, 66].map((h, i) => (
+                <i key={i} style={{ '--h': `${h}%` }} />
+              ))}
+            </span>
+          </>
+        )}
+      </span>
+      <span className="pa-tabs">{[0, 1, 2, 3].map(i => <i key={i} />)}</span>
+     </span>
+    </span>
+  )
+}
