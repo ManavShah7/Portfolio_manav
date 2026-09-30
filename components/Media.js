@@ -24,16 +24,21 @@ export function Video({ src, poster, className = '', style, label, eager = false
       if (v.getAttribute('src')) { v.removeAttribute('src'); v.load() }
       return
     }
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        if (v.preload !== 'auto') { v.preload = 'auto' }
-        v.play().catch(() => {})
-      } else {
-        v.pause()
-      }
-    }, { rootMargin: '200px 0px' })
-    io.observe(v)
-    return () => io.disconnect()
+    // Two rings, because "near enough to have ready" and "near enough to be
+    // worth decoding" are different distances. One 200px ring had SIX clips
+    // decoding at once on Peak - which stands fifteen on a page, two of them
+    // over 1600px wide - and that is felt as stutter while scrolling, not as
+    // anything anybody is watching.
+    const warm = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && v.preload !== 'auto') v.preload = 'auto'
+    }, { rootMargin: '500px 0px' })
+    // A little slack either side so a clip resting on the fold does not
+    // start and stop with every notch of the wheel.
+    const run = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) v.play().catch(() => {}); else v.pause()
+    }, { rootMargin: '64px 0px' })
+    warm.observe(v); run.observe(v)
+    return () => { warm.disconnect(); run.disconnect() }
   }, [])
   return (
     <video ref={ref} className={`loop ${className}`} src={src} poster={poster}

@@ -34,7 +34,15 @@ const TRIGGER = 0.85   // fraction of viewport height
 // the follower, all four numbers theirs
 const START = 1.08     // progress opens with the top at 108% of the viewport
 const WINDOW = 0.40    // and completes over the next 40%
-const CHASE = 0.15     // decay per frame at 60fps; time constant ~100ms
+// The reference fits "current += (target - current) * 0.15" and notes it is
+// 0.15 AT 60FPS - a time constant of ~100ms. Written as a per-frame constant
+// it is not that: it is 0.15 per frame at whatever rate the display happens to
+// be running. On a ProMotion Mac that rate CHANGES DURING A SCROLL (120 down
+// to 80 or 60 and back), so the damping changed speed mid-move, which is what
+// made the motion look broken. Measured here: the whole decay finished in
+// 143ms against the reference's ~690ms. So decay against real elapsed time.
+const TAU = 0.1        // seconds; the reference's ~100ms, now actually that
+const DT_MAX = 0.05    // a tab-switch must not arrive as one enormous step
 const AMP = [60, 80]   // travel, alternating down a group
 
 export default function Reveal() {
@@ -55,8 +63,11 @@ export default function Reveal() {
         const sibs = [...el.parentElement.children].filter(n => n.hasAttribute('data-reveal'))
         const i = Math.max(0, sibs.indexOf(el))
         const amp = Number(el.dataset.amp) || AMP[i % AMP.length]
-        el.style.willChange = 'opacity, transform'
-        return { el, amp, cur: 0, live: false, done: false }
+        // will-change is NOT set here. The reference switches it on only while
+        // the element is near and off again when it has arrived; setting it on
+        // every tracked element at load promoted 40 layers at once on Peak,
+        // which costs GPU memory and causes the jank it is meant to avoid.
+        return { el, amp, cur: 0, live: false, done: false, forced: false }
       })
 
       // Arrive outright if the element is already past. The frame loop only
@@ -81,14 +92,17 @@ export default function Reveal() {
         t.el.style.opacity = ''; t.el.style.transform = ''; t.el.style.willChange = ''
         t.el.classList.add('in')
       }
+      const byEl = new Map(tracked.map(t => [t.el, t]))
       const io = new IntersectionObserver(es => {
         for (const e of es) {
-          const t = tracked.find(x => x.el === e.target)
+          const t = byEl.get(e.target)
           if (!t || t.done) continue
           t.live = e.isIntersecting
+          // on only while it is near, off the moment it is not
+          t.el.style.willChange = e.isIntersecting ? 'opacity, transform' : ''
           if (!e.isIntersecting && e.boundingClientRect.bottom < 0) arrive(t)
         }
-        if (!raf) raf = requestAnimationFrame(tick)
+        schedule()
       }, { rootMargin: '25% 0px 25% 0px' })
       tracked.forEach(t => io.observe(t.el))
 
@@ -96,16 +110,27 @@ export default function Reveal() {
       // each write invalidate layout and each following read force it back -
       // measured at 46fps with a third of frames over 24ms. Split, it is two
       // layouts a frame instead of two per element.
-      const tick = () => {
+      let last = 0
+      const schedule = () => {
+        // `last` is reset on the way in, never on the way out: a loop that has
+        // been idle for a second must not resume with a one-second step.
+        if (!raf) { last = performance.now(); raf = requestAnimationFrame(tick) }
+      }
+      const tick = now => {
         raf = 0
+        const dt = Math.min((now - last) / 1000, DT_MAX)
+        last = now
+        // exponential decay over real elapsed time: the same curve at 60Hz,
+        // 90Hz and 120Hz, and unchanged by a dropped frame
+        const chase = 1 - Math.exp(-dt / TAU)
         let busy = false
         const h = innerHeight
-        const live = tracked.filter(t => t.live && !t.done)
+        const live = tracked.filter(t => (t.live || t.forced) && !t.done)
         const rects = live.map(t => t.el.getBoundingClientRect())      // read
         for (let i = 0; i < live.length; i++) {                        // write
           const t = live[i]
-          const target = progressOf(rects[i], h)
-          t.cur += (target - t.cur) * CHASE
+          const target = t.forced ? 1 : progressOf(rects[i], h)
+          t.cur += (target - t.cur) * chase
           const settled = Math.abs(target - t.cur) < 0.0015
           if (settled) t.cur = target
           // once it has arrived it stays arrived - scrolling back up must not
@@ -116,7 +141,7 @@ export default function Reveal() {
           t.el.style.transform = `translate3d(0,${((1 - t.cur) * t.amp).toFixed(2)}px,0)`
           if (!settled) busy = true
         }
-        if (busy) raf = requestAnimationFrame(tick)
+        if (busy) { last = now; raf = requestAnimationFrame(tick) }
       }
       // The observer is not enough on its own. A flick from above an element
       // to below it never crosses a threshold - not intersecting before, not
@@ -134,17 +159,28 @@ export default function Reveal() {
         for (const t of tracked) {
           if (t.done) continue
           const r = t.el.getBoundingClientRect()
-          if (r.bottom < 0 || progressOf(r, h) >= 1 || (atEnd && r.top < h)) arrive(t)
+          // gone above the fold - nobody is watching, finish it outright
+          if (r.bottom < 0) { arrive(t); continue }
+          // Everything else the sweep catches is FORCED, not arrived: the
+          // frame loop still walks it in on its own curve. arrive() here was
+          // a hard cut to the finished state 120ms after the scroll stopped,
+          // which chopped the damping off half way through - measured, the
+          // whole move was over in 143ms instead of settling over ~650ms.
+          if (progressOf(r, h) >= 1 || (atEnd && r.top < h)) {
+            t.forced = true
+            t.el.style.willChange = 'opacity, transform'
+            schedule()
+          }
         }
       }
       const onScrollCine = () => {
-        if (!raf) raf = requestAnimationFrame(tick)
+        schedule()
         clearTimeout(ct); ct = setTimeout(sweepCine, 120)
       }
       addEventListener('scroll', onScrollCine, { passive: true })
       addEventListener('resize', onScrollCine, { passive: true })
       sweepCine()
-      raf = requestAnimationFrame(tick)
+      schedule()
 
       var teardownCine = () => {
         io.disconnect()
