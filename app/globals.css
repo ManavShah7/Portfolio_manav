@@ -235,14 +235,19 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* Weight, not size, is what read as heavy here: apple.com's own global nav is
    400 at 12px and this was 600 at 28 design px. The name keeps a little more
    than the links so the two sides still rank, but nothing is bold. */
+/* The bar is 76 design px tall but the links themselves were 20-28px boxes,
+   so on a phone you had to hit a 20px target. The padding is vertical only and
+   the flex row centres them, so nothing moves - the hit area just reaches 44. */
 .nav-back{display:inline-flex;align-items:center;gap:calc(10*var(--u));
-  font-size:max(14px,calc(26*var(--u)));font-weight:500;letter-spacing:-.002em;color:inherit}
+  font-size:max(14px,calc(26*var(--u)));font-weight:500;letter-spacing:-.002em;
+  color:inherit;padding-block:max(8px,calc(14*var(--u)))}
 .nav-back-chev{font-size:1.25em;line-height:0;opacity:.5;
   transition:transform .3s cubic-bezier(0,0,.5,1),opacity .3s}
 html.no-touch .nav-back:hover .nav-back-chev{transform:translateX(-3px);opacity:1}
 .nav-links{display:flex;gap:max(22px,calc(52*var(--u)));
   font-size:max(13px,calc(23*var(--u)));font-weight:400;letter-spacing:0}
-.nav-links a{color:#6E6E73;transition:color .2s var(--ease)}
+.nav-links a{color:#6E6E73;transition:color .2s var(--ease);
+  padding-block:max(12px,calc(18*var(--u)))}
 .nav-links a[aria-current]{font-weight:500}
 .nav-links a:hover,.nav-links a[aria-current]{color:#1D1D1F}
 @media (max-width:1068px){ .nav-in{padding-inline:var(--m)} }
@@ -773,7 +778,7 @@ html.reduced-motion video.loop{display:none}
 .pq-count{font-size:1.5em;font-weight:600;font-variant-numeric:tabular-nums;color:#FF383C}
 .pq-count s{color:#6E6E73;text-decoration-thickness:.06em;margin-right:.45em;font-weight:500}
 .pq-week{display:grid;grid-template-columns:repeat(7,1fr);gap:.4em;margin-top:1.1em;
-  text-align:center;color:#86868B;font-size:max(12px,.82em)}
+  text-align:center;color:#86868B;font-size:max(13px,.82em)}
 .pq-day{display:flex;flex-direction:column;align-items:center;gap:.5em}
 .pq-day i{width:1.9em;height:1.9em;border-radius:50%;display:grid;place-items:center;
   border:1px solid rgba(255,255,255,.14)}
@@ -794,9 +799,12 @@ html.reduced-motion video.loop{display:none}
 /* research */
 .pk .p70 + .pk-aside{margin-top:calc(18*var(--u))}
 .pk .p28.w500 + .p70{margin-top:calc(8*var(--u))}
-.pk-aside{max-width:calc(330*var(--u));color:#1C1C1E}
-.pk-pair{display:flex;justify-content:space-between;gap:24px}
-.pk-pair > *{width:calc(400*var(--u))}
+.pk-aside{max-width:calc(350*var(--u));color:#1C1C1E}
+/* The gap is in design units like everything else: a fixed 24px gap eats a
+   larger share of the row as the window narrows, and these two columns
+   carry authored lines that cannot wrap out of the way. */
+.pk-pair{display:flex;justify-content:space-between;gap:calc(24*var(--u))}
+.pk-pair > *{width:calc(466*var(--u))}
 .pk-voice-photo{height:calc(345*var(--u));border-radius:calc(20*var(--u))}
 .pk-voice figcaption{margin-top:calc(38*var(--u));color:#1C1C1E;font-size:calc(26*var(--u));font-weight:600}
 .pk-voice blockquote{margin-top:calc(12*var(--u));color:#1C1C1E}
@@ -1059,7 +1067,7 @@ html.js.no-reduced-motion .in .pk-chart-x{opacity:1;transition:opacity .5s ease 
 .tm .c-2{color:#8a8a8e}
 
 /* the opening lines: 57 pitch, 116 between blocks */
-.tm-intro{max-width:calc(760*var(--u))}
+.tm-intro{max-width:calc(880*var(--u))}
 .tm-intro + .tm-intro{margin-top:calc(59*var(--u))}
 .tm-hero .pin-copy{padding:calc(140*var(--u)) 0 calc(166*var(--u));
   width:auto;max-width:none;margin:0 var(--m) 0 calc(518*var(--u))}
@@ -1135,9 +1143,9 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
 
 .hm-me{position:absolute;left:calc(194*var(--u));top:calc(150*var(--u))}
 .hm-me .p48{margin-top:calc(8*var(--u))}
-.hm-nav{position:absolute;right:calc(1900*var(--u) - 1580*var(--u));top:calc(132*var(--u));
-  display:flex;flex-direction:column;align-items:flex-end;gap:calc(27*var(--u))}
-.hm-nav a{text-decoration:none}
+.hm-nav{position:absolute;right:calc(1900*var(--u) - 1580*var(--u));top:calc(122*var(--u));
+  display:flex;flex-direction:column;align-items:flex-end;gap:calc(7*var(--u))}
+.hm-nav a{text-decoration:none;padding-block:max(8px,calc(10*var(--u)))}
 .hm-nav a:hover{color:#000}
 
 .hm-band{position:relative;overflow:hidden;height:calc(754*var(--u));
@@ -1278,12 +1286,14 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
 /* The four points are spaced top-to-top in the frame (291, 336, 291), and
    they are not all the same number of lines, so each margin is the gap minus
    the block above it rather than one repeated value. */
-.lv-points{margin-left:calc(1107*var(--u));margin-right:var(--m);max-width:calc(565*var(--u))}
+.lv-points{margin-left:calc(1107*var(--u));margin-right:var(--m);max-width:calc(672*var(--u))}
 .lv-points > :first-child{margin-top:calc(294*var(--u))}
 .lv-points > * + *{margin-top:calc(201*var(--u))}
 .lv-points-dark > :first-child{margin-top:calc(46*var(--u))}
 
-.lv-res-head{margin-top:calc(387*var(--u))}
+/* 387 in the frame, less the 210 of tail the pinned section above now
+   carries so the laptop can let go before this arrives */
+.lv-res-head{margin-top:calc(177*var(--u))}
 .lv-cards{display:grid;grid-template-columns:1fr 1fr;gap:calc(52*var(--u)) calc(43*var(--u));
   width:calc(941*var(--u));margin:calc(197*var(--u)) var(--m) 0 calc(458*var(--u))}
 .lv-card{background:#fff;color:#1D1D1F;border-radius:calc(27*var(--u));
@@ -1297,7 +1307,7 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
 .lv-row-dev{width:min(calc(var(--dw)*var(--u)),100%);flex:none}
 .lv-row > * + *{margin-left:calc(var(--cgap)*var(--u));flex:none}
 /* the copy sits --cy below the top of the device either way round */
-.lv-row-copy{width:calc(var(--cw)*var(--u));margin-top:calc(var(--cy)*var(--u))}
+.lv-row-copy{width:calc(var(--cw)*1.05*var(--u));margin-top:calc(var(--cy)*var(--u))}
 
 @media (max-width:1068px){
   .lv-hero .pin-copy{margin-inline:var(--m)}
@@ -1306,7 +1316,7 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
   .lv .lv-run-pin > *{position:relative;top:auto;width:100%}
   .lv-points{margin-inline:var(--m);max-width:none}
   .lv-points > *,.lv-points > :first-child{margin-top:48px}
-  .lv-res-head{margin-top:96px}
+  .lv-res-head{margin-top:72px}
   .lv-cards{gap:24px}
   .lv-card{height:auto;min-height:200px;padding:28px;border-radius:20px}
   .lv .bg-dark .lv-cards{padding-bottom:96px}
@@ -1423,7 +1433,7 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
    approximation that made it worse. */
 .ab-band-film::after{content:'';position:absolute;inset:0;
   background:var(--band-pink,#EF3888);mix-blend-mode:color}
-.ab-quote{color:#fff;width:calc(1240*var(--u));position:relative}
+.ab-quote{color:#fff;width:calc(1310*var(--u));position:relative}
 
 /* the two-column blocks: the artwork on the left, the words on the right */
 .ab .ab-two{display:grid;grid-template-columns:calc(877*var(--u)) 1fr;
@@ -1432,7 +1442,7 @@ html.intro .hm-band-line{transform:scale(1.18);transition:none}
 .ab-logo{width:calc(468*var(--u));height:auto;
   margin:calc(94*var(--u)) 0 0 calc(125*var(--u))}
 .ab-head{margin-bottom:calc(52*var(--u))}
-.ab-body{max-width:calc(790*var(--u))}
+.ab-body{max-width:calc(840*var(--u))}
 /* It was body-sized dark text under a paragraph of body-sized dark text, so
    nothing said it was the one thing to click. Apple's own blue, at label size
    in a pill - smaller than it was and far harder to miss. */
@@ -1667,6 +1677,13 @@ html.touch .orbit-hint::after{content:''}
 .dev-screen > video{display:block;width:100%;height:100%;object-fit:cover}
 
 /* authored lines are the frame's own breaks: on a laptop they never re-wrap */
+/* Above the phone breakpoint the frame's own line breaks hold, which is what
+   `nowrap` is for. The cost is that a measure narrower than its longest
+   authored line cannot wrap out of trouble: it spills, and inside a
+   `[data-swipe]` block - which clips - it is chopped mid-word instead. Every
+   measure on the site is checked against its longest line by
+   `node scripts/check.mjs`; if that check fails, widen the measure rather
+   than dropping the nowrap. */
 @media (min-width:1069px){ .du .ln{white-space:nowrap} }
 
 /* ---- Times Media, the rebuilt lower half ------------------------------------ */

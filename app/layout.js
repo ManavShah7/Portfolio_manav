@@ -4,7 +4,15 @@ export const metadata = {
   metadataBase: new URL('https://manavshah.me'),
   title: { default: 'Manav Shah - Product Designer', template: '%s - Manav Shah' },
   description: 'Product designer who designs end to end and builds enough to find out where the design was lying.',
-  openGraph: { siteName: 'Manav Shah', type: 'website' },
+  // Every page inherits this card unless it sets its own. Without an image, a
+  // link to the site pasted anywhere - Slack, LinkedIn, iMessage - came out as
+  // a bare grey rectangle.
+  openGraph: {
+    siteName: 'Manav Shah', type: 'website', locale: 'en_US',
+    images: [{ url: '/media/og.jpg', width: 1200, height: 630,
+               alt: 'Manav Shah, product designer' }],
+  },
+  twitter: { card: 'summary_large_image', images: ['/media/og.jpg'] },
 }
 
 export const viewport = { themeColor: '#FFFFFF' }

@@ -48,22 +48,14 @@ export default function Liveasy() {
             </div>
           </section>
 
-          <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 0 }}>
+          {/* The pinned run ENDS here, with the fourth point. It used to run
+              on through the pillars below, and since the pin box is
+              `bottom:0` of this wrapper the laptop stayed stuck to the
+              screen all the way down them. */}
+          <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 210 }}>
             <div className="lv-points lv-points-dark">
               {C.problem.items.slice(2).map((lines, i) => (
                 <p key={i} className="p38" data-reveal><Lines lines={lines} /></p>
-              ))}
-            </div>
-
-            {/* ---- the four pillars ---- */}
-            <h2 className="p64 du-x lv-res-head" style={{ '--x': 261 }} data-reveal>
-              <Lines lines={C.research.headline} />
-            </h2>
-            <div className="lv-cards" data-stagger>
-              {C.research.cards.map((lines, i) => (
-                <div key={i} className="lv-card" data-reveal>
-                  <p className="p38"><Lines lines={lines} /></p>
-                </div>
               ))}
             </div>
           </section>
@@ -74,6 +66,21 @@ export default function Liveasy() {
             <Frame kind="mac" w={760} shot={C.shots.old} />
           </div>
         </div>
+
+        {/* ---- the four pillars. Same black ground, so the seam with the
+                section above does not show. ---- */}
+        <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 0 }}>
+          <h2 className="p64 du-x lv-res-head" style={{ '--x': 261 }} data-reveal>
+            <Lines lines={C.research.headline} />
+          </h2>
+          <div className="lv-cards" data-stagger>
+            {C.research.cards.map((lines, i) => (
+              <div key={i} className="lv-card" data-reveal>
+                <p className="p38"><Lines lines={lines} /></p>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* ---- the orange band: the film plays full bleed and the line shrinks
                 down into it, the way apple.com/macbook-pro does its chip film.
