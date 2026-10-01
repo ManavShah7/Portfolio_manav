@@ -1643,32 +1643,6 @@ html.no-touch .ab-job-pick:hover{transform:translateY(calc(-6*var(--u)));
   .ab-pillar{width:82vw}
 }
 
-/* ---- drag to look around (components/Orbit.js) ----------------------------
-   A sprite sheet of the pan from his own Street View capture. background-size
-   is cols x rows of 100%, so background-position steps in whole tiles and no
-   frame is ever half-shown. */
-.orbit{position:relative;overflow:hidden;cursor:grab;background:#111;
-  touch-action:pan-y;user-select:none;-webkit-user-select:none;outline:none}
-.orbit-still,.orbit-sheet{position:absolute;left:0;top:0;display:block;
-  pointer-events:none;-webkit-user-drag:none}
-.orbit-still{width:100%;height:100%;object-fit:cover}
-/* the sheet is cols x rows of the box and is moved by whole tiles. A
-   transform composites; the background-position version repainted a rescaled
-   9-megapixel image every frame, which is what felt glitchy. */
-/* max-width:none is load-bearing: the global `img{max-width:100%}` reset
-   clamps a 400% width straight back to the container, which squeezed all four
-   columns of the sheet into the box side by side. */
-.orbit-sheet{transform-origin:0 0;will-change:transform;max-width:none;max-height:none}
-.orbit.held{cursor:grabbing}
-.orbit:focus-visible{box-shadow:0 0 0 3px #2997FF}
-.orbit-hint{position:absolute;left:50%;bottom:4.5%;translate:-50% 0;
-  padding:.5em 1em;border-radius:99px;font-size:max(12px,calc(22*var(--u)));
-  font-weight:500;color:#fff;background:rgba(0,0,0,.42);white-space:nowrap;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  transition:opacity .4s var(--ease-soft);pointer-events:none}
-.orbit.held .orbit-hint,.orbit:not(.ready) .orbit-hint{opacity:0}
-html.touch .orbit-hint::after{content:''}
-
 /* ---- the foot every updated frame draws ------------------------------------
    A #F5F5F7 band, 567 tall, four columns at 146 / 519 / 1120 / 1479. The
    label is 48 and the note under it 34, both measured off liveasy.png. */
@@ -1747,10 +1721,6 @@ html.touch .orbit-hint::after{content:''}
    shot's own height, so a re-export of any length still ends exactly on its
    last row. A shot no taller than the screen gets no roll and simply fills. */
 .fr-shot{display:block;width:100%;height:auto}
-/* The draggable view fills the screen rect. No background-size here: the
-   component sets it inline to cols x rows of 100%, which is what makes
-   background-position step in whole tiles. */
-.fr-orbit{position:absolute;inset:0;width:100%;height:100%}
 .fr-screen:not(.fr-rolls) > .fr-shot{height:100%;object-fit:cover}
 .fr-rolls > .fr-shot{will-change:transform}
 @keyframes frRoll{ from{transform:translateY(0)} to{transform:translateY(calc(var(--fr-roll) * -1))} }
