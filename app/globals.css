@@ -957,14 +957,20 @@ html.js.no-reduced-motion .pk-cmp-key .pk-cmp-mark{opacity:1;transform:none}
    script, and it degrades to a normal two-column read if sticky is ignored. */
 /* 540, not 470: "Different people." at p70 wants 502u and the column has to
    hold his own line breaks. The gap gives way instead of the heading. */
+/* The budget across this row is tight and every number in it is load-bearing:
+   222 left + 540 for the heading (its longest line wants 502) + 60 gap + 110
+   right leaves 968 for the boxes, and two of them abreast with a 28 gutter and
+   44 of padding need 938. Widening the right margin further takes the card
+   measure below his longest line. */
 .pk-stages{display:grid;grid-template-columns:calc(540*var(--u)) 1fr;
-  gap:calc(80*var(--u));padding-left:calc(222*var(--u));padding-right:var(--m)}
+  gap:calc(60*var(--u));padding-left:calc(222*var(--u));
+  padding-right:calc(110*var(--u))}
 .pk-stages-head{position:sticky;align-self:start;top:calc(50vh - 190*var(--u))}
 .pk-stages-aside{margin-top:calc(44*var(--u));color:#6E6E73;line-height:1.45;
   max-width:calc(420*var(--u))}
 .pk-stages-run{display:flex;flex-direction:column;gap:calc(28*var(--u));min-width:0}
 .pk-stages-grid{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u))}
-.pk-stage{padding:calc(54*var(--u)) calc(56*var(--u))}
+.pk-stage{padding:calc(48*var(--u)) calc(44*var(--u))}
 .pk-stage-h{letter-spacing:-.014em}
 .pk-stage-b{margin-top:calc(30*var(--u));color:#6E6E73;line-height:1.45}
 /* the chart card is the one the other four sit under, so it runs full width */
@@ -1081,15 +1087,15 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .pk-learn-h{letter-spacing:-.014em}
 .pk-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
 
-.pk-faq-item{border-top:1px solid rgba(0,0,0,.12)}
-.pk-faq-item:last-child{border-bottom:1px solid rgba(0,0,0,.12)}
-.pk-faq-q{display:flex;align-items:flex-start;justify-content:space-between;
+.faq-item{border-top:1px solid rgba(0,0,0,.12)}
+.faq-item:last-child{border-bottom:1px solid rgba(0,0,0,.12)}
+.faq-q{display:flex;align-items:flex-start;justify-content:space-between;
   gap:calc(40*var(--u));padding:calc(34*var(--u)) 0;cursor:pointer;
   list-style:none;letter-spacing:-.014em}
 /* Safari draws its own triangle through ::-webkit-details-marker, which
    `list-style:none` alone does not remove. */
-.pk-faq-q::-webkit-details-marker{display:none}
-.pk-faq-q::after{content:'';flex:none;width:calc(19*var(--u));height:calc(19*var(--u));
+.faq-q::-webkit-details-marker{display:none}
+.faq-q::after{content:'';flex:none;width:calc(19*var(--u));height:calc(19*var(--u));
   margin-top:calc(9*var(--u));background:
     linear-gradient(currentColor,currentColor) center/100% 2px no-repeat,
     linear-gradient(currentColor,currentColor) center/2px 100% no-repeat;
@@ -1097,8 +1103,8 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 /* The vertical stroke collapses to nothing, which leaves a minus. Rotating
    the whole mark instead - the obvious first move - does nothing you can see,
    because a plus turned 90 degrees is still a plus. */
-.pk-faq-item[open] .pk-faq-q::after{background-size:100% 2px,2px 0;opacity:.55}
-.pk-faq-a{padding:0 0 calc(38*var(--u));max-width:calc(880*var(--u));
+.faq-item[open] .faq-q::after{background-size:100% 2px,2px 0;opacity:.55}
+.faq-a{padding:0 0 calc(38*var(--u));max-width:calc(880*var(--u));
   color:#6E6E73;line-height:1.45}
 
 @media (max-width:1068px){
@@ -1110,9 +1116,9 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
   .pk-test-shots{gap:18px;justify-content:center}
   .pk-test-shot{width:min(150px,38vw);gap:14px}
   .pk-test-label{margin-top:24px;padding-top:20px}
-  .pk-faq-q{padding:22px 0;gap:20px}
-  .pk-faq-q::after{width:16px;height:16px;margin-top:6px}
-  .pk-faq-a{padding-bottom:24px;max-width:none}
+  .faq-q{padding:22px 0;gap:20px}
+  .faq-q::after{width:16px;height:16px;margin-top:6px}
+  .faq-a{padding-bottom:24px;max-width:none}
 }
 
 /* ---- the graphics in the problem cards (components/PeakProblem.js) --------
@@ -1408,6 +1414,38 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .tm-owner-shot{height:100%;width:100%;background-position:50% 22% !important}
 .tm-owner-quote{margin:0;align-self:center;padding:calc(56*var(--u))}
 .tm-voices{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
+/* ---- hearing it back, and the learnings -----------------------------------
+   The heading occupies the first cell of a 2x2, so the three quotes fill the
+   other three - which is how the frame lays it out. */
+.tm-heard{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
+.tm-heard-head{padding:calc(36*var(--u)) calc(10*var(--u)) 0}
+.tm-heard-aside{margin-top:calc(34*var(--u));color:#6E6E73;line-height:1.45}
+.tm-heard-card{background:#FFFFFF;border-radius:calc(20*var(--u));
+  padding:calc(60*var(--u)) calc(64*var(--u));display:flex;flex-direction:column}
+.tm-heard-card blockquote{margin:0;color:#1D1D1F;letter-spacing:-.016em}
+/* the frame sets the attribution on the right, under the quote */
+.tm-heard-who{margin-top:auto;padding-top:calc(44*var(--u));text-align:right}
+
+.tm-learn-head{margin-top:calc(14*var(--u))}
+.tm-learn-aside{margin:calc(30*var(--u)) auto 0;max-width:calc(1000*var(--u));color:#6E6E73}
+.tm-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.tm-learn-c{background:#0A0A0A;color:#F5F5F7;border-radius:calc(20*var(--u));
+  padding:calc(54*var(--u)) calc(44*var(--u))}
+.tm-learn-h{letter-spacing:-.014em}
+.tm-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
+
+@media (max-width:1068px){
+  .tm-heard{grid-template-columns:1fr;gap:16px}
+  .tm-heard-head{padding:0}
+  .tm-heard-aside{margin-top:16px}
+  .tm-heard-card{padding:26px}
+  .tm-heard-who{margin-top:20px;padding-top:0}
+  .tm-learn{grid-template-columns:1fr;gap:16px}
+  .tm-learn-c{padding:28px}
+  .tm-learn-b{margin-top:18px}
+  .tm-learn-aside{margin-top:16px;max-width:none}
+}
+
 /* ---- feedbacks and iterations --------------------------------------------
    Front: the complaint and the version that caused it. Back: what changed and
    the version that replaced it, on black with the eyebrow in Apple's blue -

@@ -8,6 +8,7 @@ import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import MotivationChart from '@/components/MotivationChart'
 import Compare from '@/components/Compare'
+import Faq from '@/components/Faq'
 import { SameQuestions, NoRoomToMiss, PhoneApp } from '@/components/PeakProblem'
 import { media, slots } from '@/lib/clips'
 import { WORK } from '@/lib/work'
@@ -396,23 +397,8 @@ export default function Peak() {
           </Gallery>
         </section>
 
-        {/* ---- FAQ. Native <details>, so there is no script behind it, it
-                opens with a keyboard, and a printed or JS-off page shows every
-                answer rather than none. ---- */}
-        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
-          <div className="pk-x" style={{ '--x': 240 }}>
-            <p className="p28 w500" data-reveal>{C.faq.eyebrow}</p>
-            <h2 className="p70" data-reveal><Lines lines={C.faq.head} /></h2>
-          </div>
-          <div className="pk-w pk-faq" style={{ '--mw': 1180, '--mt': 96 }} data-stagger>
-            {C.faq.items.map(it => (
-              <details key={it.q} className="pk-faq-item" data-reveal>
-                <summary className="p30 pk-faq-q">{it.q}</summary>
-                <p className="p26 w500 pk-faq-a">{para(it.a)}</p>
-              </details>
-            ))}
-          </div>
-        </section>
+        {/* ---- FAQ ---- */}
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} x={240} pt={240} />
 
         <OtherWork slug="peak" head={C.whatsNext.other} headX={195} other={{ pt: 236, pb: 0 }} />
         <Outro x={195} pt={164} pb={220} />

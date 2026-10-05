@@ -3,6 +3,7 @@ import { CaseHero } from '@/components/Case'
 import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import Flip from '@/components/Flip'
+import Faq from '@/components/Faq'
 import { Media, Video } from '@/components/Media'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
@@ -167,7 +168,7 @@ export default function TimesMedia() {
         </section>
 
         {/* ---- impact ---- */}
-        <section className="du-sec" style={{ '--pt': 233, '--pb': 0 }}>
+        <section className="du-sec" style={{ '--pt': 233, '--pb': 200 }}>
           <div className="du-w" style={{ '--mw': 1400 }}>
             <p className="p65 center" style={{ color: RED }} data-reveal data-swipe>
               <Lines lines={C.impact} swipe /></p>
@@ -178,7 +179,7 @@ export default function TimesMedia() {
                 changed because of it. The turn lives here and not on the
                 research quotes, because here there is a v1 and a v2 to turn
                 between. ---- */}
-        <section className="du-sec bg-fill tm-iter-sec" style={{ '--pt': 200, '--pb': 200 }}>
+        <section className="du-sec bg-fill tm-iter-sec" style={{ '--pt': 120, '--pb': 200 }}>
           <div className="du-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.iterate.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.iterate.head} /></h2>
@@ -218,6 +219,41 @@ export default function TimesMedia() {
             ))}
           </div>
         </section>
+
+        {/* ---- hearing it back: the heading takes the first cell of the
+                grid and the three quotes take the other three ---- */}
+        <section className="du-sec bg-fill" style={{ '--pt': 0, '--pb': 200 }}>
+          <div className="du-w tm-heard" style={{ '--mw': 1448 }} data-stagger>
+            <div className="tm-heard-head" data-reveal>
+              <h2 className="p55"><Lines lines={C.heard.head} /></h2>
+              <p className="p25 w500 tm-heard-aside"><Lines lines={C.heard.aside} /></p>
+            </div>
+            {C.heard.quotes.map((q, i) => (
+              <figure key={i} className="tm-heard-card" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <blockquote className="p34"><Lines lines={q.lines} /></blockquote>
+                <figcaption className="p24 c-2 tm-heard-who"><Lines lines={q.who} /></figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- learnings ---- */}
+        <section className="du-sec bg-fill" style={{ '--pt': 0, '--pb': 200 }}>
+          <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
+          <h2 className="p60 center tm-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
+          <p className="p26 w500 center tm-learn-aside" data-reveal>{para(C.learned.aside)}</p>
+          <div className="du-w tm-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
+            {C.learned.cards.map((c, i) => (
+              <div key={i} className="tm-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
+                <h3 className="p32 tm-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p26 w500 tm-learn-b">{para(c.body)}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- FAQ ---- */}
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} x={240} pt={240} />
 
         <OtherWork slug="times-media" head={C.other} headX={403} other={{ pt: 164, pb: 0 }} />
         <Outro x={164} pt={225} pb={267} />
