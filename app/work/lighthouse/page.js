@@ -1,150 +1,209 @@
-import { Page, Lines, Outro, para } from '@/components/Chrome'
+import { Page, Lines, para, Outro } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
 import OtherWork from '@/components/OtherWork'
-import Frame from '@/components/Frame'
+import Faq from '@/components/Faq'
+import Fill from '@/components/Fill'
+import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/lighthouse-copy'
 
-// Manav has pulled this one back to rework it. The whole case study below is
-// still here and still correct - flip this one switch and it returns exactly
-// as it was. Until then the route answers honestly instead of 404ing, and
-// hands people the rest of the work. `wip` in lib/work.js keeps the same URL
-// out of the sitemap.
-const MAINTENANCE = true
-
-export const metadata = MAINTENANCE ? {
+export const metadata = {
   title: 'Lighthouse AI',
-  description: 'This case study is being rewritten.',
-  // no point sending a search result to a page that is not the case study
+  description: 'Lighthouse AI - designing an AI career coach that turns endless advice into one clear path. Case study by Manav Shah.',
+  // MANAV: the spec says to drop this, and it should go - but the page still
+  // renders 17 visible [FILL] / [ASSET] blocks, and an indexed portfolio page
+  // full of dashed to-do boxes is worse than one search cannot see yet. Delete
+  // these two lines and the `wip: true` in lib/work.js the day the holes are
+  // filled and it is in search the next deploy.
   robots: { index: false, follow: true },
-} : {
-  title: 'Lighthouse AI',
-  description: 'Lighthouse AI - Navi, a plan that grows with you, and a Knowledge Base. Case study by Manav Shah.',
 }
 
-const IMG = n => `/media/lighthouse-${n}.webp`
 const GREEN = '#029322'
+const V = n => media(`lighthouse-${n}`)
 
-// Built to Manav's frame in design units: `--u` is one design px, so every
-// number below is read straight off lighthouse.png. Type pitches measured on
-// it - intro 57, the photo copy 60, the statement 94, the headings 85, the
-// captions 48 - and Figma's auto leading means size = pitch / 1.2.
-//
-// Every device is drawn empty, which is how the frame has it. The photography
-// is cut out of the export itself; where the frame set type over a photo, the
-// words were painted back out so they can be live text here.
-function Maintenance() {
+// A screen, flat and unframed, as the spec asks: no mockup, a hairline and a
+// 16px radius, and a long capture scrolls inside a fixed height rather than
+// being cropped. With no asset yet it is a placeholder of the same size, so
+// the layout is already the real one.
+function Screen({ shot, alt }) {
+  if (!shot) return <Fill what="[ASSET] screen" h={620} />
   return (
-    <Page title="Lighthouse AI" here="lighthouse">
-      <div className="lh-wip du cine">
-        <section className="du-sec" style={{ '--pt': 300, '--pb': 40 }}>
-          <div className="du-x" style={{ '--x': 190 }}>
-            <p className="p28 w500 lh-wip-eyebrow" data-reveal>Lighthouse AI</p>
-            <h1 className="p70 lh-wip-head" data-reveal>
-              <Lines lines={['This case study is', 'being rewritten.']} />
-            </h1>
-            <p className="p30 w500 lh-wip-body" data-reveal>
-              {para(['It will be back here shortly. In the meantime, the rest of',
-                     'the work is below.'])}
-            </p>
-          </div>
-        </section>
-
-        <OtherWork slug="lighthouse" headX={190} other={{ pt: 180, pb: 0 }} />
-        <Outro x={190} pt={164} pb={220} />
-      </div>
-    </Page>
+    <div className="lh-screen">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={shot.src} alt={alt || ''} loading="lazy" />
+    </div>
   )
 }
 
 export default function Lighthouse() {
-  if (MAINTENANCE) return <Maintenance />
   return (
     <Page title="Lighthouse AI" dark here="lighthouse">
       <div className="lh du cine">
-        <CaseHero clip={media('lighthouse-hero') || media('times-court')} className="lh-hero">
-          {C.intro.map((lines, i) => (
-            <p key={i} className="p48 lh-intro" data-reveal><Lines lines={lines} /></p>
+        <CaseHero clip={V('hero')} className="lh-hero" title={
+          <div className="lh-open">
+            <div className="lh-open-copy" data-reveal>
+              <p className="p28 w500 lh-open-eyebrow">{C.hero.eyebrow}</p>
+              <h1 className="p70 lh-open-head"><Lines lines={C.hero.head} /></h1>
+              <p className="lh-open-tags">
+                {C.hero.tags.map(t => <span key={t} className="p26 lh-open-tag">{t}</span>)}
+              </p>
+            </div>
+            <div className="pin-credits lh-open-meta" data-reveal data-amp="70">
+              {C.hero.meta.map(m => (
+                <div key={m.label} className="pin-credit">
+                  <span className="p20 pin-credit-label">{m.label}</span>
+                  <span className="p30 pin-credit-value">{m.value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        }>
+          {C.context.map((lines, i) => (
+            <p key={i} className="p45 lh-context" data-reveal><Lines lines={lines} /></p>
           ))}
         </CaseHero>
 
-        {/* ---- the laptop at night: the photo holds the right half, the line
-                sits on the black beside it ---- */}
-        <section className="lh-desk">
-          <p className="p50 lh-desk-copy" data-reveal><Lines lines={C.access} /></p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="lh-desk-shot" src={IMG('desk')} alt="" loading="lazy" />
-        </section>
+        {/* ---- 3a: access to information, full bleed ---- */}
+        {V('info') && (
+          <section className="lh-bleed">
+            <div className="lh-bleed-film"
+                 style={{ background: `url(${V('info').poster}) center/cover no-repeat` }}>
+              {V('info').video && <Video src={V('info').src} poster={V('info').poster} />}
+            </div>
+            <p className="p60 center lh-bleed-line" data-reveal><Lines lines={C.access} /></p>
+          </section>
+        )}
 
-        {/* ---- the turn, on the water the sea photo comes out of ---- */}
-        <section className="lh-turn">
-          <p className="p70 center" data-reveal><Lines lines={C.lost} /></p>
-        </section>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="lh-sea" src={IMG('buoy')} alt="" loading="lazy" />
+        {/* ---- 3b: but without direction ---- */}
+        {V('ocean') && (
+          <section className="lh-bleed lh-bleed-2">
+            <div className="lh-bleed-film"
+                 style={{ background: `url(${V('ocean').poster}) center/cover no-repeat` }}>
+              {V('ocean').video && <Video src={V('ocean').src} poster={V('ocean').poster} />}
+            </div>
+            <p className="p60 center lh-bleed-line" data-reveal><Lines lines={C.lost} /></p>
+          </section>
+        )}
 
-        {/* ---- research ---- */}
-        <section className="du-sec bg-fill" style={{ '--pt': 170, '--pb': 241 }}>
-          <h2 className="p65 center du-w" style={{ '--mw': 1400 }} data-reveal>
-            <Lines lines={C.research.headline} />
+        {/* ---- 3c: the problem, on light ---- */}
+        <section className="du-sec bg-fill" style={{ '--pt': 200, '--pb': 200 }}>
+          <h2 className="p60 center du-w" style={{ '--mw': 1300 }} data-reveal>
+            <Lines lines={C.problem.head} />
           </h2>
-          <figure className="lh-shot du-w" style={{ '--mw': 884, '--mt': 160 }} data-reveal>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={IMG('hours')} alt="" loading="lazy" />
-            <figcaption className="p45"><Lines lines={C.research.shot} /></figcaption>
-          </figure>
-          <div className="du-w lh-cards" style={{ '--mw': 888, '--mt': 31 }} data-stagger>
-            {C.research.cards.map((lines, i) => (
-              <div key={i} className="lh-card" data-reveal>
-                <p className="p32"><Lines lines={lines} /></p>
+          <div className="du-w lh-probs" style={{ '--mw': 1448, '--mt': 120 }} data-stagger>
+            {C.problem.cards.map((c, i) => (
+              <div key={i} className="lh-prob" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <h3 className="p32 lh-prob-h"><Lines lines={c.head} /></h3>
+                <p className="p26 w500 lh-prob-b">{para(c.body)}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ---- the people, on the green ---- */}
-        <section className="lh-green">
-          <h2 className="p60 lh-green-head" data-reveal><Lines lines={C.talked} /></h2>
-        </section>
-
-        {/* ---- the solution ---- */}
-        <section className="du-sec" style={{ '--pt': 362, '--pb': 0 }}>
-          <h2 className="p80 center du-w" style={{ '--mw': 1400, color: GREEN }} data-reveal>
-            <Lines lines={C.solution.headline} />
-          </h2>
-
-          <h3 className="p70 du-x" style={{ '--x': 234, marginTop: 'calc(363 * var(--u))' }} data-reveal>
-            <Lines lines={C.solution.navi.head} />
-          </h3>
-          <div className="du-w" style={{ '--mw': 1215, '--mt': 113 }} data-reveal>
-            <Frame kind="ipad" w={1215} />
+        {/* ---- research ---- */}
+        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <div className="du-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
+            <h2 className="p70" data-reveal><Lines lines={C.research.head} /></h2>
+            <p className="p25 w500 lh-aside" data-reveal>{para(C.research.aside)}</p>
           </div>
-          <p className="p40 center du-w" style={{ '--mw': 1100, '--mt': 78 }} data-reveal>
-            {para(C.solution.navi.caption)}
-          </p>
-
-          {C.solution.rows.map((row, i) => {
-            const dev = <div key="d" className="lh-row-dev" data-reveal><Frame kind="ipad" w={row.dw} /></div>
-            const copy = <p key="c" className="p60 lh-row-copy" style={{ '--ac': GREEN }} data-reveal>
-              <Lines lines={row.lines} /></p>
-            return (
-              <div key={i} className="lh-row" data-stagger
-                   style={{ '--mt': row.mt, '--dx': row.dx, '--dw': row.dw,
-                            '--cx': row.cx, '--cgap': row.cgap, '--cw': row.cw, '--cy': row.cy }}>
-                {row.copyFirst ? [copy, dev] : [dev, copy]}
+          <div className="du-w lh-people" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
+            {C.research.personas.map((pp, i) => (
+              <div key={pp.who} className="lh-person" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <Fill what="[ASSET] avatar" h={120} />
+                <p className="p28 lh-person-who">{pp.who}</p>
+                <p className="p23 w500 lh-person-label" style={{ color: GREEN }}>{pp.label}</p>
+                <p className="p26 w500 lh-person-line">{para(pp.line)}</p>
               </div>
-            )
-          })}
-
-          <h3 className="p70 center du-w" style={{ '--mw': 1400, '--mt': 317, '--ac': GREEN }} data-reveal>
-            <Lines lines={C.solution.guide} />
-          </h3>
-          <div className="du-w" style={{ '--mw': 882, '--mt': 107 }} data-reveal>
-            <Frame kind="ipad" w={882} />
+            ))}
           </div>
         </section>
 
-        <Outro x={156} pt={1864} pb={299} />
+        {/* ---- key insight, on black ---- */}
+        <section className="du-sec bg-dark" style={{ '--pt': 240, '--pb': 240, '--mt': 240 }}>
+          <div className="du-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.insight.eyebrow}</p>
+            <h2 className="p65" data-reveal><Lines lines={C.insight.head} /></h2>
+            <p className="p25 w500 lh-aside" data-reveal>{para(C.insight.aside)}</p>
+          </div>
+          <div className="du-w lh-pats" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
+            {C.insight.cards.map((c, i) => (
+              <div key={i} className="lh-pat" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <h3 className="p32 lh-pat-h"><Lines lines={c.head} /></h3>
+                <p className="p26 w500 lh-pat-b">{para(c.body)}</p>
+                <p className="p23 w500 lh-pat-led">
+                  <span style={{ color: GREEN }}>{C.insight.ledTo} &rarr;</span> {para(c.led)}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- the core idea, and the system behind it ---- */}
+        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <div className="du-x" style={{ '--x': 240, '--ac': GREEN }}>
+            <h2 className="p70 ac-i" data-reveal><Lines lines={C.core.head} /></h2>
+            <p className="p30 w500 lh-core-lead" data-reveal>{para(C.core.lead)}</p>
+            <ul className="lh-qs" data-stagger>
+              {C.core.questions.map(q => (
+                <li key={q} className="p32 lh-q" data-reveal>{q}</li>
+              ))}
+            </ul>
+            <p className="p30 w500 lh-core-body" data-reveal>{para(C.core.body)}</p>
+          </div>
+          <div className="du-w lh-flow" style={{ '--mw': 1448, '--mt': 120 }} data-stagger>
+            {C.core.steps.map((st, i) => (
+              <div key={st.head} className="lh-step" data-reveal data-amp={i % 2 ? 70 : 50}>
+                <span className="p20 lh-step-n" style={{ color: GREEN }}>{`0${i + 1}`}</span>
+                <h3 className="p28 lh-step-h">{st.head}</h3>
+                <p className="p23 w500 lh-step-b">{para(st.body)}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- the solution, flat screens, text alternating side ---- */}
+        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <div className="du-w lh-sols" style={{ '--mw': 1300 }} data-stagger>
+            {C.solution.blocks.map((b, i) => (
+              <div key={i} className={`lh-sol${i % 2 ? ' is-flip' : ''}`}>
+                <div className="lh-sol-copy" data-reveal data-amp={50}>
+                  <h3 className="p42 lh-sol-h"><Lines lines={b.head} /></h3>
+                  {b.body
+                    ? <p className="p26 w500 lh-sol-b">{para(b.body)}</p>
+                    : <Fill what="[FILL] one line" h={90} />}
+                </div>
+                <div className="lh-sol-shot" data-reveal data-amp={76}>
+                  <Screen shot={b.shot} alt={b.head.join(' ')} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- learnings. His three card directions are marked "not final
+                copy" in the spec, so they are holes, not drafts I shipped. ---- */}
+        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
+          {C.learned.head
+            ? <h2 className="p60 center lh-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
+            : <div className="du-w" style={{ '--mw': 900, '--mt': 20 }}><Fill what="[FILL] heading" h={110} /></div>}
+          <div className="du-w lh-learn" style={{ '--mw': 1560, '--mt': 96 }} data-stagger>
+            {C.learned.cards.map((c, i) => (
+              <div key={i} data-reveal data-amp={[52, 76, 52][i]}>
+                <Fill what={C.learned.drafts[i]
+                  ? `[FILL] card - draft: "${C.learned.drafts[i]}"`
+                  : '[FILL] card'} h={420} />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- FAQ. The questions are his; the answers are holes. ---- */}
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} x={240} pt={240} />
+
+        <OtherWork slug="lighthouse" head={C.other} headX={240} other={{ pt: 240, pb: 0 }} />
+        <Outro x={240} pt={164} pb={220} />
       </div>
     </Page>
   )

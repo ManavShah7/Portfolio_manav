@@ -1939,6 +1939,148 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
   background:var(--band-pink,#EF3888);mix-blend-mode:color}
 .ab-quote{color:#fff;width:calc(1310*var(--u));position:relative}
 
+/* ---- a hole only Manav can fill (components/Fill.js) ----------------------
+   Deliberately unmissable: his spec asks for a visible placeholder rather than
+   copy I invented. These are to-dos, not design. */
+.fill{display:grid;place-items:center;border-radius:calc(16*var(--u));
+  border:2px dashed rgba(2,147,34,.45);background:rgba(2,147,34,.05);
+  min-height:calc(120*var(--u));padding:calc(24*var(--u))}
+.fill-tag{font-size:max(12px,calc(22*var(--u)));font-weight:600;color:#029322;
+  letter-spacing:-.004em;text-align:center}
+.bg-dark .fill,.lh-pat .fill{border-color:rgba(2,147,34,.6);
+  background:rgba(2,147,34,.1)}
+
+/* ---- Lighthouse AI -------------------------------------------------------
+   The same objects the other three case studies use. The one thing the spec
+   asks for that none of them had: screens shown FLAT and unframed, with a
+   hairline and a 16 radius, and a long capture scrolling inside a fixed height
+   instead of being cropped. */
+.lh-open{position:absolute;left:0;right:0;top:50%;translate:0 -50%;z-index:1;
+  padding:0 var(--m) 0 calc(182*var(--u))}
+.lh-hero .pin-first::before{content:'';position:absolute;inset:0;z-index:0;
+  pointer-events:none;background:linear-gradient(100deg,rgba(0,0,0,.68) 0%,
+    rgba(0,0,0,.42) 44%,rgba(0,0,0,.12) 80%)}
+.lh-open-copy{color:#fff;max-width:calc(1060*var(--u))}
+.lh-open-eyebrow{color:rgba(255,255,255,.72)}
+.lh-open-head{margin-top:calc(22*var(--u));letter-spacing:-.024em}
+.lh-open-tags{display:flex;flex-wrap:wrap;gap:calc(16*var(--u));
+  margin-top:calc(44*var(--u))}
+.lh-open-tag{display:inline-block;padding:calc(12*var(--u)) calc(26*var(--u));
+  border-radius:calc(14*var(--u));background:rgba(20,20,22,.58);color:#F5F5F7;
+  font-weight:500;letter-spacing:-.006em;border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+/* The credit row the other heroes use, but four up and with a long Skills
+   string - `justify-content:center` plus `white-space:nowrap` on the value
+   blew it straight off both edges. A grid with `minmax(0,1fr)` columns and a
+   value that may wrap keeps all four inside the lockup. */
+.lh-open-meta{margin-top:calc(70*var(--u));max-width:calc(1400*var(--u));
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:calc(44*var(--u));justify-content:start}
+.lh-open-meta .pin-credit-value{white-space:normal}
+.lh-context{color:#F5F5F7}
+.lh-context + .lh-context{margin-top:calc(58*var(--u))}
+.lh-aside{margin-top:calc(40*var(--u));color:#6E6E73;line-height:1.45;
+  max-width:calc(760*var(--u))}
+.bg-dark .lh-aside{color:#A1A1A6}
+
+/* the two full-bleed films, each with its line over the foot of it */
+.lh-bleed{position:relative;background:#000}
+.lh-bleed-film{position:relative;height:calc(840*var(--u));overflow:hidden}
+.lh-bleed-film > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lh-bleed-film::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.72) 100%)}
+.lh-bleed-line{position:absolute;left:0;right:0;bottom:calc(96*var(--u));
+  z-index:1;color:#fff;padding:0 var(--m)}
+
+/* the three problem cards */
+.lh-probs{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.lh-prob{background:#FFFFFF;border-radius:calc(20*var(--u));
+  padding:calc(54*var(--u)) calc(48*var(--u))}
+.lh-prob-h{letter-spacing:-.014em}
+.lh-prob-b{margin-top:calc(28*var(--u));color:#6E6E73;line-height:1.45}
+
+/* personas */
+.lh-people{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.lh-person{background:#F5F5F7;border-radius:calc(20*var(--u));
+  padding:calc(48*var(--u)) calc(44*var(--u))}
+.lh-person-who{margin-top:calc(34*var(--u));font-weight:600;letter-spacing:-.014em}
+.lh-person-label{margin-top:calc(8*var(--u));font-weight:600}
+.lh-person-line{margin-top:calc(24*var(--u));color:#6E6E73;line-height:1.45}
+
+/* the pattern cards, each closing on what it led to */
+.lh-pats{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.lh-pat{background:#141416;border-radius:calc(20*var(--u));
+  padding:calc(48*var(--u)) calc(44*var(--u));display:flex;flex-direction:column}
+.lh-pat-h{letter-spacing:-.014em}
+.lh-pat-b{margin-top:calc(24*var(--u));color:#A1A1A6;line-height:1.45}
+.lh-pat-led{margin-top:auto;padding-top:calc(36*var(--u));color:#F5F5F7;
+  line-height:1.45;border-top:1px solid rgba(255,255,255,.12)}
+
+/* the three questions, and the four steps under them */
+.lh-core-lead{margin-top:calc(54*var(--u));color:#6E6E73}
+.lh-qs{list-style:none;margin-top:calc(26*var(--u));display:flex;
+  flex-direction:column;gap:calc(14*var(--u))}
+.lh-q{position:relative;padding-left:calc(34*var(--u));letter-spacing:-.014em}
+.lh-q::before{content:'';position:absolute;left:0;top:.62em;
+  width:calc(12*var(--u));height:calc(12*var(--u));border-radius:50%;
+  background:#029322}
+.lh-core-body{margin-top:calc(46*var(--u));color:#6E6E73;
+  max-width:calc(1000*var(--u))}
+.lh-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(28*var(--u))}
+.lh-step{border-top:2px solid rgba(2,147,34,.3);padding-top:calc(28*var(--u))}
+.lh-step-n{display:block;font-weight:600;letter-spacing:.04em}
+.lh-step-h{margin-top:calc(12*var(--u));letter-spacing:-.012em}
+.lh-step-b{margin-top:calc(14*var(--u));color:#6E6E73;line-height:1.45}
+
+/* the solution blocks: flat screens, copy alternating side */
+.lh-sols{display:flex;flex-direction:column;gap:calc(180*var(--u))}
+/* 560, not 460: "Everything you learn, saved" at p42 wants 504u and the
+   headings here carry his own line breaks, so the column holds them */
+.lh-sol{display:grid;grid-template-columns:calc(560*var(--u)) 1fr;
+  gap:calc(90*var(--u));align-items:center}
+.lh-sol.is-flip .lh-sol-copy{order:2}
+.lh-sol-h{letter-spacing:-.02em}
+.lh-sol-b{margin-top:calc(30*var(--u));color:#6E6E73;line-height:1.45}
+/* flat and unframed, per the spec - and a long capture scrolls inside this
+   box rather than being cropped to fit it */
+.lh-screen{border:1px solid rgba(0,0,0,.12);border-radius:calc(16*var(--u));
+  overflow:auto;max-height:calc(620*var(--u));background:#FFFFFF;
+  -webkit-overflow-scrolling:touch}
+.lh-screen > img{display:block;width:100%;height:auto}
+
+.lh-learn-head{margin-top:calc(14*var(--u))}
+.lh-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+
+@media (max-width:1068px){
+  .lh-open{top:auto;bottom:calc(40*var(--u));translate:none;padding:0 var(--m)}
+  .lh-open-copy{max-width:none}
+  .lh-open-head{margin-top:12px}
+  .lh-open-tags{gap:10px;margin-top:22px}
+  .lh-open-tag{padding:8px 16px;border-radius:10px}
+  .lh-open-meta{margin-top:30px;max-width:none;
+    grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+  .lh-hero .pin-first::before{background:linear-gradient(180deg,
+    rgba(0,0,0,.42) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.62) 100%)}
+  .lh-context + .lh-context{margin-top:36px}
+  .lh-aside{margin-top:18px;max-width:none}
+  .lh-bleed-film{height:62vh}
+  .lh-bleed-line{bottom:40px}
+  .lh-probs,.lh-people,.lh-pats,.lh-learn{grid-template-columns:1fr;gap:16px}
+  .lh-prob,.lh-person,.lh-pat{padding:28px}
+  .lh-prob-b,.lh-person-line,.lh-pat-b{margin-top:16px}
+  .lh-pat-led{margin-top:22px;padding-top:20px}
+  .lh-flow{grid-template-columns:1fr;gap:24px}
+  .lh-core-lead{margin-top:26px}
+  .lh-core-body{margin-top:24px;max-width:none}
+  /* the spec: no pinned or scroll-jacked sections on a phone, stack it all */
+  .lh-sols{gap:72px}
+  .lh-sol{grid-template-columns:1fr;gap:28px}
+  .lh-sol.is-flip .lh-sol-copy{order:0}
+  .lh-sol-b{margin-top:16px}
+  .lh-screen{max-height:70vh}
+  .fill{min-height:120px;padding:18px}
+}
+
 /* ---- the Liveasy hero lockup ----------------------------------------------
    Left, like Peak's: the line, three facts stacked under it, and a laptop
    standing to the right of them. */
