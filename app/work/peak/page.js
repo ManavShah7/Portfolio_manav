@@ -72,19 +72,32 @@ export default function Peak() {
   return (
     <Page title="Peak" dark here="peak">
       <div className="pk du cine">
-        {/* ---- the film, and the four opening lines on black ---- */}
-        {/* the same title card Times Media opens on: the product in the
-            middle of its own film, and the two facts about the work. His name
-            is not on it - the whole site is his. */}
-        <CaseHero clip={media('peak-hero')} className="pk-hero"
-                  name={ME.name} line={ME.line} credits={C.credits}>
+        {/* ---- the film, and the four opening lines on black ----
+                The updated frame drops the centred title card for a lockup on
+                the left of the film - name, line, and three facts as pills -
+                with two phones standing to the right of it. */}
+        <CaseHero clip={media('peak-hero')} className="pk-hero" title={
+          <div className="pk-open">
+            <div className="pk-open-copy" data-reveal>
+              <h1 className="p80 pk-open-name">{C.hero.name}</h1>
+              <p className="p38 pk-open-line"><Lines lines={C.hero.line} /></p>
+              <p className="pk-open-tags">
+                {C.hero.tags.map(t => <span key={t} className="p26 pk-open-tag">{t}</span>)}
+              </p>
+            </div>
+            <div className="pk-open-phones" aria-hidden="true" data-reveal data-amp="80">
+              <Phone kind="device" w={240} h={482} slot="open1" />
+              <Phone kind="device" w={240} h={482} slot="open2" />
+            </div>
+          </div>
+        }>
           {C.intro.map((lines, i) => (
             <p key={i} className="p45 pk-intro" data-reveal><Lines lines={lines} /></p>
           ))}
         </CaseHero>
 
         {/* ---- problems ---- */}
-        <section className="pk-sec pk-problems" style={{ '--pt': 138, '--pb': 93 }}>
+        <section className="pk-sec pk-problems" style={{ '--pt': 150, '--pb': 140 }}>
           <h2 className="p60 center" data-reveal><Lines lines={C.problem.headline} /></h2>
           <div className="pk-w" style={{ '--mw': 886, '--mt': 60 }}>
             {/* three apps, three phones - the card said it in words and drew
@@ -116,15 +129,15 @@ export default function Peak() {
         </section>
 
         {/* ---- research ---- */}
-        <section className="pk-sec" style={{ '--pt': 180, '--pb': 115 }}>
+        <section className="pk-sec" style={{ '--pt': 200, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
             <h2 className="p70" style={{ '--ac': '#E01D85' }} data-reveal><Lines lines={C.research.headline} /></h2>
             <p className="p25 w500 pk-aside" data-reveal><Lines lines={C.research.aside} /></p>
           </div>
-          <div className="pk-w pk-pair" style={{ '--mw': 966, '--mt': 86 }} data-stagger>
+          <div className="pk-w pk-trio-voices" style={{ '--mw': 1420, '--mt': 96 }} data-stagger>
             {C.research.quotes.map((q, i) => (
-              <figure key={i} className="pk-voice" data-reveal>
+              <figure key={i} className="pk-voice" data-reveal data-amp={i % 2 ? 76 : 52}>
                 <Media clip={V(`voice${i + 1}`)} className="pk-voice-photo" alt={q.who} />
                 <figcaption className="p23 w500">{q.who}</figcaption>
                 <blockquote className="p28"><Lines lines={q.lines} /></blockquote>
@@ -133,16 +146,34 @@ export default function Peak() {
           </div>
 
           <h3 className="p60 center pk-reddit" style={{ '--ac': '#FF383C' }} data-reveal><Lines lines={C.research.redditHead} /></h3>
+          {/* drawn as what they are: three posts, each with the half he
+              highlighted carrying the complaint */}
+          <div className="pk-w pk-posts" style={{ '--mw': 1420, '--mt': 96 }} data-stagger>
+            {C.research.redditQuotes.map((q, i) => (
+              <div key={q.sub} className="pk-post" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <p className="p24 pk-post-sub">
+                  <span>{q.sub}</span><i aria-hidden="true">·</i><span>{q.age}</span>
+                </p>
+                <p className="p28 pk-post-body">
+                  {para(q.lead)} <span className="pk-post-hi">{para(q.hi)}</span>
+                </p>
+                <p className="p26 pk-post-votes">
+                  <svg viewBox="0 0 12 10" aria-hidden="true"><path d="M6 0l6 10H0z" /></svg>
+                  {q.votes}<span className="vh"> upvotes</span>
+                </p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* ---- competitive analysis ---- */}
-        <section className="pk-sec" style={{ '--pt': 150, '--pb': 40 }}>
+        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.compare.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.compare.head} /></h2>
             <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.compare.aside} /></p>
           </div>
-          <div className="pk-w" style={{ '--mw': 1590, '--mt': 104 }}>
+          <div className="pk-w" style={{ '--mw': 1590, '--mt': 96 }}>
             <Compare cols={C.compare.cols} rows={C.compare.rows} keys={C.compare.key} />
           </div>
         </section>
@@ -152,7 +183,7 @@ export default function Peak() {
                 sticky inside a grid cell, so it is CSS and no script. The
                 chart card leads because it is the finding the other four sit
                 under. ---- */}
-        <section className="pk-sec bg-fill" style={{ '--pt': 173, '--pb': 183 }}>
+        <section className="pk-sec bg-fill" style={{ '--pt': 200, '--pb': 200 }}>
           <div className="pk-stages">
             <div className="pk-stages-head">
               <h2 className="p70" data-reveal><Lines lines={C.stages.head} /></h2>
@@ -189,7 +220,7 @@ export default function Peak() {
         </section>
 
         {/* ---- solution ---- */}
-        <section className="pk-sec bg-dark pk-solution" style={{ '--pt': 209, '--pb': 0 }}>
+        <section className="pk-sec bg-dark pk-solution" style={{ '--pt': 200, '--pb': 0 }}>
           <h2 className="p70 center" data-reveal>
             <span className="ln">{C.solution.headline[0]}</span>
             <span className="ln">{C.solution.headline[1]}<span className="pk-orange">{C.solution.headAccent}</span></span>
@@ -203,7 +234,7 @@ export default function Peak() {
         </section>
 
         {/* ---- lift: headline left, the two phones right ---- */}
-        <section className="pk-sec pk-lift" style={{ '--pt': 288, '--pb': 380 }}>
+        <section className="pk-sec pk-lift" style={{ '--pt': 240, '--pb': 280 }}>
           <div className="pk-lift-row">
             <h3 className="p65 pk-x ac-i" style={{ '--x': 191, '--ac': '#D3058B' }} data-reveal><Lines lines={C.solution.liftHead} /></h3>
             <div className="pk-lift-phones" data-stagger>
@@ -225,7 +256,7 @@ export default function Peak() {
         </section>
 
         {/* ---- catalog ---- */}
-        <section className="pk-sec pk-catalog" style={{ '--pt': 0, '--pb': 226 }}>
+        <section className="pk-sec pk-catalog" style={{ '--pt': 0, '--pb': 240 }}>
           <h3 className="p65 pk-x" style={{ '--x': 301 }} data-reveal><Lines lines={C.solution.catalogHead} /></h3>
           <Gallery label="Four ways to log food" className="pk-gallery pk-dark-paddles" always
                    style={{ '--inset': 'calc(298 * var(--u))' }}>
@@ -241,7 +272,7 @@ export default function Peak() {
         </section>
 
         {/* ---- friendship ---- */}
-        <section className="pk-sec" style={{ '--pt': 360, '--pb': 617 }}>
+        <section className="pk-sec" style={{ '--pt': 240, '--pb': 240 }}>
           <h2 className="p80 center" data-reveal>
             <span className="ln pk-magenta">{C.social.head[0]}</span>
             <span className="ln">{C.social.head[1]}</span>
@@ -287,27 +318,58 @@ export default function Peak() {
                 each one changed. The case study used to run finished screens
                 straight into "what's next", which read as a product launch
                 rather than a design process. ---- */}
-        <section className="pk-sec bg-fill" style={{ '--pt': 170, '--pb': 176 }}>
+        <section className="pk-sec bg-fill" style={{ '--pt': 200, '--pb': 200 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.testing.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.testing.headline} /></h2>
             <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.testing.aside} /></p>
           </div>
-          <div className="pk-w pk-tests" style={{ '--mw': 1448, '--mt': 92 }} data-stagger>
+          <div className="pk-w pk-tests" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
             {C.testing.notes.map((n, i) => (
-              <div key={i} className="pk-card white pk-test" data-reveal>
-                <blockquote className="p38 pk-test-quote"><Lines lines={n.quote} /></blockquote>
-                <p className="p23 w500 pk-test-label">{C.testing.changed}</p>
-                <p className="p26 w500 pk-test-body">{para(n.body)}</p>
+              <div key={i} className="pk-card white pk-test" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <div className="pk-test-copy">
+                  <blockquote className="p38 pk-test-quote"><Lines lines={n.quote} /></blockquote>
+                  <p className="p23 w500 pk-test-label">{C.testing.changed}</p>
+                  <p className="p26 w500 pk-test-body">{para(n.body)}</p>
+                </div>
+                {/* the before and the after, which is what makes this an
+                    iteration rather than an anecdote. Empty until he drops the
+                    recordings in at peak-<slot>v1 / v2 (rule 4). */}
+                <div className="pk-test-shots">
+                  {n.shots.map((cap, k) => (
+                    <figure key={k} className="pk-test-shot">
+                      <Phone kind="line" w={196} h={394} slot={`${n.slot}v${k + 1}`} />
+                      <figcaption className="p23 w500 pk-test-cap"><Lines lines={cap} /></figcaption>
+                    </figure>
+                  ))}
+                </div>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- the same two testers, on the other side of the changes ---- */}
+        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <h2 className="p60 center" style={{ '--ac': '#E01D85' }} data-reveal>
+            <Lines lines={C.progress.head} />
+          </h2>
+          <p className="p26 w500 center pk-prog-aside" data-reveal>{para(C.progress.aside)}</p>
+          <div className="pk-w pk-prog" style={{ '--mw': 1180, '--mt': 96 }} data-stagger>
+            {C.progress.quotes.map((q, i) => (
+              <figure key={q.who} className="pk-voice" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <Media clip={V(q.ink)} className="pk-voice-photo" alt={q.who} />
+                <figcaption className="p23 w500">{q.who}</figcaption>
+                <blockquote className="p28"><Lines lines={q.lines} /></blockquote>
+              </figure>
             ))}
           </div>
         </section>
 
         {/* ---- what I learned: centred head, three black cards, as the
                 updated frame draws it ---- */}
-        <section className="pk-sec" style={{ '--pt': 196, '--pb': 0 }}>
-          <h2 className="p60 center" data-reveal>{C.learned.head}</h2>
+        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
+          <h2 className="p60 center pk-learn-head" data-reveal>{C.learned.head}</h2>
           <p className="p26 w500 center pk-learn-aside" data-reveal>{para(C.learned.aside)}</p>
           <div className="pk-w pk-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
             {C.learned.cards.map((c, i) => (
@@ -321,7 +383,7 @@ export default function Peak() {
         </section>
 
         {/* ---- what's next ---- */}
-        <section className="pk-sec" style={{ '--pt': 179, '--pb': 0 }}>
+        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
           <h2 className="p55 pk-x" style={{ '--x': 148 }} data-reveal><Lines lines={C.whatsNext.headline} /></h2>
           <Gallery label="What's next" className="pk-gallery pk-light-paddles pk-next-cards" always
                    style={{ '--inset': 'calc(149 * var(--u))' }}>
@@ -337,12 +399,12 @@ export default function Peak() {
         {/* ---- FAQ. Native <details>, so there is no script behind it, it
                 opens with a keyboard, and a printed or JS-off page shows every
                 answer rather than none. ---- */}
-        <section className="pk-sec" style={{ '--pt': 196, '--pb': 0 }}>
+        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.faq.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.faq.head} /></h2>
           </div>
-          <div className="pk-w pk-faq" style={{ '--mw': 1180, '--mt': 76 }} data-stagger>
+          <div className="pk-w pk-faq" style={{ '--mw': 1180, '--mt': 96 }} data-stagger>
             {C.faq.items.map(it => (
               <details key={it.q} className="pk-faq-item" data-reveal>
                 <summary className="p30 pk-faq-q">{it.q}</summary>

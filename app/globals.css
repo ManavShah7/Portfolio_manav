@@ -771,6 +771,74 @@ html.reduced-motion video.loop{display:none}
 .vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
   overflow:hidden;white-space:nowrap;clip-path:inset(50%)}
 
+/* ---- the hero lockup the updated frame draws -------------------------------
+   Name, line and three facts on the left of the film, two phones standing to
+   the right of them - in place of the centred title card the other cases use. */
+/* Centred on the first screen the way the title card is, and absolutely
+   positioned for the same reason: `overflow` or a flex centre on .pin-first
+   would re-scope the view() timeline the film animates on. */
+.pk-hero .pin-first::before{content:'';position:absolute;inset:0;z-index:0;
+  pointer-events:none;
+  background:linear-gradient(100deg,rgba(0,0,0,.66) 0%,rgba(0,0,0,.38) 40%,
+    rgba(0,0,0,0) 74%)}
+.pk-open{position:absolute;left:0;right:0;top:50%;translate:0 -50%;z-index:1;
+  display:grid;grid-template-columns:1fr auto;align-items:center;
+  gap:calc(90*var(--u));padding:0 var(--m) 0 calc(140*var(--u))}
+.pk-open-copy{color:#fff;max-width:calc(760*var(--u))}
+.pk-open-name{letter-spacing:-.03em}
+.pk-open-line{margin-top:calc(26*var(--u));font-weight:400;color:rgba(255,255,255,.92)}
+.pk-open-tags{display:flex;flex-direction:column;align-items:flex-start;
+  gap:calc(16*var(--u));margin-top:calc(46*var(--u))}
+/* the pills sit ON the film, so they carry their own ground rather than
+   relying on whichever frame the clip happens to be paused at */
+.pk-open-tag{display:inline-block;padding:calc(12*var(--u)) calc(24*var(--u));
+  border-radius:999px;background:rgba(20,20,22,.58);color:#F5F5F7;font-weight:500;
+  letter-spacing:-.006em;border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.pk-open-phones{display:flex;gap:calc(58*var(--u));align-items:flex-end}
+
+/* ---- the Reddit posts -----------------------------------------------------
+   Three posts drawn as posts: where it was said, what was said with the half
+   he highlighted, and what it scored. */
+.pk-posts{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(34*var(--u))}
+.pk-post{background:#F5F5F7;border-radius:calc(22*var(--u));
+  padding:calc(44*var(--u)) calc(44*var(--u)) calc(38*var(--u));
+  display:flex;flex-direction:column}
+.pk-post-sub{color:#86868B;font-weight:400;letter-spacing:-.008em}
+.pk-post-sub i{font-style:normal;margin:0 calc(10*var(--u))}
+.pk-post-body{margin-top:calc(30*var(--u));color:#1D1D1F;font-weight:600;
+  letter-spacing:-.012em;line-height:1.3}
+/* the page's own orange, on the clause that carries the complaint */
+.pk-post-hi{color:#E8842A}
+.pk-post-votes{display:flex;align-items:center;gap:calc(12*var(--u));
+  margin-top:auto;padding-top:calc(40*var(--u));color:#6E6E73;font-weight:500}
+.pk-post-votes svg{width:calc(20*var(--u));height:calc(17*var(--u));fill:#6E6E73}
+
+/* three voices now, not two */
+.pk-trio-voices{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(34*var(--u))}
+/* the same shape, used again after the changes landed */
+.pk-prog{display:grid;grid-template-columns:repeat(2,1fr);gap:calc(60*var(--u))}
+.pk-prog-aside{margin:calc(30*var(--u)) auto 0;max-width:calc(760*var(--u));color:#6E6E73}
+.pk-learn-head{margin-top:calc(14*var(--u))}
+
+@media (max-width:1068px){
+  .pk-open{grid-template-columns:1fr;gap:40px;padding:0 var(--m);align-items:start}
+  .pk-hero .pin-first::before{background:linear-gradient(180deg,
+    rgba(0,0,0,.52) 0%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.44) 100%)}
+  .pk-open-copy{max-width:none}
+  .pk-open-line{margin-top:14px}
+  .pk-open-tags{gap:10px;margin-top:26px}
+  .pk-open-tag{padding:8px 16px}
+  .pk-open-phones{gap:20px}
+  .pk-open-phones .pk-phone{width:min(150px,32vw) !important}
+  .pk-posts,.pk-trio-voices{grid-template-columns:1fr;gap:16px}
+  .pk-prog{grid-template-columns:1fr;gap:32px}
+  .pk-post{padding:26px}
+  .pk-post-body{margin-top:18px}
+  .pk-post-votes{padding-top:24px}
+  .pk-prog-aside{margin-top:16px;max-width:none}
+}
+
 /* ---- competitive analysis (components/Compare.js) --------------------------
    Horizontal hairlines only and no boxed cells, at the same weight the FAQ
    uses, so the matrix belongs to the page rather than sitting on it. */
@@ -958,15 +1026,23 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 /* 1448, not 1420: at 1420 each card gave its quote 568u of measure and his
    longest line - "but the lifting weights in pounds." - wants 571. His words
    do not get rewritten to fit a box. */
-.pk-tests{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u))}
+/* One card per complaint now, each one copy on the left and the before/after
+   pair on the right - a two-up grid could not hold a phone pair as well. */
+.pk-tests{display:grid;grid-template-columns:1fr;gap:calc(34*var(--u))}
+.pk-test{display:grid;grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;gap:calc(70*var(--u))}
+.pk-test-copy{display:flex;flex-direction:column}
+.pk-test-shots{display:flex;gap:calc(54*var(--u));align-items:flex-start}
+.pk-test-shot{margin:0;display:flex;flex-direction:column;align-items:center;
+  gap:calc(26*var(--u));width:calc(196*var(--u))}
+.pk-test-cap{color:#6E6E73;text-align:center}
 /* The research aside is three short lines and 350u suits it; this one is a
    longer thought, so it gets its own measure rather than the copy being
    squeezed to fit. Two classes, because `.pk-aside` is declared further down
    the file and a single-class override loses on source order - the same trap
    the footer label fell into. */
 .pk-aside.pk-aside-wide{max-width:calc(580*var(--u))}
-.pk-test{padding:calc(60*var(--u)) calc(64*var(--u)) calc(64*var(--u));
-  display:flex;flex-direction:column}
+.pk-test{padding:calc(66*var(--u)) calc(70*var(--u))}
 .pk-test-quote{color:#1D1D1F;letter-spacing:-.016em;margin-bottom:calc(30*var(--u))}
 /* the label is the hinge between what was said and what was done, so it gets
    the rule rather than a heading weight */
@@ -1009,7 +1085,9 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
   .pk-learn-c{padding:28px}
   .pk-learn-aside{margin-top:18px;max-width:none}
   .pk-learn-b{margin-top:20px}
-  .pk-test{padding:28px}
+  .pk-test{padding:28px;grid-template-columns:1fr;gap:30px}
+  .pk-test-shots{gap:18px;justify-content:center}
+  .pk-test-shot{width:min(150px,38vw);gap:14px}
   .pk-test-label{margin-top:24px;padding-top:20px}
   .pk-faq-q{padding:22px 0;gap:20px}
   .pk-faq-q::after{width:16px;height:16px;margin-top:6px}
@@ -1309,6 +1387,55 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .tm-owner-shot{height:100%;width:100%;background-position:50% 22% !important}
 .tm-owner-quote{margin:0;align-self:center;padding:calc(56*var(--u))}
 .tm-voices{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
+/* ---- the card with a second side (components/Flip.js) ---------------------
+   The front is in flow and sets the height; the back is laid over it and both
+   faces hide their own reverse, so the pair turns as one object. The button is
+   outside the turning layer, which is what keeps it the right way round and
+   clickable at every point in the turn. */
+.flip{position:relative;height:100%}
+.flip-in{position:relative;height:100%;transform-style:preserve-3d;
+  transition:transform .72s cubic-bezier(.3,.9,.25,1)}
+.flip.is-open .flip-in{transform:rotateY(180deg)}
+.flip-face{backface-visibility:hidden;-webkit-backface-visibility:hidden;height:100%}
+.flip-back{position:absolute;inset:0;transform:rotateY(180deg)}
+.flip-back > *{height:100%}
+/* the mark the FAQ uses, so a plus means the same thing twice on this site:
+   there is more here. It becomes a minus by dropping its vertical stroke. */
+.flip-btn{position:absolute;right:calc(34*var(--u));bottom:calc(34*var(--u));z-index:2;
+  width:calc(60*var(--u));height:calc(60*var(--u));border-radius:50%;border:0;
+  background:rgba(0,0,0,.06);color:#1D1D1F;cursor:pointer;padding:0;
+  transition:background .3s var(--ease),color .3s var(--ease)}
+.flip-btn::after{content:'';position:absolute;left:50%;top:50%;translate:-50% -50%;
+  width:calc(22*var(--u));height:calc(22*var(--u));background:
+    linear-gradient(currentColor,currentColor) center/100% 2px no-repeat,
+    linear-gradient(currentColor,currentColor) center/2px 100% no-repeat;
+  transition:background-size .3s var(--ease)}
+.flip.is-open .flip-btn{background:rgba(255,255,255,.14);color:#F5F5F7}
+.flip.is-open .flip-btn::after{background-size:100% 2px,2px 0}
+html.no-touch .flip-btn:hover{background:rgba(0,0,0,.12)}
+html.no-touch .flip.is-open .flip-btn:hover{background:rgba(255,255,255,.22)}
+
+/* the solution side: his dark card, so turning it over is a change of ground
+   as well as of content */
+/* Two classes, because this block sits ABOVE `.tm-voice` in the file and a
+   single class loses on source order - the back face came out light grey with
+   white text on it, which is to say invisible. */
+.tm-voice.tm-fix{background:#0A0A0A;color:#F5F5F7;justify-content:flex-start}
+.tm-fix-eyebrow{color:#86868B;font-weight:500;letter-spacing:.06em;
+  text-transform:uppercase}
+.tm-fix-head{margin-top:calc(30*var(--u));font-weight:600;letter-spacing:-.016em}
+.tm-fix-body{margin-top:calc(34*var(--u));color:#A1A1A6;line-height:1.45;font-weight:500}
+
+/* less motion means no turn - the two sides simply swap */
+html.reduced-motion .flip-in,
+html:not(.no-reduced-motion) .flip-in{transition:none}
+
+@media (max-width:1068px){
+  .flip-btn{right:18px;bottom:18px;width:40px;height:40px}
+  .flip-btn::after{width:15px;height:15px}
+  .tm-fix-head{margin-top:16px}
+  .tm-fix-body{margin-top:18px}
+}
 .tm-voice{background:#f5f5f7;border-radius:calc(20*var(--u));padding:calc(72*var(--u)) calc(80*var(--u));
   min-height:calc(533*var(--u));display:flex;flex-direction:column}
 .tm-voice blockquote{margin:0}

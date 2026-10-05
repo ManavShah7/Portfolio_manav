@@ -35,7 +35,8 @@ function TitleCard({ name, line, credits }) {
   )
 }
 
-export function CaseHero({ clip, name, line, kind, fill, credits, className = '', children }) {
+export function CaseHero({ clip, name, line, kind, fill, credits, title,
+                           className = '', children }) {
   const still = clip?.poster || (clip && !clip.video ? clip.src : undefined)
   return (
     <section className={`pin ${className}`}>
@@ -46,9 +47,13 @@ export function CaseHero({ clip, name, line, kind, fill, credits, className = ''
         <div className="pin-scrim" />
       </div>
       <div className="pin-first">
-        {name && credits && <TitleCard name={name} line={line} credits={credits} />}
+        {/* a page can bring its own lockup for the first screen - Peak's
+            updated frame sets its name, line and three facts on the left of
+            the film instead of a centred card */}
+        {title}
+        {!title && name && credits && <TitleCard name={name} line={line} credits={credits} />}
         {/* a page can open on the film alone - Peak's frame has no title on it */}
-        {name && !credits && (
+        {!title && name && !credits && (
           <div className="wrap pin-title">
             <p className="t-eyebrow on-dark-2">{kind}</p>
             <h1 className="t-hero">{name}</h1>

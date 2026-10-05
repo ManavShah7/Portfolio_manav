@@ -2,6 +2,7 @@ import { Page, Lines, Outro, para } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
 import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
+import Flip from '@/components/Flip'
 import { Media, Video } from '@/components/Media'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
@@ -51,12 +52,25 @@ export default function TimesMedia() {
             <Media clip={V('owner')} className="tm-owner-shot" />
             <blockquote className="p34 tm-owner-quote">{para(C.research.quote)}</blockquote>
           </div>
+          {/* each complaint turns over to what was built for it */}
           <div className="du-w tm-voices" style={{ '--mw': 1161, '--mt': 97 }} data-stagger>
             {C.research.voices.map((v, i) => (
-              <figure key={i} className="tm-voice" data-reveal>
-                <blockquote className="p34">{para(v.lines)}</blockquote>
-                <figcaption className="p24 c-2"><Lines lines={v.who} /></figcaption>
-              </figure>
+              <div key={i} data-reveal data-amp={i % 2 ? 76 : 52}>
+                <Flip label={`what we built for ${v.who.join(' ')}`}
+                  front={
+                    <figure className="tm-voice">
+                      <blockquote className="p34">{para(v.lines)}</blockquote>
+                      <figcaption className="p24 c-2"><Lines lines={v.who} /></figcaption>
+                    </figure>
+                  }
+                  back={
+                    <div className="tm-voice tm-fix">
+                      <p className="p24 tm-fix-eyebrow">{C.research.fixLabel}</p>
+                      <p className="p34 tm-fix-head"><Lines lines={C.research.fixes[i].head} /></p>
+                      <p className="p26 tm-fix-body">{para(C.research.fixes[i].lines)}</p>
+                    </div>
+                  } />
+              </div>
             ))}
           </div>
         </section>
