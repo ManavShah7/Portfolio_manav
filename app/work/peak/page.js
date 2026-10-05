@@ -9,6 +9,7 @@ import OtherWork from '@/components/OtherWork'
 import MotivationChart from '@/components/MotivationChart'
 import Compare from '@/components/Compare'
 import Faq from '@/components/Faq'
+import Lockup from '@/components/Lockup'
 import { SameQuestions, NoRoomToMiss, PhoneApp } from '@/components/PeakProblem'
 import { media, slots } from '@/lib/clips'
 import { WORK } from '@/lib/work'
@@ -78,19 +79,8 @@ export default function Peak() {
                 the left of the film - name, line, and three facts as pills -
                 with two phones standing to the right of it. */}
         <CaseHero clip={media('peak-hero')} className="pk-hero" title={
-          <div className="pk-open">
-            <div className="pk-open-copy" data-reveal>
-              <h1 className="p80 pk-open-name">{C.hero.name}</h1>
-              <p className="p38 pk-open-line"><Lines lines={C.hero.line} /></p>
-              <p className="pk-open-tags">
-                {C.hero.tags.map(t => <span key={t} className="p26 pk-open-tag">{t}</span>)}
-              </p>
-            </div>
-            <div className="pk-open-phones" aria-hidden="true" data-reveal data-amp="80">
-              <Phone kind="device" w={240} h={482} slot="open1" />
-              <Phone kind="device" w={240} h={482} slot="open2" />
-            </div>
-          </div>
+          <Lockup eyebrow={C.hero.name} head={C.hero.line}
+                  tags={C.hero.tags} meta={C.credits} />
         }>
           {C.intro.map((lines, i) => (
             <p key={i} className="p45 pk-intro" data-reveal><Lines lines={lines} /></p>

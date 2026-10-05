@@ -3,6 +3,7 @@ import { CaseHero } from '@/components/Case'
 import OtherWork from '@/components/OtherWork'
 import Faq from '@/components/Faq'
 import Fill from '@/components/Fill'
+import Lockup from '@/components/Lockup'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/lighthouse-copy'
@@ -40,23 +41,8 @@ export default function Lighthouse() {
     <Page title="Lighthouse AI" dark here="lighthouse">
       <div className="lh du cine">
         <CaseHero clip={V('hero')} className="lh-hero" title={
-          <div className="lh-open">
-            <div className="lh-open-copy" data-reveal>
-              <p className="p28 w500 lh-open-eyebrow">{C.hero.eyebrow}</p>
-              <h1 className="p70 lh-open-head"><Lines lines={C.hero.head} /></h1>
-              <p className="lh-open-tags">
-                {C.hero.tags.map(t => <span key={t} className="p26 lh-open-tag">{t}</span>)}
-              </p>
-            </div>
-            <div className="pin-credits lh-open-meta" data-reveal data-amp="70">
-              {C.hero.meta.map(m => (
-                <div key={m.label} className="pin-credit">
-                  <span className="p20 pin-credit-label">{m.label}</span>
-                  <span className="p30 pin-credit-value">{m.value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Lockup eyebrow={C.hero.eyebrow} head={C.hero.head}
+                  tags={C.hero.tags} meta={C.hero.meta} />
         }>
           {C.context.map((lines, i) => (
             <p key={i} className="p45 lh-context" data-reveal><Lines lines={lines} /></p>
@@ -66,22 +52,30 @@ export default function Lighthouse() {
         {/* ---- 3a: access to information, full bleed ---- */}
         {V('info') && (
           <section className="lh-bleed">
-            <div className="lh-bleed-film"
-                 style={{ background: `url(${V('info').poster}) center/cover no-repeat` }}>
-              {V('info').video && <Video src={V('info').src} poster={V('info').poster} />}
+            <div className="lh-bleed-hold">
+              <div className="lh-bleed-film"
+                   style={{ background: `url(${V('info').poster}) center/cover no-repeat` }}>
+                {V('info').video && <Video src={V('info').src} poster={V('info').poster} />}
+              </div>
+              <p className="p65 center lh-bleed-line" data-reveal data-swipe>
+                <Lines lines={C.access} swipe />
+              </p>
             </div>
-            <p className="p60 center lh-bleed-line" data-reveal><Lines lines={C.access} /></p>
           </section>
         )}
 
         {/* ---- 3b: but without direction ---- */}
         {V('ocean') && (
           <section className="lh-bleed lh-bleed-2">
-            <div className="lh-bleed-film"
-                 style={{ background: `url(${V('ocean').poster}) center/cover no-repeat` }}>
-              {V('ocean').video && <Video src={V('ocean').src} poster={V('ocean').poster} />}
+            <div className="lh-bleed-hold">
+              <div className="lh-bleed-film"
+                   style={{ background: `url(${V('ocean').poster}) center/cover no-repeat` }}>
+                {V('ocean').video && <Video src={V('ocean').src} poster={V('ocean').poster} />}
+              </div>
+              <p className="p65 center lh-bleed-line" data-reveal data-swipe>
+                <Lines lines={C.lost} swipe />
+              </p>
             </div>
-            <p className="p60 center lh-bleed-line" data-reveal><Lines lines={C.lost} /></p>
           </section>
         )}
 
@@ -92,9 +86,11 @@ export default function Lighthouse() {
           </h2>
           <div className="du-w lh-probs" style={{ '--mw': 1448, '--mt': 120 }} data-stagger>
             {C.problem.cards.map((c, i) => (
-              <div key={i} className="lh-prob" data-reveal data-amp={i % 2 ? 76 : 52}>
+              <div key={i} className={`lh-prob${i === 0 ? ' lh-prob-lead' : ''}`}
+                   data-reveal data-amp={i % 2 ? 76 : 52}>
+                {i === 0 && <Fill what="[ASSET] photo" />}
                 <h3 className="p32 lh-prob-h"><Lines lines={c.head} /></h3>
-                <p className="p26 w500 lh-prob-b">{para(c.body)}</p>
+                {i > 0 && <p className="p26 w500 lh-prob-b">{para(c.body)}</p>}
               </div>
             ))}
           </div>

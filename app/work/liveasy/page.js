@@ -3,6 +3,7 @@ import { CaseHero } from '@/components/Case'
 import OtherWork from '@/components/OtherWork'
 import Frame from '@/components/Frame'
 import Faq from '@/components/Faq'
+import Lockup from '@/components/Lockup'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/liveasy-copy'
@@ -28,21 +29,9 @@ export default function Liveasy() {
   return (
     <Page title="Liveasy" dark here="liveasy">
       <div className="lv du cine">
-        {/* the updated frame drops the centred title card for the line on
-            the left of the film, three facts stacked under it, and a laptop
-            standing to the right */}
         <CaseHero clip={media('liveasy-hero') || media('times-court')} className="lv-hero" title={
-          <div className="lv-open">
-            <div className="lv-open-copy" data-reveal>
-              <h1 className="p64 lv-open-line"><Lines lines={C.hero.line} /></h1>
-              <p className="lv-open-tags">
-                {C.hero.tags.map(t => <span key={t} className="p26 lv-open-tag">{t}</span>)}
-              </p>
-            </div>
-            <div className="lv-open-dev" aria-hidden="true" data-reveal data-amp="80">
-              <Frame kind="mac" w={760} clip={media('liveasy-open')} />
-            </div>
-          </div>
+          <Lockup eyebrow="Liveasy" head={C.hero.line}
+                  tags={C.hero.tags} meta={C.credits} />
         }>
           {C.intro.map((lines, i) => (
             <p key={i} className="p45 lv-intro" data-reveal><Lines lines={lines} /></p>

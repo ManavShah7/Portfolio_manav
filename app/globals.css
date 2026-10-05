@@ -1950,6 +1950,45 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 .bg-dark .fill,.lh-pat .fill{border-color:rgba(2,147,34,.6);
   background:rgba(2,147,34,.1)}
 
+/* ---- the opening lockup every case study now shares (components/Lockup.js)
+   Eyebrow, the line, the facts as pills, a hairline meta row. Centred on the
+   first screen and absolutely positioned - .pin-first cannot take `overflow`
+   or a flex centre without re-scoping the film's view() timeline. */
+.lock{position:absolute;left:0;right:0;top:50%;translate:0 -50%;z-index:1;
+  padding:0 var(--m) 0 calc(182*var(--u))}
+.lock-copy{color:#fff;max-width:calc(1120*var(--u))}
+.lock-eyebrow{color:rgba(255,255,255,.72)}
+.lock-head{margin-top:calc(22*var(--u));letter-spacing:-.024em}
+.lock-tags{display:flex;flex-wrap:wrap;gap:calc(16*var(--u));
+  margin-top:calc(44*var(--u))}
+.lock-tag{display:inline-block;padding:calc(12*var(--u)) calc(26*var(--u));
+  border-radius:calc(14*var(--u));background:rgba(20,20,22,.58);color:#F5F5F7;
+  font-weight:500;letter-spacing:-.006em;border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+/* a grid, not the centred flex row .pin-credits is: four up with a long Skills
+   string sent that one straight off both edges */
+.lock-meta{margin-top:calc(70*var(--u));max-width:calc(1400*var(--u));
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(260*var(--u)),1fr));
+  gap:calc(40*var(--u));justify-content:start}
+.lock-meta .pin-credit-value{white-space:normal}
+/* every hero film gets the same left-weighted scrim, so white type on it is
+   never a bet on which frame you happened to stop at */
+.pin .pin-first::before{content:'';position:absolute;inset:0;z-index:0;
+  pointer-events:none;background:linear-gradient(100deg,rgba(0,0,0,.68) 0%,
+    rgba(0,0,0,.42) 44%,rgba(0,0,0,.12) 80%)}
+
+@media (max-width:1068px){
+  .lock{top:auto;bottom:calc(40*var(--u));translate:none;padding:0 var(--m)}
+  .lock-copy{max-width:none}
+  .lock-head{margin-top:12px}
+  .lock-tags{gap:10px;margin-top:22px}
+  .lock-tag{padding:8px 16px;border-radius:10px}
+  .lock-meta{margin-top:30px;max-width:none;gap:18px;
+    grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pin .pin-first::before{background:linear-gradient(180deg,
+    rgba(0,0,0,.42) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.62) 100%)}
+}
+
 /* ---- Lighthouse AI -------------------------------------------------------
    The same objects the other three case studies use. The one thing the spec
    asks for that none of them had: screens shown FLAT and unframed, with a
@@ -1984,18 +2023,37 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 .bg-dark .lh-aside{color:#A1A1A6}
 
 /* the two full-bleed films, each with its line over the foot of it */
-.lh-bleed{position:relative;background:#000}
-.lh-bleed-film{position:relative;height:calc(840*var(--u));overflow:hidden}
+/* Cinematic: the film is the whole screen, the line sits in the middle of it,
+   and it holds while the page scrolls past - so it plays as a beat rather than
+   as a picture you scroll over. The film is sticky inside a 180vh run, which
+   is the same mechanism Peak's friendship section uses. */
+.lh-bleed{position:relative;background:#000;height:180vh}
+.lh-bleed-hold{position:sticky;top:0;height:100vh;overflow:hidden}
+.lh-bleed-film{position:absolute;inset:0}
 .lh-bleed-film > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .lh-bleed-film::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.2) 0%,rgba(0,0,0,.72) 100%)}
-.lh-bleed-line{position:absolute;left:0;right:0;bottom:calc(96*var(--u));
+  background:linear-gradient(180deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.18) 45%,
+    rgba(0,0,0,.52) 100%)}
+.lh-bleed-line{position:absolute;left:0;right:0;top:50%;translate:0 -50%;
   z-index:1;color:#fff;padding:0 var(--m)}
 
 /* the three problem cards */
-.lh-probs{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+/* The format he picked out: one large image card across the top with its
+   heading laid over the picture, and two plain cards beneath it. */
+.lh-probs{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u))}
 .lh-prob{background:#FFFFFF;border-radius:calc(20*var(--u));
   padding:calc(54*var(--u)) calc(48*var(--u))}
+.lh-prob-lead{grid-column:1 / -1;position:relative;overflow:hidden;
+  min-height:calc(620*var(--u));padding:0;background:#141416;
+  display:flex;align-items:flex-start}
+.lh-prob-lead > .fill{position:absolute;inset:0;border-radius:0;border-width:0 0 2px;
+  background:rgba(2,147,34,.08)}
+.lh-prob-lead-film{position:absolute;inset:0}
+.lh-prob-lead-film > img{display:block;width:100%;height:100%;object-fit:cover}
+.lh-prob-lead-film::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.1) 60%)}
+.lh-prob-lead .lh-prob-h{position:relative;z-index:1;color:#fff;
+  margin:calc(54*var(--u)) calc(52*var(--u))}
 .lh-prob-h{letter-spacing:-.014em}
 .lh-prob-b{margin-top:calc(28*var(--u));color:#6E6E73;line-height:1.45}
 
@@ -2063,9 +2121,13 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
     rgba(0,0,0,.42) 0%,rgba(0,0,0,.3) 50%,rgba(0,0,0,.62) 100%)}
   .lh-context + .lh-context{margin-top:36px}
   .lh-aside{margin-top:18px;max-width:none}
-  .lh-bleed-film{height:62vh}
-  .lh-bleed-line{bottom:40px}
+  /* no pinned runs on a phone, per the spec - the film is just a tall band */
+  .lh-bleed{height:auto}
+  .lh-bleed-hold{position:relative;height:72vh}
+  .lh-bleed-line{top:50%}
   .lh-probs,.lh-people,.lh-pats,.lh-learn{grid-template-columns:1fr;gap:16px}
+  .lh-prob-lead{min-height:300px}
+  .lh-prob-lead .lh-prob-h{margin:24px}
   .lh-prob,.lh-person,.lh-pat{padding:28px}
   .lh-prob-b,.lh-person-line,.lh-pat-b{margin-top:16px}
   .lh-pat-led{margin-top:22px;padding-top:20px}

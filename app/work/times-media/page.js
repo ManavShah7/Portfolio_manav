@@ -4,6 +4,7 @@ import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import Flip from '@/components/Flip'
 import Faq from '@/components/Faq'
+import Lockup from '@/components/Lockup'
 import { Media, Video } from '@/components/Media'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
@@ -28,20 +29,9 @@ export default function TimesMedia() {
   return (
     <Page title="Times Media" dark here="times-media">
       <div className="tm du cine">
-        {/* the updated frame drops the centred title card for the line
-            itself, three facts as pills in a row, and a tablet below them */}
         <CaseHero clip={media('times-court')} className="tm-hero" title={
-          <div className="tm-open">
-            <div className="tm-open-copy" data-reveal>
-              <h1 className="p70 tm-open-line"><Lines lines={C.hero.line} /></h1>
-              <p className="tm-open-tags">
-                {C.hero.tags.map(t => <span key={t} className="p26 tm-open-tag">{t}</span>)}
-              </p>
-            </div>
-            <div className="tm-open-dev" aria-hidden="true" data-reveal data-amp="80">
-              <Frame kind="ipad-p" w={520} clip={media('times-open')} />
-            </div>
-          </div>
+          <Lockup eyebrow="Times Media" head={C.hero.line}
+                  tags={C.hero.tags} meta={C.credits} />
         }>
           {/* each line rises out of its own box, a beat apart, over the film */}
           {C.intro.map((lines, i) => (
