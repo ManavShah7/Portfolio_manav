@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Reveal from '@/components/Reveal'
 import Intro from '@/components/Intro'
 import { Lines, Footer, Outro } from '@/components/Chrome'
+import Faq from '@/components/Faq'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/home-copy'
@@ -93,7 +94,7 @@ export default function Home() {
                         never disagree. */}
                     <span className="hm-dev-tag">
                       <span className="hm-dev-name p30">{d.name}</span>
-                      <span className="hm-dev-kind p24">{kindOf(d.slug)}</span>
+                      <span className="hm-dev-kind p20">{kindOf(d.slug)}</span>
                     </span>
                   </span>
                 )}
@@ -128,6 +129,10 @@ export default function Home() {
             </div>
           ))}
         </section>
+        {/* the same accordion every case study closes on */}
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items}
+             x={190} pt={200} mw={1180} />
+
         {/* the same close every other page has: home used to end on the
             collage with no way to reach him */}
         <Outro x={190} pt={196} pb={216} />

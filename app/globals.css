@@ -1658,16 +1658,23 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
    own height. */
 /* the name, on the screen, in a glass pill - the same object .ow-name is on
    the case studies' own carousels, so a device reads the same everywhere */
-.hm-dev-tag{position:absolute;z-index:3;left:calc(30*var(--u));bottom:calc(26*var(--u));
-  right:calc(30*var(--u));color:#fff;
+/* The phone's screen is 145px wide against the landscape iPad's 651, so one
+   inset cannot serve both: 30u a side left "Consumer iOS app" 99px and it
+   wrapped. The tag insets by a fraction of the tile instead, which is tight on
+   the phone and generous on the big ones. */
+.hm-dev-tag{position:absolute;z-index:3;left:7%;bottom:calc(26*var(--u));
+  right:7%;color:#fff;
   /* the films run from a night street to a bright sea, so the name carries its
      own shadow rather than a pill - the least chrome that stays legible */
   text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 16px rgba(0,0,0,.35)}
 .hm-dev-name{display:block;font-weight:500;white-space:nowrap;letter-spacing:-.004em}
-/* the kind is allowed to wrap - the phone tile's screen is narrow and `nowrap`
-   would push it straight out through the bezel */
-.hm-dev-kind{display:block;margin-top:calc(3*var(--u));font-weight:400;
-  letter-spacing:-.002em;color:rgba(255,255,255,.82)}
+/* Quieter than the name and clearly a second thing rather than a second line
+   of the title: a rung smaller, a touch of positive tracking against the tight
+   name above it, and two thirds opacity. It may still wrap - the phone tile's
+   screen is narrow and `nowrap` would push it out through the bezel - but at
+   this size each one now sets on a single line. */
+.hm-dev-kind{display:block;margin-top:calc(7*var(--u));font-weight:400;
+  letter-spacing:.006em;color:rgba(255,255,255,.66)}
 .hm-d1 .hm-dev-screen{border-radius:1.25% / 2.2%}
 .hm-d2 .hm-dev-screen{border-radius:11.74% / 5.41%}
 .hm-d3 .hm-dev-screen{border-radius:2.15% / 1.37%}
