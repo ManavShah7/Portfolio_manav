@@ -760,8 +760,196 @@ html.reduced-motion video.loop{display:none}
    graphics inside carry a 13px type floor that does not shrink with --u, so
    between 1069 and ~1250 the content is taller than 459 design px. min-height
    lets the card grow to hold it rather than clipping the last row. */
-.pk-problem-card{min-height:calc(459*var(--u));padding:calc(56*var(--u))}
+.pk-problem-card{min-height:calc(459*var(--u));padding:calc(56*var(--u));
+  display:flex;flex-direction:column}
+/* the graphic takes the middle and this closes the card, which is the order
+   the updated frame draws: claim, evidence, consequence */
+.pk-problem-body{margin-top:auto;padding-top:calc(34*var(--u));color:#A1A1A6;line-height:1.45}
 @media (max-width:734px){ .pk-problem-big{height:56vw} .pk-two{grid-template-columns:1fr} .pk-problem-card{height:auto;min-height:200px;padding:24px} }
+
+/* the visually-hidden pattern, for text that only a screen reader needs */
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+  overflow:hidden;white-space:nowrap;clip-path:inset(50%)}
+
+/* ---- competitive analysis (components/Compare.js) --------------------------
+   Horizontal hairlines only and no boxed cells, at the same weight the FAQ
+   uses, so the matrix belongs to the page rather than sitting on it. */
+.pk-cmp{padding:calc(56*var(--u)) calc(60*var(--u)) calc(48*var(--u))}
+.pk-cmp-t{width:100%;border-collapse:collapse;table-layout:fixed}
+.pk-cmp-t th,.pk-cmp-t td{text-align:center;vertical-align:middle;padding:0}
+/* the labels carry the reading, so they get the width and the type */
+.pk-cmp-t th:first-child,.pk-cmp-row{width:32%;text-align:left}
+.pk-cmp-col{display:block;font-weight:600;color:#F5F5F7;letter-spacing:-.01em}
+.pk-cmp-eg{display:block;margin-top:calc(6*var(--u));color:#86868B;font-weight:400;
+  letter-spacing:-.006em}
+.pk-cmp-t thead th{padding-bottom:calc(34*var(--u));vertical-align:bottom}
+.pk-cmp-row{font-weight:500;color:#F5F5F7;letter-spacing:-.014em}
+/* The row height has to be set on `.pk-cmp-t tbody th,td` and not on
+   `.pk-cmp-row`: the reset above is `.pk-cmp-t th` at (0,1,1) and a single
+   class loses to it, so the rows stayed as tall as their own type. */
+.pk-cmp-t tbody th,.pk-cmp-t tbody td{padding:calc(28*var(--u)) 0}
+.pk-cmp-t tbody tr{border-top:1px solid rgba(255,255,255,.1)}
+/* Peak's column is washed in its own ink rather than handed the lighter panel
+   a pricing table would use - and the wash is rounded at both ends, so it
+   reads as one object and not as seven tinted cells. */
+.pk-cmp-t .is-us{background:rgba(186,222,142,.07)}
+.pk-cmp-t thead .is-us{border-radius:calc(16*var(--u)) calc(16*var(--u)) 0 0;
+  padding-top:calc(26*var(--u))}
+.pk-cmp-t tbody tr:last-child .is-us{border-radius:0 0 calc(16*var(--u)) calc(16*var(--u))}
+.pk-cmp-t thead .is-us .pk-cmp-col{color:#BADE8E}
+
+/* three states, one visual family: filled, ring, hairline */
+.pk-cmp-mark{display:inline-block;vertical-align:middle;width:calc(18*var(--u));
+  height:calc(18*var(--u));border-radius:50%}
+.pk-cmp-mark.is-y{background:#F0EFEC}
+.pk-cmp-mark.is-p{box-shadow:inset 0 0 0 calc(3*var(--u)) #8E8E93}
+.pk-cmp-mark.is-n{width:calc(22*var(--u));height:2px;border-radius:0;background:#575552}
+.is-us .pk-cmp-mark.is-y{background:#BADE8E}
+/* The note hangs off the mark instead of sharing a centred line with it -
+   centring the pair together pushed that one dot off the column's axis and
+   broke the only alignment the matrix has. */
+.pk-cmp-t td{position:relative}
+.pk-cmp-note{position:absolute;left:50%;top:50%;
+  margin-left:calc(18*var(--u));transform:translateY(-50%);
+  color:#BADE8E;font-weight:500;letter-spacing:-.004em;white-space:nowrap}
+
+.pk-cmp-key{display:flex;gap:calc(38*var(--u));justify-content:flex-end;
+  margin-top:calc(34*var(--u));color:#86868B}
+.pk-cmp-key > span{display:inline-flex;align-items:center;gap:calc(12*var(--u))}
+
+/* The marks arrive down the table rather than all at once - a distinct beat
+   from the block entrances everywhere else, and it reads as the mapping being
+   filled in. `--r` is the row index, set in the markup. */
+html.js.no-reduced-motion .pk-cmp-mark{opacity:0;transform:scale(.4)}
+html.js.no-reduced-motion .pk-cmp .in .pk-cmp-mark,
+html.js.no-reduced-motion .pk-cmp.in .pk-cmp-mark{opacity:1;transform:none;
+  transition:opacity .4s ease calc(var(--r,0) * 70ms + 160ms),
+             transform .5s cubic-bezier(.22,1,.36,1) calc(var(--r,0) * 70ms + 160ms)}
+/* the key is not a row, so it must not wait on one */
+html.js.no-reduced-motion .pk-cmp-key .pk-cmp-mark{opacity:1;transform:none}
+
+/* wide screens: the column name lives in the heading, so the copy of it in
+   each cell is for screen readers only */
+.pk-cmp-cn{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+  overflow:hidden;white-space:nowrap;clip-path:inset(50%)}
+
+/* A five-column matrix cannot hold at 390 - the three headings collide into
+   each other and the note runs off the card. So below 734 it stops being a
+   grid and becomes one block per capability, each cell naming its own column.
+   The marks and their meanings are unchanged; only the arrangement is. */
+@media (max-width:734px){
+  .pk-cmp-t thead{display:none}
+  .pk-cmp-t,.pk-cmp-t tbody,.pk-cmp-t tr{display:block;width:auto}
+  .pk-cmp-t tbody tr{padding:18px 0 20px}
+  .pk-cmp-t tbody th,.pk-cmp-t tbody td{display:block;width:auto;padding:0;
+    text-align:left}
+  .pk-cmp-row{width:auto}
+  .pk-cmp-t tbody td{display:flex;align-items:center;gap:10px;
+    margin-top:10px;padding:7px 12px;border-radius:8px}
+  .pk-cmp-cn{position:static;width:auto;height:auto;margin:0;overflow:visible;
+    clip-path:none;flex:1;color:#86868B}
+  .pk-cmp-t .is-us{background:rgba(186,222,142,.09)}
+  .pk-cmp-t thead .is-us,
+  .pk-cmp-t tbody tr:last-child .is-us{border-radius:8px}
+  .pk-cmp-t .is-us .pk-cmp-cn{color:#BADE8E}
+  .pk-cmp-note{position:static;transform:none;margin:0 0 0 8px}
+}
+@media (max-width:1068px){
+  .pk-cmp{padding:22px 16px 20px}
+  .pk-cmp-t th:first-child,.pk-cmp-row{width:34%}
+  .pk-cmp-row{padding:16px 0}
+  .pk-cmp-t thead th{padding-bottom:18px}
+  .pk-cmp-eg{margin-top:3px}
+  .pk-cmp-key{gap:18px;margin-top:20px;flex-wrap:wrap;justify-content:flex-start}
+}
+
+/* ---- the five patterns: heading holds, boxes run past -----------------------
+   Sticky inside a grid cell rather than the absolute/sticky pair Times Media
+   uses, because here the held thing is the FIRST column rather than an overlay
+   - so `position:sticky` plus `align-self:start` is the whole mechanism. No
+   script, and it degrades to a normal two-column read if sticky is ignored. */
+/* 540, not 470: "Different people." at p70 wants 502u and the column has to
+   hold his own line breaks. The gap gives way instead of the heading. */
+.pk-stages{display:grid;grid-template-columns:calc(540*var(--u)) 1fr;
+  gap:calc(80*var(--u));padding-left:calc(222*var(--u));padding-right:var(--m)}
+.pk-stages-head{position:sticky;align-self:start;top:calc(50vh - 190*var(--u))}
+.pk-stages-aside{margin-top:calc(44*var(--u));color:#6E6E73;line-height:1.45;
+  max-width:calc(420*var(--u))}
+.pk-stages-run{display:flex;flex-direction:column;gap:calc(28*var(--u));min-width:0}
+.pk-stages-grid{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u))}
+.pk-stage{padding:calc(54*var(--u)) calc(56*var(--u))}
+.pk-stage-h{letter-spacing:-.014em}
+.pk-stage-b{margin-top:calc(30*var(--u));color:#6E6E73;line-height:1.45}
+/* the chart card is the one the other four sit under, so it runs full width */
+.pk-stage-chart .pk-stage-b{max-width:calc(820*var(--u))}
+
+/* the chart */
+.pk-chart{display:block;margin:calc(58*var(--u)) 0 0;max-width:none;width:auto}
+.pk-chart-box{position:relative}
+.pk-chart-box > svg{display:block;width:100%;height:auto;overflow:visible}
+.pk-chart-base{stroke:#C7C7CC;stroke-width:3}
+.pk-chart-axis{display:flex;justify-content:space-between;
+  margin-top:calc(14*var(--u))}
+.pk-chart-tick{font-size:max(13px,calc(24*var(--u)));font-weight:500;color:#8A8A8E;
+  letter-spacing:-.01em;white-space:nowrap;line-height:1}
+/* Each series is named at its OWN end of the plot and aligned inwards -
+   left-aligned at the start, right-aligned at the finish. Centring a label on
+   its point, which is the obvious thing, hangs half of "Motivation" off the
+   left edge of the card and most of "Results" off the right. */
+.pk-ck-s{position:absolute;transform:translate(0,-50%);white-space:nowrap;
+  font-size:max(13px,calc(26*var(--u)));font-weight:600;letter-spacing:-.014em}
+.pk-ck-end{transform:translate(-100%,-50%)}
+.pk-ck-quit{top:calc(14*var(--u));transform:translate(-50%,0)}
+html.js.no-reduced-motion .pk-chart-line{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+html.js.no-reduced-motion .in .pk-chart-line{stroke-dashoffset:0;
+  transition:stroke-dashoffset 1.5s cubic-bezier(.22,1,.36,1) var(--dd,0s)}
+/* the band is the card's point, so it arrives AFTER the curves that explain
+   it - it grows out of its own centre once both lines have drawn */
+html.js.no-reduced-motion .pk-chart-band{opacity:0;transform:scaleX(.2);
+  transform-origin:center;transform-box:fill-box}
+html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
+  transition:opacity .5s ease .9s,transform .7s cubic-bezier(.22,1,.36,1) .9s}
+
+/* ---- friendship: the film holds, the phone and the line change -------------
+   The film is an absolute layer over the whole run with a sticky child, so it
+   holds at the top of the window while the slides above it scroll - the same
+   mechanism as .tm-run-pin, inverted so the held thing is the background. */
+.pk-social{position:relative;background:#000}
+.pk-social-film{position:absolute;inset:0;z-index:0}
+.pk-social-film-in{position:sticky;top:0;display:block;height:100vh;overflow:hidden}
+.pk-social-film-in > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* a scrim, because white type over his footage is otherwise a gamble on which
+   frame you happen to stop at */
+.pk-social-film-in::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,.52))}
+.pk-slide{position:relative;z-index:1;min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;align-items:center;
+  gap:calc(90*var(--u));padding:calc(80*var(--u)) var(--m) calc(80*var(--u)) calc(300*var(--u))}
+.pk-slide-phone{justify-self:end}
+.pk-slide-copy{color:#fff;max-width:calc(700*var(--u))}
+
+/* Between 1069 and ~1250 the heading column still takes its design width
+   while the page has stopped growing, so two boxes abreast leaves each one
+   about 390u of measure - and his longest card line wants 392. One column
+   until there is room for two. */
+@media (max-width:1250px){ .pk-stages-grid{grid-template-columns:1fr} }
+@media (max-width:1068px){
+  .pk-stages{grid-template-columns:1fr;gap:40px;padding-inline:var(--m)}
+  .pk-stages-head{position:static;top:auto}
+  .pk-stages-aside{margin-top:20px;max-width:none}
+  .pk-stages-grid{grid-template-columns:1fr;gap:16px}
+  .pk-stage{padding:28px}
+  .pk-stage-b{margin-top:18px}
+  .pk-stage-chart .pk-stage-b{max-width:none}
+  .pk-chart{margin-top:32px}
+  /* the slides stack and the film stops holding - a 100vh hold per slide on a
+     phone is a lot of scrolling for two lines of copy */
+  .pk-social-film{position:relative;inset:auto}
+  .pk-social-film-in{position:relative;height:56vh}
+  .pk-slide{min-height:0;grid-template-columns:1fr;gap:28px;padding:48px var(--m)}
+  .pk-slide-phone{justify-self:center;width:min(240px,52vw)}
+  .pk-slide-copy{max-width:none}
+}
 
 /* ---- testing, what I learned, and the FAQ ---------------------------------
    All three reuse the page's own objects: the eyebrow/headline/aside lockup
@@ -776,7 +964,7 @@ html.reduced-motion video.loop{display:none}
    squeezed to fit. Two classes, because `.pk-aside` is declared further down
    the file and a single-class override loses on source order - the same trap
    the footer label fell into. */
-.pk-aside.pk-aside-wide{max-width:calc(480*var(--u))}
+.pk-aside.pk-aside-wide{max-width:calc(580*var(--u))}
 .pk-test{padding:calc(60*var(--u)) calc(64*var(--u)) calc(64*var(--u));
   display:flex;flex-direction:column}
 .pk-test-quote{color:#1D1D1F;letter-spacing:-.016em;margin-bottom:calc(30*var(--u))}
@@ -788,10 +976,13 @@ html.reduced-motion video.loop{display:none}
 .pk-test-body{margin-top:calc(14*var(--u));color:#1D1D1F}
 
 .pk-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
-.pk-learn-pt{display:flex;flex-direction:column}
-.pk-learn-n{color:#E8842A;letter-spacing:.04em;font-variant-numeric:tabular-nums}
-.pk-learn-h{margin-top:calc(18*var(--u));letter-spacing:-.012em}
-.pk-learn-b{margin-top:calc(16*var(--u));color:#6E6E73;line-height:1.45}
+.pk-learn-aside{margin:calc(30*var(--u)) auto 0;max-width:calc(900*var(--u));color:#6E6E73}
+/* 44 of side padding, not 52: three cards abreast leave each heading about
+   400u and "Emotions shape behavior." wants 376 - with the px type floor at
+   1100 eating the rest of the margin. */
+.pk-learn-c{padding:calc(54*var(--u)) calc(44*var(--u))}
+.pk-learn-h{letter-spacing:-.014em}
+.pk-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
 
 .pk-faq-item{border-top:1px solid rgba(0,0,0,.12)}
 .pk-faq-item:last-child{border-bottom:1px solid rgba(0,0,0,.12)}
@@ -815,6 +1006,9 @@ html.reduced-motion video.loop{display:none}
 
 @media (max-width:1068px){
   .pk-tests,.pk-learn{grid-template-columns:1fr;gap:20px}
+  .pk-learn-c{padding:28px}
+  .pk-learn-aside{margin-top:18px;max-width:none}
+  .pk-learn-b{margin-top:20px}
   .pk-test{padding:28px}
   .pk-test-label{margin-top:24px;padding-top:20px}
   .pk-faq-q{padding:22px 0;gap:20px}
@@ -938,29 +1132,11 @@ html.reduced-motion video.loop{display:none}
 @media (min-width:735px) and (max-width:1068px){ .pk-pair > *{width:calc(50% - 12px)} .pk-voice-photo{height:auto;aspect-ratio:400/345} .pk-voice blockquote{width:auto} .pk-outline{height:auto;min-height:260px;padding:32px} }
 
 /* findings */
-.pk-inset{padding-left:calc(37*var(--u));margin-bottom:calc(90*var(--u))}
-/* The frame measures 565/583 and 402/390 - within 3% of equal, which reads as
-   a mistake rather than a decision: two columns 14px apart in width and two
-   rows 8px apart in height. Squared up. The cards either side carry the same
-   two-line heading over the same body, so equal rows stay equal. */
-.pk-bento{display:grid;grid-template-columns:1fr 1fr;
-  grid-template-rows:repeat(2,minmax(calc(396*var(--u)),auto));
-  gap:calc(28*var(--u))}
-.pk-find{padding:calc(66*var(--u)) calc(70*var(--u))}
-.pk-find-body{color:#6E6E73;margin-top:calc(26*var(--u));line-height:1.45}
-.pk-find-1{grid-column:2;grid-row:1 / span 2;display:flex;flex-direction:column}
-/* the card is two rows tall and the chart is not - so the leftover height
-   is split above and below it rather than all falling to the bottom */
-.pk-find-1 .pk-chart{margin-top:auto;margin-bottom:auto}
-.pk-find-2{grid-column:1;grid-row:2}
 .pk-ceiling{margin-top:calc(30*var(--u));height:calc(525*var(--u));display:grid;place-items:center;color:#FFFFFF;
   background:linear-gradient(135deg,#8E2DE2,#C300B4 50%,#FF0F7B)}
 .pk-ceiling > video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pk-ceiling > p{position:relative}
 @media (max-width:734px){
-  .pk-inset{padding-left:0}
-  .pk-bento{grid-template-columns:1fr;grid-template-rows:none;gap:12px}
-  .pk-find,.pk-find-1,.pk-find-2{grid-column:auto;grid-row:auto;min-height:180px;padding:28px}
   .pk-ceiling{height:auto;min-height:300px;padding:40px 24px}
 }
 
@@ -1093,76 +1269,6 @@ html.reduced-motion video.loop{display:none}
 .ac{color:var(--ac,inherit)}
 .ac-i .ac{font-style:italic}
 
-
-/* ---- the motivation/results curve on Peak's research card ------------------
-   Text wears ink tokens, never the series colour; the axis rules are solid
-   hairlines one shade off the surface. Every label is HTML at a real size -
-   SVG <text> would scale with the viewBox and set at 6-9px in this card. */
-/* The frame insets the chart 29 from the card's edges, not out to them - the
-   full bleed was left over from when this was a flat image, and it put the
-   plot's right edge and its end dot hard against the card. Below 1069 the
-   card is narrow enough that the chart sits inside the padding instead. */
-/* No fixed width: the chart fills its card and bleeds 46 of the card's own 70
-   of padding, which is what makes the plot big enough to be the card's content
-   rather than an illustration sitting in it. */
-.pk-chart{display:block;max-width:none;width:auto;
-  margin:calc(70*var(--u)) calc(-60*var(--u)) calc(6*var(--u))}
-/* The plot is a box with a gutter: High and Low hang in the gutter, pinned to
-   the exact rows they name (their `top` comes from the same geometry the SVG
-   is drawn with), and Time sits under the right edge. Nothing is eyeballed and
-   nothing can fall off the card. */
-.pk-chart-plot{padding-left:calc(76*var(--u));padding-bottom:calc(48*var(--u))}
-/* the box is the SVG's exact rectangle, so every label's percentage is the
-   same percentage the geometry uses */
-.pk-chart-box{position:relative}
-.pk-chart-box > svg{display:block;width:100%;height:auto;overflow:visible}
-.pk-chart-tick{font-size:calc(24*var(--u));font-weight:500;color:#8A8A8E;
-  letter-spacing:-.01em;white-space:nowrap;line-height:1}
-.pk-ck-y{position:absolute;right:100%;margin-right:calc(18*var(--u));text-align:right;
-  transform:translateY(-50%)}
-.pk-ck-time{position:absolute;right:0;top:100%;margin-top:calc(14*var(--u))}
-/* the series named on the curve itself - no legend to read back and forth to */
-.pk-ck-s{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;
-  font-size:calc(26*var(--u));font-weight:600;letter-spacing:-.014em}
-.pk-chart-rule{stroke:#EDEDF0;stroke-width:2}
-.pk-chart-base{stroke:#DFDFE4;stroke-width:2}
-
-/* The line draws itself in behind the card's own entrance: the curve is the
-   content here, and a curve that arrives finished says less than one that
-   travels. Everything is gated on the motion switch like the rest of the site. */
-html.js.no-reduced-motion .pk-chart-line{
-  stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
-html.js.no-reduced-motion .in .pk-chart-line{stroke-dashoffset:0;
-  transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1) var(--dd,0s)}
-html.js.no-reduced-motion .pk-chart-fill,
-html.js.no-reduced-motion .pk-ck-s,
-html.js.no-reduced-motion .pk-chart-x{opacity:0}
-html.js.no-reduced-motion .in .pk-chart-fill{opacity:1;transition:opacity 1s ease .45s}
-html.js.no-reduced-motion .in .pk-ck-s{opacity:1;transition:opacity .6s ease .95s}
-html.js.no-reduced-motion .in .pk-chart-x{opacity:1;transition:opacity .5s ease 1.15s}
-
-@media (max-width:1068px){
-  .pk-chart{width:auto;max-width:none;margin:34px calc(-44*var(--u)) 0}
-  .pk-chart-plot{padding-left:46px;padding-bottom:28px}
-  .pk-chart-tick{font-size:14px}
-  .pk-ck-y{margin-right:10px}
-  .pk-ck-time{margin-top:8px}
-  .pk-ck-s{font-size:14px}
-}
-
-/* the four phases the curve passes through - the words that make the chart
-   readable without relying on its colours */
-.pk-phase{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(34*var(--u));margin-top:calc(56*var(--u))}
-.pk-phase h4{font-size:calc(26*var(--u));font-weight:600;margin-bottom:calc(10*var(--u))}
-.pk-phase p{font-size:calc(23*var(--u));font-weight:400;color:#6E6E73;line-height:1.42}
-.pk-phase span{display:block;width:calc(34*var(--u));height:calc(34*var(--u));border-radius:50%;
-  margin-bottom:calc(14*var(--u))}
-@media (max-width:1068px){
-  .pk-phase{grid-template-columns:repeat(2,1fr);gap:28px 18px;margin-top:32px}
-  .pk-phase h4{font-size:15px;margin-bottom:4px}
-  .pk-phase p{font-size:13px}
-  .pk-phase span{width:22px;height:22px;margin-bottom:8px}
-}
 
 /* the frame leaves a clear gap under "Check out my other work." */
 .pk-other{margin-bottom:calc(102*var(--u))}
@@ -1990,7 +2096,6 @@ html:not(.no-reduced-motion) .mx-line{color:#fff}
    back. */
 .pk-projects .paddle{background:#D9D9D9}
 /* the chart card carries the frame's own chart image */
-.pk-find-body{max-width:calc(395*var(--u))}
 
 /* The case-study heroes, as the frames draw them: the film is soft (blurred)
    and dimmed, with a darker band across its top 197px. */
@@ -2002,8 +2107,6 @@ html:not(.no-reduced-motion) .mx-line{color:#fff}
 html.no-reduced-motion .pk-hero .pin-scrim,html.no-reduced-motion .tm-hero .pin-scrim{--dim-from:.45}
 
 /* findings cards, as set: body in full ink, 24 on 29 */
-.pk-find-body{color:#1D1D1F !important;font-size:calc(24*var(--u)) !important;line-height:1.21 !important}
-.pk-find .p38{font-size:calc(37*var(--u))}
 
 .pk-wn-row{display:grid;grid-template-columns:repeat(3,calc(540*var(--u)));gap:calc(30*var(--u));margin-left:calc(170*var(--u))}
 .pk-wn-row .pk-wn{width:auto;padding-bottom:calc(57*var(--u))}
@@ -2024,4 +2127,3 @@ html.no-reduced-motion .pk-hero .pin-scrim,html.no-reduced-motion .tm-hero .pin-
 html.no-touch .ow-slide:hover .ow-name .chev{transform:translateX(calc(7*var(--u)))}
 @media (max-width:1068px){ .ow-name{left:22px;bottom:20px;gap:8px;padding:9px 16px} }
 @media (max-width:1068px){ .ow-slide{width:min(760px,calc(100vw - 2 * var(--m)))} }
-@media (max-width:1068px){ .pk-find-body{font-size:17px !important;max-width:none} }

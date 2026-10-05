@@ -7,6 +7,7 @@ import Gallery from '@/components/Gallery'
 import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import MotivationChart from '@/components/MotivationChart'
+import Compare from '@/components/Compare'
 import { SameQuestions, NoRoomToMiss, PhoneApp } from '@/components/PeakProblem'
 import { media, slots } from '@/lib/clips'
 import { WORK } from '@/lib/work'
@@ -97,14 +98,17 @@ export default function Peak() {
               </div>
             </div>
             <div className="pk-two" data-stagger>
-              {C.problem.cards.map((lines, i) => (
+              {C.problem.cards.map((c, i) => (
                 <div key={i} className="pk-card black pk-problem-card" data-reveal>
-                  <p className="p27"><Lines lines={lines} /></p>
+                  <p className="p27"><Lines lines={c.head} /></p>
                   {/* the frame leaves these cards empty under the heading;
                       each graphic says what its heading claims */}
                   {i === 0
                     ? <SameQuestions {...C.problem.onboarding} />
                     : <NoRoomToMiss {...C.problem.streak} />}
+                  {/* the frame prints this under the graphic, which is what
+                      makes the card an argument rather than a label */}
+                  <p className="p26 w500 pk-problem-body">{para(c.body)}</p>
                 </div>
               ))}
             </div>
@@ -131,19 +135,51 @@ export default function Peak() {
           <h3 className="p60 center pk-reddit" style={{ '--ac': '#FF383C' }} data-reveal><Lines lines={C.research.redditHead} /></h3>
         </section>
 
-        {/* ---- findings: two stacked on the left, one tall on the right ---- */}
+        {/* ---- competitive analysis ---- */}
+        <section className="pk-sec" style={{ '--pt': 150, '--pb': 40 }}>
+          <div className="pk-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.compare.eyebrow}</p>
+            <h2 className="p70" data-reveal><Lines lines={C.compare.head} /></h2>
+            <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.compare.aside} /></p>
+          </div>
+          <div className="pk-w" style={{ '--mw': 1590, '--mt': 104 }}>
+            <Compare cols={C.compare.cols} rows={C.compare.rows} keys={C.compare.key} />
+          </div>
+        </section>
+
+        {/* ---- the five patterns. The heading and its aside hold still while
+                the boxes run past them, the way Times Media pins its deck -
+                sticky inside a grid cell, so it is CSS and no script. The
+                chart card leads because it is the finding the other four sit
+                under. ---- */}
         <section className="pk-sec bg-fill" style={{ '--pt': 173, '--pb': 183 }}>
-          <div className="pk-w" style={{ '--mw': 1180 }}>
-            <h2 className="p70 pk-inset" data-reveal><Lines lines={C.findings.headline} /></h2>
-            <div className="pk-bento" data-stagger>
-              {C.findings.cards.map((c, i) => (
-                <div key={i} className={`pk-card white pk-find pk-find-${i}`} style={{ '--ac': '#077B67' }} data-reveal>
-                  <p className="p38"><Lines lines={c.head} /></p>
-                  {c.body && <p className="p26 w500 pk-find-body">{para(c.body)}</p>}
-                  {c.chart && <MotivationChart />}
-                </div>
-              ))}
+          <div className="pk-stages">
+            <div className="pk-stages-head">
+              <h2 className="p70" data-reveal><Lines lines={C.stages.head} /></h2>
+              <p className="p25 w500 pk-stages-aside" data-reveal><Lines lines={C.stages.aside} /></p>
             </div>
+            <div className="pk-stages-run" data-stagger>
+              <div className="pk-card white pk-stage pk-stage-chart" data-reveal data-amp="44">
+                <p className="p32 pk-stage-h" style={{ '--ac': '#0B8A3D' }}>
+                  <span className="ln">{C.stages.chart.head[0]}</span>
+                  <span className="ln ac">{C.stages.chart.head[1]}</span>
+                </p>
+                <p className="p26 w500 pk-stage-b">{para(C.stages.chart.body)}</p>
+                <MotivationChart quit={C.stages.chart.quit} from={C.stages.chart.from}
+                                 to={C.stages.chart.to} />
+              </div>
+              <div className="pk-stages-grid">
+                {C.stages.cards.map((c, i) => (
+                  <div key={i} className="pk-card white pk-stage" data-reveal
+                       data-amp={i % 2 ? 76 : 52}>
+                    <p className="p32 pk-stage-h"><Lines lines={c.head} /></p>
+                    <p className="p26 w500 pk-stage-b">{para(c.body)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="pk-w" style={{ '--mw': 1180 }}>
             <div className="pk-card pk-ceiling" data-reveal
                  style={V('ceiling')?.poster ? { background: `url(${V('ceiling').poster}) center/cover` } : undefined}>
               {V('ceiling')?.video && <Video src={V('ceiling').src} poster={V('ceiling').poster} />}
@@ -211,23 +247,41 @@ export default function Peak() {
             <span className="ln">{C.social.head[1]}</span>
           </h2>
         </section>
-        {/* The phone holds still while the footage and the copy change behind
-            it - one sticky frame spanning both bands, which is what the frame
-            draws now that it puts the phone in the same place in each. */}
-        <div className="pk-bands">
-          {C.social.bands.map((b, i) => friends[i] && (
-            <section key={i} className={`pk-band pk-band-${i}`}
-                     style={{ background: `url(${friends[i].poster}) center/cover no-repeat` }}>
-              <Video src={friends[i].src} poster={friends[i].poster} className="pk-band-film" />
-              <p className="p65 pk-band-copy" data-reveal><Lines lines={b.lines} /></p>
-            </section>
-          ))}
-          {friends[0] && (
-            <div className="pk-bands-pin" aria-hidden="true">
-              <Phone kind="device" w={305} h={631} slot="social" />
+        {/* It was the other way round: the phone held still and the footage
+            changed behind it, which meant the films were the thing moving and
+            they pulled the eye off the screens. Now the film holds - ONE
+            sticky layer under the whole run - and the phone and its line are
+            what change as you scroll. The film layer is absolute over the
+            wrapper with a sticky child, so the hold is CSS; the slides sit
+            above it in normal flow. */}
+        {friends[0] && (
+          <div className="pk-social">
+            <div className="pk-social-film" aria-hidden="true">
+              {/* the zoom is on the CLIP, not on this layer. This layer is
+                  the one holding sticky, so it cannot be inside anything that
+                  clips - and scaling it to 1.18 therefore hung 18% of the page
+                  width off the side, which WebKit let you scroll to. The clip
+                  sits inside `overflow:hidden`, so scaling it is contained. */}
+              <span className="pk-social-film-in"
+                    style={{ background: `url(${friends[0].poster}) center/cover no-repeat` }}>
+                <Video src={friends[0].src} poster={friends[0].poster} data-sv="zoom" />
+              </span>
             </div>
-          )}
-        </div>
+            {C.social.bands.map((b, i) => (
+              <section key={i} className="pk-slide">
+                <div className="pk-slide-phone" data-reveal data-amp="70" aria-hidden="true">
+                  {/* a second recording at peak-social2 gives each slide its
+                      own screen; until then both carry the first (rule 4) */}
+                  <Phone kind="device" w={305} h={631}
+                         slot={V(`social${i + 1}`) ? `social${i + 1}` : 'social'} />
+                </div>
+                <p className="p65 pk-slide-copy" data-reveal data-amp="44">
+                  <Lines lines={b.lines} />
+                </p>
+              </section>
+            ))}
+          </div>
+        )}
 
         {/* ---- testing: his own two pieces of tester feedback, and what
                 each one changed. The case study used to run finished screens
@@ -250,18 +304,17 @@ export default function Peak() {
           </div>
         </section>
 
-        {/* ---- what I learned ---- */}
-        <section className="pk-sec" style={{ '--pt': 176, '--pb': 0 }}>
-          <div className="pk-x" style={{ '--x': 240 }}>
-            <p className="p28 w500" data-reveal>{C.learned.eyebrow}</p>
-            <h2 className="p70" data-reveal><Lines lines={C.learned.headline} /></h2>
-          </div>
-          <div className="pk-w pk-learn" style={{ '--mw': 1420, '--mt': 86 }} data-stagger>
-            {C.learned.points.map((pt, i) => (
-              <div key={i} className="pk-learn-pt" data-reveal>
-                <span className="p23 w500 pk-learn-n" aria-hidden="true">{`0${i + 1}`}</span>
-                <h3 className="p28 pk-learn-h">{pt.title}</h3>
-                <p className="p26 w500 pk-learn-b">{para(pt.body)}</p>
+        {/* ---- what I learned: centred head, three black cards, as the
+                updated frame draws it ---- */}
+        <section className="pk-sec" style={{ '--pt': 196, '--pb': 0 }}>
+          <h2 className="p60 center" data-reveal>{C.learned.head}</h2>
+          <p className="p26 w500 center pk-learn-aside" data-reveal>{para(C.learned.aside)}</p>
+          <div className="pk-w pk-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
+            {C.learned.cards.map((c, i) => (
+              <div key={i} className="pk-card black pk-learn-c" data-reveal
+                   data-amp={[52, 76, 52][i]}>
+                <h3 className="p32 pk-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p26 w500 pk-learn-b">{para(c.body)}</p>
               </div>
             ))}
           </div>
