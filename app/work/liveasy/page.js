@@ -2,6 +2,7 @@ import { Page, Lines, Outro, para } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
 import OtherWork from '@/components/OtherWork'
 import Frame from '@/components/Frame'
+import Faq from '@/components/Faq'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/liveasy-copy'
@@ -27,8 +28,22 @@ export default function Liveasy() {
   return (
     <Page title="Liveasy" dark here="liveasy">
       <div className="lv du cine">
-        <CaseHero clip={media('liveasy-hero') || media('times-court')} className="lv-hero"
-                  name={ME.name} line={ME.line} credits={C.credits}>
+        {/* the updated frame drops the centred title card for the line on
+            the left of the film, three facts stacked under it, and a laptop
+            standing to the right */}
+        <CaseHero clip={media('liveasy-hero') || media('times-court')} className="lv-hero" title={
+          <div className="lv-open">
+            <div className="lv-open-copy" data-reveal>
+              <h1 className="p64 lv-open-line"><Lines lines={C.hero.line} /></h1>
+              <p className="lv-open-tags">
+                {C.hero.tags.map(t => <span key={t} className="p26 lv-open-tag">{t}</span>)}
+              </p>
+            </div>
+            <div className="lv-open-dev" aria-hidden="true" data-reveal data-amp="80">
+              <Frame kind="mac" w={760} clip={media('liveasy-open')} />
+            </div>
+          </div>
+        }>
           {C.intro.map((lines, i) => (
             <p key={i} className="p45 lv-intro" data-reveal><Lines lines={lines} /></p>
           ))}
@@ -73,9 +88,11 @@ export default function Liveasy() {
             band's first pixel - no gap at all, the cards read as sitting on
             top of it rather than above it. */}
         <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 150 }}>
-          <h2 className="p64 du-x lv-res-head" style={{ '--x': 261 }} data-reveal>
-            <Lines lines={C.research.headline} />
-          </h2>
+          <div className="du-x lv-res-head" style={{ '--x': 261 }}>
+            <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
+            <h2 className="p64" data-reveal><Lines lines={C.research.headline} /></h2>
+            <p className="p26 w500 lv-res-aside" data-reveal>{para(C.research.aside)}</p>
+          </div>
           <div className="lv-cards" data-stagger>
             {C.research.cards.map((c, i) => (
               <div key={i} className="lv-card" data-reveal>
@@ -105,25 +122,38 @@ export default function Liveasy() {
           </div>
         </section>
 
-        {/* ---- the redesign, one device a row. The copy comes first in the
-                middle row, which is the one the frame draws mirrored. ---- */}
-        <section className="du-sec" style={{ '--pt': 0, '--pb': 0 }}>
-          {C.solution.map((row, i) => {
-            const dev = (
-              <div key="d" className="lv-row-dev" data-reveal>
-                <Frame kind={row.dev} w={row.w} shot={C.shots[row.shot]} alt={row.alt} />
-              </div>
-            )
-            const copy = <p key="c" className="p50 lv-row-copy" data-reveal><Lines lines={row.lines} /></p>
-            return (
-              <div key={i} className="lv-row" data-stagger
-                   style={{ '--mt': row.mt, '--dx': row.dx, '--dw': row.w,
-                            '--cgap': row.cgap, '--cw': row.cw, '--cy': row.cy }}>
-                {row.copyFirst ? [copy, dev] : [dev, copy]}
-              </div>
-            )
-          })}
+        {/* ---- the redesign, three screens deep. One laptop a row, each with
+                its line centred underneath. ---- */}
+        <section className="du-sec" style={{ '--pt': 200, '--pb': 0 }}>
+          <div className="du-w lv-screens" style={{ '--mw': 1300 }} data-stagger>
+            {C.screens.map((sc, i) => (
+              <figure key={i} className="lv-screen" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <Frame kind="mac" w={1300} shot={C.shots[sc.shot]} />
+                <figcaption className="p32 w500 lv-screen-cap">
+                  <Lines lines={sc.lines} />
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
+
+        {/* ---- learnings ---- */}
+        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
+          <h2 className="p60 center lv-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
+          <p className="p26 w500 center lv-learn-aside" data-reveal>{para(C.learned.aside)}</p>
+          <div className="du-w lv-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
+            {C.learned.cards.map((c, i) => (
+              <div key={i} className="lv-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
+                <h3 className="p32 lv-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p26 w500 lv-learn-b">{para(c.body)}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- FAQ ---- */}
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} x={240} pt={240} />
 
         <OtherWork slug="liveasy" headX={156} other={{ pt: 334, pb: 0 }} />
         <Outro x={156} pt={164} pb={267} />

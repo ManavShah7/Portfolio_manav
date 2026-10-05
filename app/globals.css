@@ -1414,6 +1414,37 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .tm-owner-shot{height:100%;width:100%;background-position:50% 22% !important}
 .tm-owner-quote{margin:0;align-self:center;padding:calc(56*var(--u))}
 .tm-voices{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
+/* ---- the Times Media hero lockup ------------------------------------------
+   Centred, unlike Peak's: the line, the three facts in a row beneath it, and
+   the tablet standing below them running off the bottom of the first screen.
+   Absolutely positioned for the same reason Peak's is - neither `overflow` nor
+   a flex centre can go on .pin-first without re-scoping the view() timeline
+   the film animates on. */
+.tm-hero .pin-first::before{content:'';position:absolute;inset:0;z-index:0;
+  pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.30) 0%,
+    rgba(0,0,0,.46) 46%,rgba(0,0,0,.30) 100%)}
+.tm-open{position:absolute;left:0;right:0;top:calc(272*var(--u));z-index:1;
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 var(--m)}
+.tm-open-copy{text-align:center;color:#fff}
+.tm-open-line{letter-spacing:-.022em}
+.tm-open-tags{display:flex;flex-wrap:wrap;justify-content:center;
+  gap:calc(20*var(--u));margin-top:calc(44*var(--u))}
+.tm-open-tag{display:inline-block;padding:calc(12*var(--u)) calc(26*var(--u));
+  border-radius:calc(14*var(--u));background:rgba(20,20,22,.58);color:#F5F5F7;
+  font-weight:500;letter-spacing:-.006em;border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.tm-open-dev{margin-top:calc(62*var(--u))}
+
+@media (max-width:1068px){
+  .tm-open{top:auto;bottom:0;transform:none;justify-content:flex-end;
+    padding:0 var(--m)}
+  .tm-open-tags{gap:10px;margin-top:24px}
+  .tm-open-tag{padding:8px 16px;border-radius:10px}
+  .tm-open-dev{margin-top:32px}
+  .tm-open-dev .fr{width:min(300px,62vw) !important}
+}
+
 /* ---- hearing it back, and the learnings -----------------------------------
    The heading occupies the first cell of a 2x2, so the three quotes fill the
    other three - which is how the frame lays it out. */
@@ -1907,6 +1938,70 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 .ab-band-film::after{content:'';position:absolute;inset:0;
   background:var(--band-pink,#EF3888);mix-blend-mode:color}
 .ab-quote{color:#fff;width:calc(1310*var(--u));position:relative}
+
+/* ---- the Liveasy hero lockup ----------------------------------------------
+   Left, like Peak's: the line, three facts stacked under it, and a laptop
+   standing to the right of them. */
+.lv-hero .pin-first::before{content:'';position:absolute;inset:0;z-index:0;
+  pointer-events:none;background:linear-gradient(100deg,rgba(0,0,0,.66) 0%,
+    rgba(0,0,0,.40) 42%,rgba(0,0,0,.08) 78%)}
+/* `overflow:hidden` is safe HERE and not on .pin-first: the frame runs the
+   laptop off the right edge, and without a clip that widened the page by
+   167px. .pin-first cannot take it - that would re-scope the view() timeline
+   the film animates on - but this box is mine and nothing in it rides one. */
+.lv-open{position:absolute;left:0;right:0;top:50%;translate:0 -50%;z-index:1;
+  overflow:hidden;
+  display:grid;grid-template-columns:1fr auto;align-items:center;
+  gap:calc(70*var(--u));padding:0 0 0 calc(182*var(--u))}
+.lv-open-copy{color:#fff;max-width:calc(820*var(--u))}
+.lv-open-line{letter-spacing:-.022em}
+.lv-open-tags{display:flex;flex-direction:column;align-items:flex-start;
+  gap:calc(16*var(--u));margin-top:calc(50*var(--u))}
+.lv-open-tag{display:inline-block;padding:calc(12*var(--u)) calc(26*var(--u));
+  border-radius:calc(14*var(--u));background:rgba(20,20,22,.58);color:#F5F5F7;
+  font-weight:500;letter-spacing:-.006em;border:1px solid rgba(255,255,255,.14);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+/* the frame runs the laptop off the right edge of the screen */
+.lv-open-dev{margin-right:calc(-220*var(--u))}
+
+/* the pillars' eyebrow and aside */
+.lv-res-aside{margin-top:calc(34*var(--u));color:#A1A1A6;line-height:1.45;
+  max-width:calc(860*var(--u))}
+
+/* ---- the redesign, three screens deep -------------------------------------
+   One laptop a row at the full measure, each with its line centred under it. */
+.lv-screens{display:flex;flex-direction:column;gap:calc(150*var(--u))}
+.lv-screen{margin:0}
+.lv-screen-cap{display:block;margin-top:calc(54*var(--u));text-align:center;
+  color:#1D1D1F;letter-spacing:-.014em}
+
+/* ---- learnings ----------------------------------------------------------- */
+.lv-learn-head{margin-top:calc(14*var(--u))}
+.lv-learn-aside{margin:calc(30*var(--u)) auto 0;max-width:calc(1000*var(--u));
+  color:#6E6E73}
+.lv-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.lv-learn-c{background:#0A0A0A;color:#F5F5F7;border-radius:calc(20*var(--u));
+  padding:calc(54*var(--u)) calc(44*var(--u))}
+.lv-learn-h{letter-spacing:-.014em}
+.lv-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
+
+@media (max-width:1068px){
+  .lv-open{grid-template-columns:1fr;gap:32px;padding:0 var(--m);align-items:start}
+  .lv-open-copy{max-width:none}
+  .lv-open-tags{gap:10px;margin-top:26px}
+  .lv-open-tag{padding:8px 16px;border-radius:10px}
+  .lv-open-dev{margin-right:0}
+  .lv-open-dev .fr{width:min(420px,86vw) !important}
+  .lv-hero .pin-first::before{background:linear-gradient(180deg,
+    rgba(0,0,0,.5) 0%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.44) 100%)}
+  .lv-res-aside{margin-top:18px;max-width:none}
+  .lv-screens{gap:64px}
+  .lv-screen-cap{margin-top:24px}
+  .lv-learn{grid-template-columns:1fr;gap:16px}
+  .lv-learn-c{padding:28px}
+  .lv-learn-b{margin-top:18px}
+  .lv-learn-aside{margin-top:16px;max-width:none}
+}
 
 /* the two-column blocks: the artwork on the left, the words on the right */
 .ab .ab-two{display:grid;grid-template-columns:calc(877*var(--u)) 1fr;
