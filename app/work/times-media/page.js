@@ -198,7 +198,7 @@ export default function TimesMedia() {
                         <p className="p24 c-2 tm-iter-who">{c.who}</p>
                       </div>
                       <figure className="tm-iter-shot">
-                        <Frame kind={c.dev} w={c.dev === 'phone' ? 196 : 420}
+                        <Frame kind={c.dev} w={c.dev === 'phone' ? 290 : 620}
                                clip={media(`times-${c.slot}v1`)} />
                         <figcaption className="p23 w500 tm-iter-cap">{c.v1}</figcaption>
                       </figure>
@@ -211,7 +211,7 @@ export default function TimesMedia() {
                         <p className="p34 tm-iter-body">{para(c.body)}</p>
                       </div>
                       <figure className="tm-iter-shot">
-                        <Frame kind={c.dev} w={c.dev === 'phone' ? 196 : 420}
+                        <Frame kind={c.dev} w={c.dev === 'phone' ? 290 : 620}
                                clip={media(`times-${c.slot}v2`)} />
                         <figcaption className="p23 w500 tm-iter-cap"><Lines lines={c.v2} /></figcaption>
                       </figure>

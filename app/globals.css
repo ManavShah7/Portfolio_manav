@@ -1493,7 +1493,7 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
    `100%` is indefinite inside an auto track. */
 .tm-iter{background:#FFFFFF;border-radius:calc(22*var(--u));
   padding:calc(66*var(--u)) calc(70*var(--u));min-height:calc(430*var(--u));
-  display:grid;grid-template-columns:minmax(0,1fr) calc(480*var(--u));
+  display:grid;grid-template-columns:minmax(0,1fr) calc(660*var(--u));
   align-items:center;gap:calc(70*var(--u))}
 .tm-iter-copy{min-width:0}
 .tm-iter-quote{color:#1D1D1F;letter-spacing:-.016em}
