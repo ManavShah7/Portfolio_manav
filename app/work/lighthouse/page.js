@@ -30,8 +30,14 @@ function Screen({ shot, alt }) {
   if (!shot) return <Fill what="[ASSET] screen" h={620} />
   return (
     <div className="lh-screen">
+      {/* width and height are load-bearing, not decoration: these are lazy, and
+          without them the browser reserves no space, so the page is short until
+          each one loads and everything below it jumps down. The guard caught it
+          as eight entrances that never played - the footer was never reached
+          because it kept moving. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={shot.src} alt={alt || ''} loading="lazy" />
+      <img src={shot.src} alt={alt || ''} loading="lazy"
+           width={shot.w} height={shot.h} />
     </div>
   )
 }
@@ -88,7 +94,12 @@ export default function Lighthouse() {
             {C.problem.cards.map((c, i) => (
               <div key={i} className={`lh-prob${i === 0 ? ' lh-prob-lead' : ''}`}
                    data-reveal data-amp={i % 2 ? 76 : 52}>
-                {i === 0 && <Fill what="[ASSET] photo" />}
+                {i === 0 && (c.photo
+                  ? <span className="lh-prob-lead-film">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={c.photo} alt="" loading="lazy" />
+                    </span>
+                  : <Fill what="[ASSET] photo" />)}
                 <h3 className="p32 lh-prob-h"><Lines lines={c.head} /></h3>
                 {i > 0 && <p className="p26 w500 lh-prob-b">{para(c.body)}</p>}
               </div>
