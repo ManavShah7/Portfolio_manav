@@ -6,6 +6,7 @@ import { Lines, Footer, Outro } from '@/components/Chrome'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/home-copy'
+import { WORK } from '@/lib/work'
 
 // Built to Manav's frame in design units (.du), the same as the case studies:
 // --u is one design px, so every number here is read straight off the export.
@@ -13,6 +14,7 @@ const IMG = n => `/media/home/${n}.webp`
 // the film behind the opening line, if he has dropped one in - the frame's
 // gradient is the fallback and the poster
 const heroFilm = media('home-hero')
+const kindOf = slug => WORK.find(w => w.slug === slug)?.kind
 
 export default function Home() {
   return (
@@ -83,7 +85,16 @@ export default function Home() {
                         hover, which meant a phone saw four unlabelled
                         mockups. It lives inside the screen, not the device,
                         because the bezel is a different width on each. */}
-                    <span className="hm-dev-name p30">{d.name}</span>
+                    {/* name, and under it what the thing actually IS. The
+                        tiles used to be four names on four mockups, which
+                        asked whoever is reading to open all four to find out
+                        which one was relevant to them. `kind` comes from
+                        lib/work.js so the home page and the case study can
+                        never disagree. */}
+                    <span className="hm-dev-tag">
+                      <span className="hm-dev-name p30">{d.name}</span>
+                      <span className="hm-dev-kind p24">{kindOf(d.slug)}</span>
+                    </span>
                   </span>
                 )}
                 {/* eslint-disable-next-line @next/next/no-img-element */}

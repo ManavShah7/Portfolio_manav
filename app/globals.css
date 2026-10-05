@@ -763,6 +763,65 @@ html.reduced-motion video.loop{display:none}
 .pk-problem-card{min-height:calc(459*var(--u));padding:calc(56*var(--u))}
 @media (max-width:734px){ .pk-problem-big{height:56vw} .pk-two{grid-template-columns:1fr} .pk-problem-card{height:auto;min-height:200px;padding:24px} }
 
+/* ---- testing, what I learned, and the FAQ ---------------------------------
+   All three reuse the page's own objects: the eyebrow/headline/aside lockup
+   from the research section, and the white card and 28u gutter from the
+   findings bento, so none of them reads as bolted on. */
+/* 1448, not 1420: at 1420 each card gave its quote 568u of measure and his
+   longest line - "but the lifting weights in pounds." - wants 571. His words
+   do not get rewritten to fit a box. */
+.pk-tests{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u))}
+/* The research aside is three short lines and 350u suits it; this one is a
+   longer thought, so it gets its own measure rather than the copy being
+   squeezed to fit. Two classes, because `.pk-aside` is declared further down
+   the file and a single-class override loses on source order - the same trap
+   the footer label fell into. */
+.pk-aside.pk-aside-wide{max-width:calc(480*var(--u))}
+.pk-test{padding:calc(60*var(--u)) calc(64*var(--u)) calc(64*var(--u));
+  display:flex;flex-direction:column}
+.pk-test-quote{color:#1D1D1F;letter-spacing:-.016em;margin-bottom:calc(30*var(--u))}
+/* the label is the hinge between what was said and what was done, so it gets
+   the rule rather than a heading weight */
+.pk-test-label{margin-top:auto;padding-top:calc(34*var(--u));
+  border-top:1px solid rgba(0,0,0,.1);color:#86868B;
+  text-transform:uppercase;letter-spacing:.07em}
+.pk-test-body{margin-top:calc(14*var(--u));color:#1D1D1F}
+
+.pk-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.pk-learn-pt{display:flex;flex-direction:column}
+.pk-learn-n{color:#E8842A;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.pk-learn-h{margin-top:calc(18*var(--u));letter-spacing:-.012em}
+.pk-learn-b{margin-top:calc(16*var(--u));color:#6E6E73;line-height:1.45}
+
+.pk-faq-item{border-top:1px solid rgba(0,0,0,.12)}
+.pk-faq-item:last-child{border-bottom:1px solid rgba(0,0,0,.12)}
+.pk-faq-q{display:flex;align-items:flex-start;justify-content:space-between;
+  gap:calc(40*var(--u));padding:calc(34*var(--u)) 0;cursor:pointer;
+  list-style:none;letter-spacing:-.014em}
+/* Safari draws its own triangle through ::-webkit-details-marker, which
+   `list-style:none` alone does not remove. */
+.pk-faq-q::-webkit-details-marker{display:none}
+.pk-faq-q::after{content:'';flex:none;width:calc(19*var(--u));height:calc(19*var(--u));
+  margin-top:calc(9*var(--u));background:
+    linear-gradient(currentColor,currentColor) center/100% 2px no-repeat,
+    linear-gradient(currentColor,currentColor) center/2px 100% no-repeat;
+  color:#86868B;transition:background-size .3s var(--ease),opacity .3s var(--ease)}
+/* The vertical stroke collapses to nothing, which leaves a minus. Rotating
+   the whole mark instead - the obvious first move - does nothing you can see,
+   because a plus turned 90 degrees is still a plus. */
+.pk-faq-item[open] .pk-faq-q::after{background-size:100% 2px,2px 0;opacity:.55}
+.pk-faq-a{padding:0 0 calc(38*var(--u));max-width:calc(880*var(--u));
+  color:#6E6E73;line-height:1.45}
+
+@media (max-width:1068px){
+  .pk-tests,.pk-learn{grid-template-columns:1fr;gap:20px}
+  .pk-test{padding:28px}
+  .pk-test-label{margin-top:24px;padding-top:20px}
+  .pk-faq-q{padding:22px 0;gap:20px}
+  .pk-faq-q::after{width:16px;height:16px;margin-top:6px}
+  .pk-faq-a{padding-bottom:24px;max-width:none}
+}
+
 /* ---- the graphics in the problem cards (components/PeakProblem.js) --------
    The frame leaves both cards empty under their headings. These are drawn in
    the page's own greys at the page's own scale, so they hold proportion from
@@ -1254,11 +1313,16 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
    own height. */
 /* the name, on the screen, in a glass pill - the same object .ow-name is on
    the case studies' own carousels, so a device reads the same everywhere */
-.hm-dev-name{position:absolute;z-index:3;left:calc(30*var(--u));bottom:calc(26*var(--u));
-  color:#fff;font-weight:500;white-space:nowrap;letter-spacing:-.004em;
+.hm-dev-tag{position:absolute;z-index:3;left:calc(30*var(--u));bottom:calc(26*var(--u));
+  right:calc(30*var(--u));color:#fff;
   /* the films run from a night street to a bright sea, so the name carries its
      own shadow rather than a pill - the least chrome that stays legible */
   text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 16px rgba(0,0,0,.35)}
+.hm-dev-name{display:block;font-weight:500;white-space:nowrap;letter-spacing:-.004em}
+/* the kind is allowed to wrap - the phone tile's screen is narrow and `nowrap`
+   would push it straight out through the bezel */
+.hm-dev-kind{display:block;margin-top:calc(3*var(--u));font-weight:400;
+  letter-spacing:-.002em;color:rgba(255,255,255,.82)}
 .hm-d1 .hm-dev-screen{border-radius:1.25% / 2.2%}
 .hm-d2 .hm-dev-screen{border-radius:11.74% / 5.41%}
 .hm-d3 .hm-dev-screen{border-radius:2.15% / 1.37%}

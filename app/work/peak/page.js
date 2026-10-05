@@ -229,6 +229,44 @@ export default function Peak() {
           )}
         </div>
 
+        {/* ---- testing: his own two pieces of tester feedback, and what
+                each one changed. The case study used to run finished screens
+                straight into "what's next", which read as a product launch
+                rather than a design process. ---- */}
+        <section className="pk-sec bg-fill" style={{ '--pt': 170, '--pb': 176 }}>
+          <div className="pk-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.testing.eyebrow}</p>
+            <h2 className="p70" data-reveal><Lines lines={C.testing.headline} /></h2>
+            <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.testing.aside} /></p>
+          </div>
+          <div className="pk-w pk-tests" style={{ '--mw': 1448, '--mt': 92 }} data-stagger>
+            {C.testing.notes.map((n, i) => (
+              <div key={i} className="pk-card white pk-test" data-reveal>
+                <blockquote className="p38 pk-test-quote"><Lines lines={n.quote} /></blockquote>
+                <p className="p23 w500 pk-test-label">{C.testing.changed}</p>
+                <p className="p26 w500 pk-test-body">{para(n.body)}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- what I learned ---- */}
+        <section className="pk-sec" style={{ '--pt': 176, '--pb': 0 }}>
+          <div className="pk-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.learned.eyebrow}</p>
+            <h2 className="p70" data-reveal><Lines lines={C.learned.headline} /></h2>
+          </div>
+          <div className="pk-w pk-learn" style={{ '--mw': 1420, '--mt': 86 }} data-stagger>
+            {C.learned.points.map((pt, i) => (
+              <div key={i} className="pk-learn-pt" data-reveal>
+                <span className="p23 w500 pk-learn-n" aria-hidden="true">{`0${i + 1}`}</span>
+                <h3 className="p28 pk-learn-h">{pt.title}</h3>
+                <p className="p26 w500 pk-learn-b">{para(pt.body)}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ---- what's next ---- */}
         <section className="pk-sec" style={{ '--pt': 179, '--pb': 0 }}>
           <h2 className="p55 pk-x" style={{ '--x': 148 }} data-reveal><Lines lines={C.whatsNext.headline} /></h2>
@@ -241,6 +279,24 @@ export default function Peak() {
               </div>
             ))}
           </Gallery>
+        </section>
+
+        {/* ---- FAQ. Native <details>, so there is no script behind it, it
+                opens with a keyboard, and a printed or JS-off page shows every
+                answer rather than none. ---- */}
+        <section className="pk-sec" style={{ '--pt': 196, '--pb': 0 }}>
+          <div className="pk-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.faq.eyebrow}</p>
+            <h2 className="p70" data-reveal><Lines lines={C.faq.head} /></h2>
+          </div>
+          <div className="pk-w pk-faq" style={{ '--mw': 1180, '--mt': 76 }} data-stagger>
+            {C.faq.items.map(it => (
+              <details key={it.q} className="pk-faq-item" data-reveal>
+                <summary className="p30 pk-faq-q">{it.q}</summary>
+                <p className="p26 w500 pk-faq-a">{para(it.a)}</p>
+              </details>
+            ))}
+          </div>
         </section>
 
         <OtherWork slug="peak" head={C.whatsNext.other} headX={195} other={{ pt: 236, pb: 0 }} />
