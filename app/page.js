@@ -137,7 +137,7 @@ export default function Home() {
             collage with no way to reach him */}
         <Outro x={190} pt={196} pb={216} />
       </main>
-      <Footer />
+      <Footer seed="home" />
       <Intro />
       <Reveal />
     </>

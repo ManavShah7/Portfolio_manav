@@ -98,7 +98,7 @@ export default function About() {
           </div>
         </section>
       </main>
-      <Footer />
+      <Footer seed="about" />
       <Reveal />
     </>
   )

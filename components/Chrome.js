@@ -44,7 +44,27 @@ const FEET = [
   { label: 'Contact',  note: '+1 (617)749-8140',            href: PHONE },
 ]
 
-export function Footer() {
+// The last line on every page. His four, one per page rather than one at
+// random: picked from the page's own name, so it is stable between the server
+// render and the browser - a random pick would either mismatch on hydration or
+// have to flash a different line first. Six pages, four lines, so two repeat.
+const RUNS = 'this man runs on white monster and music'
+const BLESS = 'god bless the white monster'
+const SIGNOFF = {
+  home: RUNS,
+  about: 'fav things to do - music+football or music+gokarting',
+  peak: BLESS,
+  'times-media': 'greatest creations in the world - white monster, music, football and cars',
+  liveasy: RUNS,
+  lighthouse: BLESS,
+}
+// Mapped rather than hashed: hashing six page names over four lines happened
+// to never pick one of them and used two of them twice. A page keeps its own
+// line, which is also stable between the server render and the browser - a
+// random pick would either mismatch on hydration or flash a different one.
+const signoff = seed => SIGNOFF[seed] || RUNS
+
+export function Footer({ seed = 'home' }) {
   return (
     <footer className="ft du" aria-label="Contact">
       <div className="ft-row" data-stagger>
@@ -57,6 +77,7 @@ export function Footer() {
           </a>
         ))}
       </div>
+      <p className="ft-sign">{signoff(seed)}</p>
     </footer>
   )
 }
@@ -83,7 +104,7 @@ export function Page({ title, dark, here, children }) {
     <>
       <Nav here={here} />
       <main>{children}</main>
-      <Footer />
+      <Footer seed={here} />
       <Reveal />
     </>
   )

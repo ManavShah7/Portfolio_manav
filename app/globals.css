@@ -2352,6 +2352,11 @@ html.no-touch .ab-job-pick:hover{transform:translateY(calc(-6*var(--u)));
 .ft-row{display:grid;grid-template-columns:373fr 601fr 359fr 421fr;padding-left:calc(146*var(--u));
   padding-right:var(--m)}
 .ft-col{display:block;text-decoration:none;color:inherit}
+/* the last line on the page - quiet, lowercase, his */
+.ft-sign{margin-top:calc(104*var(--u));text-align:center;color:#86868B;
+  font-size:max(13px,calc(23*var(--u)));font-weight:400;letter-spacing:-.004em}
+@media (max-width:1068px){ .ft-sign{margin-top:48px} }
+
 .ft-label{display:block;font-weight:600;white-space:nowrap}
 /* the ramp is `.du .pNN`, two classes, and this band carries `.du` - so the
    override has to be two classes too or it never lands */
