@@ -32,11 +32,20 @@ export function Video({ src, poster, className = '', style, label, eager = false
     const warm = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && v.preload !== 'auto') v.preload = 'auto'
     }, { rootMargin: '500px 0px' })
-    // A little slack either side so a clip resting on the fold does not
-    // start and stop with every notch of the wheel.
+    // Play only while a decent part of THIS clip is on screen, not merely
+    // while it clips the fold. Lighthouse stacks two full-screen sticky films
+    // back to back under a sticky hero, and a bare `isIntersecting` test had
+    // three of them decoding at once, which is what glitching looks like.
+    // Measured at 0.35 it was still three: in the hand-over between two
+    // full-screen films the outgoing one, the incoming one and the hero were
+    // each more than a third visible at the same scroll position. At 0.6 only
+    // the clip actually filling the screen runs. The pair of numbers is
+    // hysteresis - start at 0.6, stop at 0.25 - so a clip resting on the fold
+    // cannot flap on every notch of the wheel.
     const run = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) v.play().catch(() => {}); else v.pause()
-    }, { rootMargin: '64px 0px' })
+      if (e.intersectionRatio >= 0.6) v.play().catch(() => {})
+      else if (e.intersectionRatio <= 0.25) v.pause()
+    }, { rootMargin: '64px 0px', threshold: [0, 0.25, 0.6, 1] })
     warm.observe(v); run.observe(v)
     return () => { warm.disconnect(); run.disconnect() }
   }, [])
