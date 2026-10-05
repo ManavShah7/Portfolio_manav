@@ -173,7 +173,7 @@ export default function Peak() {
             <h2 className="p70" data-reveal><Lines lines={C.compare.head} /></h2>
             <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.compare.aside} /></p>
           </div>
-          <div className="pk-w" style={{ '--mw': 1590, '--mt': 96 }}>
+          <div className="pk-w" style={{ '--mw': 1320, '--mt': 96 }}>
             <Compare cols={C.compare.cols} rows={C.compare.rows} keys={C.compare.key} />
           </div>
         </section>

@@ -9,19 +9,38 @@
    Breakpoints are Apple's: large > 1068, medium 735-1068, small <= 734.
    ========================================================================== */
 
-/* SF Pro, and only SF Pro.
-   Measured in Chromium on this machine: `-apple-system` and `system-ui` both
-   resolve to the system SF and they are NOT the same as naming
-   'SF Pro Display' - at 17px the system cut sets 5% wider, at 63px they
-   converge. That is the optical axis doing its job: SF Pro Text below ~20px,
-   SF Pro Display above it. Naming a cut yourself defeats it, so the stack
-   never does. ('SF Pro Text', 'SF Pro' and 'SF Pro Rounded' are not installed
-   families here at all - asking for them falls through to a serif.)
-   Off Apple hardware the self-hosted Display cut is all there is. */
-@font-face{font-family:'SF Pro Web';src:url('/fonts/SFProDisplay-Regular.otf') format('opentype');font-weight:400;font-display:swap}
-@font-face{font-family:'SF Pro Web';src:url('/fonts/SFProDisplay-Medium.otf') format('opentype');font-weight:500;font-display:swap}
-@font-face{font-family:'SF Pro Web';src:url('/fonts/SFProDisplay-Semibold.ttf') format('truetype');font-weight:600;font-display:swap}
-@font-face{font-family:'SF Pro Web';src:url('/fonts/SFProDisplay-Bold.otf') format('opentype');font-weight:700;font-display:swap}
+/* SF Pro Display, everywhere, and self-hosted.
+   This used to lead with `-apple-system` to let the system's optical axis do
+   its job - SF Pro Text below ~20px, SF Pro Display above it - which is what
+   Apple themselves do. The consequence was the one Manav spotted: letter
+   spacing that looks inconsistent between sizes.
+   The reason is that the whole tracking ramp below was measured off his Figma
+   frames, and those are set in SF Pro DISPLAY at every size. Display-measured
+   tracking laid over SF Pro Text, which is already about 5% wider by design,
+   over-loosens small copy - so body text and headings disagree on the same
+   page. Measured in Chromium on this machine, the two cuts differ by 5% at
+   17px and converge by 63px, which is exactly the size range the complaint
+   lives in.
+   So the self-hosted Display cut now leads the stack: one cut, one ramp that
+   is actually valid for it, and the same rendering on hardware that has no SF
+   at all. Before this, the four faces below were never fetched by any Mac -
+   `-apple-system` always matched first, and document.fonts reported all four
+   `unloaded`.
+   woff2 first (413KB for the set, against 1.37MB of otf/ttf); the originals
+   stay as the fallback source. The swap is nearly invisible on Apple hardware
+   because the fallback IS SF. */
+@font-face{font-family:'SF Pro Web';font-weight:400;font-display:swap;
+  src:url('/fonts/SFProDisplay-Regular.woff2') format('woff2'),
+      url('/fonts/SFProDisplay-Regular.otf') format('opentype')}
+@font-face{font-family:'SF Pro Web';font-weight:500;font-display:swap;
+  src:url('/fonts/SFProDisplay-Medium.woff2') format('woff2'),
+      url('/fonts/SFProDisplay-Medium.otf') format('opentype')}
+@font-face{font-family:'SF Pro Web';font-weight:600;font-display:swap;
+  src:url('/fonts/SFProDisplay-Semibold.woff2') format('woff2'),
+      url('/fonts/SFProDisplay-Semibold.ttf') format('truetype')}
+@font-face{font-family:'SF Pro Web';font-weight:700;font-display:swap;
+  src:url('/fonts/SFProDisplay-Bold.woff2') format('woff2'),
+      url('/fonts/SFProDisplay-Bold.otf') format('opentype')}
 
 :root{
   /* ink - Apple's six greys and nothing else */
@@ -70,7 +89,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{background:#FFFFFF;-webkit-text-size-adjust:100%}
 body{
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Web','Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-family:'SF Pro Web',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,Arial,sans-serif;
   font-size:17px;line-height:1.47059;font-weight:400;letter-spacing:-0.022em;
   color:var(--ink);background:#FFFFFF;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
@@ -842,7 +861,7 @@ html.reduced-motion video.loop{display:none}
 /* ---- competitive analysis (components/Compare.js) --------------------------
    Horizontal hairlines only and no boxed cells, at the same weight the FAQ
    uses, so the matrix belongs to the page rather than sitting on it. */
-.pk-cmp{padding:calc(56*var(--u)) calc(60*var(--u)) calc(48*var(--u))}
+.pk-cmp{padding:calc(46*var(--u)) calc(50*var(--u)) calc(40*var(--u))}
 .pk-cmp-t{width:100%;border-collapse:collapse;table-layout:fixed}
 .pk-cmp-t th,.pk-cmp-t td{text-align:center;vertical-align:middle;padding:0}
 /* the labels carry the reading, so they get the width and the type */
@@ -850,12 +869,12 @@ html.reduced-motion video.loop{display:none}
 .pk-cmp-col{display:block;font-weight:600;color:#F5F5F7;letter-spacing:-.01em}
 .pk-cmp-eg{display:block;margin-top:calc(6*var(--u));color:#86868B;font-weight:400;
   letter-spacing:-.006em}
-.pk-cmp-t thead th{padding-bottom:calc(34*var(--u));vertical-align:bottom}
+.pk-cmp-t thead th{padding-bottom:calc(28*var(--u));vertical-align:bottom}
 .pk-cmp-row{font-weight:500;color:#F5F5F7;letter-spacing:-.014em}
 /* The row height has to be set on `.pk-cmp-t tbody th,td` and not on
    `.pk-cmp-row`: the reset above is `.pk-cmp-t th` at (0,1,1) and a single
    class loses to it, so the rows stayed as tall as their own type. */
-.pk-cmp-t tbody th,.pk-cmp-t tbody td{padding:calc(28*var(--u)) 0}
+.pk-cmp-t tbody th,.pk-cmp-t tbody td{padding:calc(22*var(--u)) 0}
 .pk-cmp-t tbody tr{border-top:1px solid rgba(255,255,255,.1)}
 /* Peak's column is washed in its own ink rather than handed the lighter panel
    a pricing table would use - and the wash is rounded at both ends, so it
@@ -1029,7 +1048,9 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 /* One card per complaint now, each one copy on the left and the before/after
    pair on the right - a two-up grid could not hold a phone pair as well. */
 .pk-tests{display:grid;grid-template-columns:1fr;gap:calc(34*var(--u))}
-.pk-test{display:grid;grid-template-columns:minmax(0,1fr) auto;
+/* explicit, for the same reason .tm-iter is - two 196u phones plus their 54u
+   gap, rather than an auto track that could be sized by an asset's own width */
+.pk-test{display:grid;grid-template-columns:minmax(0,1fr) calc(446*var(--u));
   align-items:center;gap:calc(70*var(--u))}
 .pk-test-copy{display:flex;flex-direction:column}
 .pk-test-shots{display:flex;gap:calc(54*var(--u));align-items:flex-start}
@@ -1387,6 +1408,35 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .tm-owner-shot{height:100%;width:100%;background-position:50% 22% !important}
 .tm-owner-quote{margin:0;align-self:center;padding:calc(56*var(--u))}
 .tm-voices{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
+/* ---- feedbacks and iterations --------------------------------------------
+   Front: the complaint and the version that caused it. Back: what changed and
+   the version that replaced it, on black with the eyebrow in Apple's blue -
+   the one place on this page that is not the brand red, because it marks a
+   state rather than the brand. */
+.tm-iter-aside{margin-top:calc(44*var(--u));color:#6E6E73;line-height:1.45;
+  max-width:calc(560*var(--u))}
+.tm-iters{display:grid;grid-template-columns:1fr;gap:calc(34*var(--u))}
+/* The device column is an explicit width, not `auto`. An `auto` track sizes to
+   its content's max-content, and the mockup inside is an <img> whose intrinsic
+   width is the full asset - 1866px for the landscape iPad - so the track ate
+   938px of a 1097px card and the quote column collapsed to ZERO, setting one
+   word per line. `width:min(420u,100%)` on the frame does not help, because
+   `100%` is indefinite inside an auto track. */
+.tm-iter{background:#FFFFFF;border-radius:calc(22*var(--u));
+  padding:calc(66*var(--u)) calc(70*var(--u));min-height:calc(430*var(--u));
+  display:grid;grid-template-columns:minmax(0,1fr) calc(480*var(--u));
+  align-items:center;gap:calc(70*var(--u))}
+.tm-iter-copy{min-width:0}
+.tm-iter-quote{color:#1D1D1F;letter-spacing:-.016em}
+.tm-iter-who{margin-top:calc(26*var(--u))}
+.tm-iter-shot{margin:0;display:flex;flex-direction:column;align-items:center;
+  gap:calc(26*var(--u))}
+.tm-iter-cap{color:#6E6E73;text-align:center}
+.tm-iter-fix{background:#0A0A0A;color:#F5F5F7}
+.tm-iter-label{color:#0A84FF;font-weight:600;letter-spacing:-.006em}
+.tm-iter-body{margin-top:calc(26*var(--u));color:#F5F5F7;letter-spacing:-.014em}
+.tm-iter-fix .tm-iter-cap{color:#A1A1A6}
+
 /* ---- the card with a second side (components/Flip.js) ---------------------
    The front is in flow and sets the height; the back is laid over it and both
    faces hide their own reverse, so the pair turns as one object. The button is
@@ -1410,21 +1460,11 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
     linear-gradient(currentColor,currentColor) center/100% 2px no-repeat,
     linear-gradient(currentColor,currentColor) center/2px 100% no-repeat;
   transition:background-size .3s var(--ease)}
-.flip.is-open .flip-btn{background:rgba(255,255,255,.14);color:#F5F5F7}
+.flip.is-open .flip-btn{background:#FFFFFF;color:#1D1D1F}
 .flip.is-open .flip-btn::after{background-size:100% 2px,2px 0}
 html.no-touch .flip-btn:hover{background:rgba(0,0,0,.12)}
-html.no-touch .flip.is-open .flip-btn:hover{background:rgba(255,255,255,.22)}
+html.no-touch .flip.is-open .flip-btn:hover{background:#EDEDED}
 
-/* the solution side: his dark card, so turning it over is a change of ground
-   as well as of content */
-/* Two classes, because this block sits ABOVE `.tm-voice` in the file and a
-   single class loses on source order - the back face came out light grey with
-   white text on it, which is to say invisible. */
-.tm-voice.tm-fix{background:#0A0A0A;color:#F5F5F7;justify-content:flex-start}
-.tm-fix-eyebrow{color:#86868B;font-weight:500;letter-spacing:.06em;
-  text-transform:uppercase}
-.tm-fix-head{margin-top:calc(30*var(--u));font-weight:600;letter-spacing:-.016em}
-.tm-fix-body{margin-top:calc(34*var(--u));color:#A1A1A6;line-height:1.45;font-weight:500}
 
 /* less motion means no turn - the two sides simply swap */
 html.reduced-motion .flip-in,
@@ -1433,8 +1473,11 @@ html:not(.no-reduced-motion) .flip-in{transition:none}
 @media (max-width:1068px){
   .flip-btn{right:18px;bottom:18px;width:40px;height:40px}
   .flip-btn::after{width:15px;height:15px}
-  .tm-fix-head{margin-top:16px}
-  .tm-fix-body{margin-top:18px}
+  .tm-iter{grid-template-columns:1fr;gap:28px;padding:28px;min-height:0}
+  .tm-iter-aside{margin-top:18px;max-width:none}
+  .tm-iter-shot{gap:14px}
+  .tm-iter-shot .fr{width:min(190px,46vw) !important}
+  .tm-iter-who,.tm-iter-body{margin-top:16px}
 }
 .tm-voice{background:#f5f5f7;border-radius:calc(20*var(--u));padding:calc(72*var(--u)) calc(80*var(--u));
   min-height:calc(533*var(--u));display:flex;flex-direction:column}

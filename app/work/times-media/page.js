@@ -52,25 +52,15 @@ export default function TimesMedia() {
             <Media clip={V('owner')} className="tm-owner-shot" />
             <blockquote className="p34 tm-owner-quote">{para(C.research.quote)}</blockquote>
           </div>
-          {/* each complaint turns over to what was built for it */}
+          {/* plain cards again - the turn belongs further down the page, on
+              the iteration section, where there is a v1 and a v2 to turn
+              between */}
           <div className="du-w tm-voices" style={{ '--mw': 1161, '--mt': 97 }} data-stagger>
             {C.research.voices.map((v, i) => (
-              <div key={i} data-reveal data-amp={i % 2 ? 76 : 52}>
-                <Flip label={`what we built for ${v.who.join(' ')}`}
-                  front={
-                    <figure className="tm-voice">
-                      <blockquote className="p34">{para(v.lines)}</blockquote>
-                      <figcaption className="p24 c-2"><Lines lines={v.who} /></figcaption>
-                    </figure>
-                  }
-                  back={
-                    <div className="tm-voice tm-fix">
-                      <p className="p24 tm-fix-eyebrow">{C.research.fixLabel}</p>
-                      <p className="p34 tm-fix-head"><Lines lines={C.research.fixes[i].head} /></p>
-                      <p className="p26 tm-fix-body">{para(C.research.fixes[i].lines)}</p>
-                    </div>
-                  } />
-              </div>
+              <figure key={i} className="tm-voice" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <blockquote className="p34">{para(v.lines)}</blockquote>
+                <figcaption className="p24 c-2"><Lines lines={v.who} /></figcaption>
+              </figure>
             ))}
           </div>
         </section>
@@ -181,6 +171,51 @@ export default function TimesMedia() {
           <div className="du-w" style={{ '--mw': 1400 }}>
             <p className="p65 center" style={{ color: RED }} data-reveal data-swipe>
               <Lines lines={C.impact} swipe /></p>
+          </div>
+        </section>
+
+        {/* ---- feedbacks and iterations: each complaint turns over to what
+                changed because of it. The turn lives here and not on the
+                research quotes, because here there is a v1 and a v2 to turn
+                between. ---- */}
+        <section className="du-sec bg-fill tm-iter-sec" style={{ '--pt': 200, '--pb': 200 }}>
+          <div className="du-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.iterate.eyebrow}</p>
+            <h2 className="p70" data-reveal><Lines lines={C.iterate.head} /></h2>
+            <p className="p25 w500 tm-iter-aside" data-reveal><Lines lines={C.iterate.aside} /></p>
+          </div>
+          <div className="du-w tm-iters" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
+            {C.iterate.cards.map((c, i) => (
+              <div key={i} data-reveal data-amp={i % 2 ? 76 : 52}>
+                <Flip label={`what changed for ${c.who}`}
+                  front={
+                    <div className="tm-iter">
+                      <div className="tm-iter-copy">
+                        <blockquote className="p34 tm-iter-quote">{para(c.quote)}</blockquote>
+                        <p className="p24 c-2 tm-iter-who">{c.who}</p>
+                      </div>
+                      <figure className="tm-iter-shot">
+                        <Frame kind={c.dev} w={c.dev === 'phone' ? 196 : 420}
+                               clip={media(`times-${c.slot}v1`)} />
+                        <figcaption className="p23 w500 tm-iter-cap">{c.v1}</figcaption>
+                      </figure>
+                    </div>
+                  }
+                  back={
+                    <div className="tm-iter tm-iter-fix">
+                      <div className="tm-iter-copy">
+                        <p className="p24 tm-iter-label">{C.iterate.changed}</p>
+                        <p className="p34 tm-iter-body">{para(c.body)}</p>
+                      </div>
+                      <figure className="tm-iter-shot">
+                        <Frame kind={c.dev} w={c.dev === 'phone' ? 196 : 420}
+                               clip={media(`times-${c.slot}v2`)} />
+                        <figcaption className="p23 w500 tm-iter-cap"><Lines lines={c.v2} /></figcaption>
+                      </figure>
+                    </div>
+                  } />
+              </div>
+            ))}
           </div>
         </section>
 
