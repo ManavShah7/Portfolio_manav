@@ -20,6 +20,18 @@ export default function Faq({ eyebrow, head, items, x = 240, pt = 240, pb = 0, m
             {it.a
               ? <p className="p26 w500 faq-a">{para(it.a)}</p>
               : <div className="faq-a"><Fill what="[FILL] answer" h={110} /></div>}
+            {/* some answers are a lead, a few labelled ways and a line to
+                close - the AI one on the home page is the first */}
+            {it.list && (
+              <ul className="faq-list">
+                {it.list.map(l => (
+                  <li key={l.label} className="p26 w500 faq-li">
+                    <span className="faq-li-label">{l.label}</span> {para(l.lines)}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {it.tail && <p className="p26 w500 faq-a faq-tail">{para(it.tail)}</p>}
           </details>
         ))}
       </div>

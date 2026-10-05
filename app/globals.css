@@ -1106,6 +1106,16 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .faq-item[open] .faq-q::after{background-size:100% 2px,2px 0;opacity:.55}
 .faq-a{padding:0 0 calc(38*var(--u));max-width:calc(880*var(--u));
   color:#6E6E73;line-height:1.45}
+/* a structured answer: the lead keeps its gap, the ways sit under it on a
+   hairline rail, and the closing line comes back to the body measure */
+.faq-a + .faq-list{margin-top:calc(-20*var(--u))}
+.faq-list{list-style:none;max-width:calc(880*var(--u));
+  display:flex;flex-direction:column;gap:calc(14*var(--u));
+  padding:0 0 calc(26*var(--u)) calc(22*var(--u));
+  border-left:2px solid rgba(0,0,0,.1)}
+.faq-li{color:#6E6E73;line-height:1.45}
+.faq-li-label{color:#1D1D1F;font-weight:600}
+.faq-tail{padding-top:0}
 
 @media (max-width:1068px){
   .pk-tests,.pk-learn{grid-template-columns:1fr;gap:20px}
@@ -1119,6 +1129,8 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
   .faq-q{padding:22px 0;gap:20px}
   .faq-q::after{width:16px;height:16px;margin-top:6px}
   .faq-a{padding-bottom:24px;max-width:none}
+  .faq-list{max-width:none;padding-left:16px;padding-bottom:18px;gap:10px}
+  .faq-a + .faq-list{margin-top:-12px}
 }
 
 /* ---- the graphics in the problem cards (components/PeakProblem.js) --------

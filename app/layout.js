@@ -23,7 +23,14 @@ export const viewport = { themeColor: '#FFFFFF' }
 //
 // No smooth-scroll library. apple.com never eases the page scroll itself; wheel
 // and trackpad input stay native, and the damping lives on the things that move.
-const BOOT = `(function(){var d=document.documentElement;d.classList.add('js');
+const BOOT = `/* god bless the white monster */
+(function(){var d=document.documentElement;d.classList.add('js');
+/* for whoever opens the console. Not on the page, not in the way, and the FAQ
+   answers it properly for anyone who asks out loud. */
+try{console.log('%c god bless the white monster ',
+  'background:#0A0A0A;color:#EDEDED;padding:6px 12px;border-radius:999px;'
+  +'font:500 12px/1.7 -apple-system,BlinkMacSystemFont,sans-serif')}catch(e){}
+d.setAttribute('data-fuel','monster ultra white');
 d.classList.add(matchMedia('(prefers-reduced-motion: reduce)').matches?'reduced-motion':'no-reduced-motion');
 /* hover effects are gated on this the way apple.com gates theirs, so a phone
    never lands in a stuck hover state after a tap */
