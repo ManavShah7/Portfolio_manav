@@ -28,7 +28,10 @@ import { useEffect } from 'react'
 //     Once the scroll settles, anything above the trigger is played or shown.
 //   - Anything already above the viewport on load (a deep link, a restored
 //     scroll) is shown outright, with no performance.
-const STEP = 0.15      // seconds between items in a one-shot group
+// seconds between items in a one-shot group - halved on a phone, where a long
+// stagger reads as the page struggling to keep up
+const STEP = 0.15
+const step = () => (innerWidth <= 734 ? STEP / 2 : STEP)
 const TRIGGER = 0.85   // fraction of viewport height
 
 // the follower, all four numbers theirs
@@ -44,6 +47,10 @@ const WINDOW = 0.40    // and completes over the next 40%
 const TAU = 0.1        // seconds; the reference's ~100ms, now actually that
 const DT_MAX = 0.05    // a tab-switch must not arrive as one enormous step
 const AMP = [60, 80]   // travel, alternating down a group
+// A phone is a fifth of the width and the travel was written for a laptop, so
+// 60-80px of it there is a lurch rather than a lift. Everything moves less.
+const PHONE = 734
+const softness = () => (innerWidth <= PHONE ? 0.45 : 1)
 
 export default function Reveal() {
   useEffect(() => {
@@ -62,7 +69,7 @@ export default function Reveal() {
         // cards breaks lockstep; a lone block takes the shorter travel
         const sibs = [...el.parentElement.children].filter(n => n.hasAttribute('data-reveal'))
         const i = Math.max(0, sibs.indexOf(el))
-        const amp = Number(el.dataset.amp) || AMP[i % AMP.length]
+        const amp = (Number(el.dataset.amp) || AMP[i % AMP.length]) * softness()
         // will-change is NOT set here. The reference switches it on only while
         // the element is near and off again when it has arrived; setting it on
         // every tracked element at load promoted 40 layers at once on Peak,
@@ -207,7 +214,7 @@ export default function Reveal() {
       els.forEach((el, i) => {
         if (el.classList.contains('in')) return
         if (animate) {
-          el.style.setProperty('--d', `${i * STEP}s`)
+          el.style.setProperty('--d', `${i * step()}s`)
           el.classList.add('moving')
           el.addEventListener('transitionend', () => el.classList.remove('moving'), { once: true })
         } else {

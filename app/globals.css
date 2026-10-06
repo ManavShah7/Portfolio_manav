@@ -371,6 +371,35 @@ html.js.no-reduced-motion [data-swipe] .ln:nth-child(4) > span{transition-delay:
 /* the mask would otherwise crop descenders and any accent's overshoot */
 html.js.no-reduced-motion [data-swipe] .ln{padding:0 .06em .1em;margin:0 -.06em -.1em}
 
+/* ---- softer on a phone ----------------------------------------------------
+   Every number above was measured on a laptop. On a 390 screen the same travel
+   is a third of the viewport, the same scroll-linked parallax is asking a
+   phone GPU to recomposite full-bleed film every frame, and a 300ms-per-line
+   headline takes a second to finish on a page you are flicking through.
+   So on a phone everything moves less and settles sooner. */
+@media (max-width:734px){
+  html.js.no-reduced-motion [data-reveal]{transform:translate3d(0,var(--ry,14px),0)}
+  html.js.no-reduced-motion [data-reveal].in{
+    transition:opacity .45s ease var(--d,0s),transform .45s ease var(--d,0s)}
+  [data-reveal="far"]{--ry:30px}
+  /* the follower's hidden state matches its JS amplitude, which is scaled in
+     components/Reveal.js by the same factor */
+  html.js.no-reduced-motion .cine [data-reveal]:not([data-swipe]){
+    transform:translate3d(0,27px,0)}
+  /* the clipped line reveal, tightened: 300ms a line is theatrical on a
+     laptop and slow on a thumb */
+  html.js.no-reduced-motion [data-swipe] .ln > span{transition-duration:.4s}
+  html.js.no-reduced-motion [data-swipe] .ln:nth-child(1) > span{transition-delay:.03s}
+  html.js.no-reduced-motion [data-swipe] .ln:nth-child(2) > span{transition-delay:.18s}
+  html.js.no-reduced-motion [data-swipe] .ln:nth-child(3) > span{transition-delay:.33s}
+  html.js.no-reduced-motion [data-swipe] .ln:nth-child(4) > span{transition-delay:.48s}
+  /* the scroll-linked parallax is decoration, and it is the expensive kind:
+     a transform on full-bleed film, recomputed every frame. Off here. */
+  html.no-reduced-motion [data-sv]{animation:none !important}
+  /* the entrance stagger halves with it */
+  [data-stagger]{--step:.08s}
+}
+
 /* ---- card hover ------------------------------------------------------------
    Apple grows a card by a constant NUMBER OF PIXELS, not a percentage, so a
    small card and a large one move the same amount: --card-grow / the card's

@@ -12,12 +12,6 @@ import * as C from '@/lib/lighthouse-copy'
 export const metadata = {
   title: 'Lighthouse AI',
   description: 'Lighthouse AI - designing an AI career coach that turns endless advice into one clear path. Case study by Manav Shah.',
-  // MANAV: the spec says to drop this, and it should go - but the page still
-  // renders 17 visible [FILL] / [ASSET] blocks, and an indexed portfolio page
-  // full of dashed to-do boxes is worse than one search cannot see yet. Delete
-  // these two lines and the `wip: true` in lib/work.js the day the holes are
-  // filled and it is in search the next deploy.
-  robots: { index: false, follow: true },
 }
 
 const GREEN = '#029322'
