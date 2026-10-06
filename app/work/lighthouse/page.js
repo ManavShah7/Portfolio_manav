@@ -87,10 +87,10 @@ export default function Lighthouse() {
 
         {/* ---- 3c: the problem, on light ---- */}
         <section className="du-sec bg-fill" style={{ '--pt': 200, '--pb': 200 }}>
-          <h2 className="p60 center du-w" style={{ '--mw': 1300 }} data-reveal>
+          <h2 className="p60 center du-w" style={{ '--mw': 1020 }} data-reveal>
             <Lines lines={C.problem.head} />
           </h2>
-          <div className="du-w lh-probs" style={{ '--mw': 1448, '--mt': 120 }} data-stagger>
+          <div className="du-w lh-probs" style={{ '--mw': 1020, '--mt': 110 }} data-stagger>
             {C.problem.cards.map((c, i) => (
               <div key={i} className={`lh-prob${i === 0 ? ' lh-prob-lead' : ''}`}
                    data-reveal data-amp={i % 2 ? 76 : 52}>
@@ -127,13 +127,17 @@ export default function Lighthouse() {
         </section>
 
         {/* ---- key insight, on black ---- */}
-        <section className="du-sec bg-dark" style={{ '--pt': 240, '--pb': 240, '--mt': 240 }}>
-          <div className="du-x" style={{ '--x': 240 }}>
-            <p className="p28 w500" data-reveal>{C.insight.eyebrow}</p>
-            <h2 className="p65" data-reveal><Lines lines={C.insight.head} /></h2>
-            <p className="p25 w500 lh-aside" data-reveal>{para(C.insight.aside)}</p>
-          </div>
-          <div className="du-w lh-pats" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
+        {/* the one section that does not stack a heading over a row of cards:
+            the heading holds while the three patterns run past it, which is
+            the mechanism Peak's five patterns use */}
+        <section className="du-sec bg-dark" style={{ '--pt': 240, '--pb': 240 }}>
+          <div className="lh-held">
+            <div className="lh-held-head">
+              <p className="p28 w500" data-reveal>{C.insight.eyebrow}</p>
+              <h2 className="p65" data-reveal><Lines lines={C.insight.head} /></h2>
+              <p className="p25 w500 lh-aside" data-reveal>{para(C.insight.aside)}</p>
+            </div>
+          <div className="lh-pats" data-stagger>
             {C.insight.cards.map((c, i) => (
               <div key={i} className="lh-pat" data-reveal data-amp={i % 2 ? 76 : 52}>
                 <h3 className="p32 lh-pat-h"><Lines lines={c.head} /></h3>
@@ -143,6 +147,7 @@ export default function Lighthouse() {
                 </p>
               </div>
             ))}
+          </div>
           </div>
         </section>
 
