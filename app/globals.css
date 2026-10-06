@@ -1703,11 +1703,17 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
    inset cannot serve both: 30u a side left "Consumer iOS app" 99px and it
    wrapped. The tag insets by a fraction of the tile instead, which is tight on
    the phone and generous on the big ones. */
+/* A scrim under the label, Apple's marquee treatment: the films run from a
+   night street to a bright sea, and on the phone tile the name was landing on
+   somebody's legs. Now every label has the same ground whatever frame the clip
+   happens to be paused at. */
+.hm-dev-screen::after{content:'';position:absolute;left:0;right:0;bottom:0;
+  height:46%;z-index:2;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.28) 42%,
+    rgba(0,0,0,.72) 100%)}
 .hm-dev-tag{position:absolute;z-index:3;left:7%;bottom:calc(26*var(--u));
   right:7%;color:#fff;
-  /* the films run from a night street to a bright sea, so the name carries its
-     own shadow rather than a pill - the least chrome that stays legible */
-  text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 16px rgba(0,0,0,.35)}
+  text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .hm-dev-name{display:block;font-weight:500;white-space:nowrap;letter-spacing:-.004em}
 /* Quieter than the name and clearly a second thing rather than a second line
    of the title: a rung smaller, a touch of positive tracking against the tight
