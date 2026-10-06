@@ -117,9 +117,9 @@ export default function Lighthouse() {
           <div className="du-w lh-people" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
             {C.research.personas.map((pp, i) => (
               <div key={pp.who} className="lh-person" data-reveal data-amp={i % 2 ? 76 : 52}>
-                <Fill what="[ASSET] avatar" h={120} />
-                <p className="p28 lh-person-who">{pp.who}</p>
-                <p className="p23 w500 lh-person-label" style={{ color: GREEN }}>{pp.label}</p>
+                <span className="lh-person-rule" style={{ background: GREEN }} aria-hidden="true" />
+                <p className="p32 lh-person-label">{pp.label}</p>
+                <p className="p23 w500 lh-person-who">{pp.who}</p>
                 <p className="p26 w500 lh-person-line">{para(pp.line)}</p>
               </div>
             ))}
@@ -173,12 +173,11 @@ export default function Lighthouse() {
         <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="du-w lh-sols" style={{ '--mw': 1300 }} data-stagger>
             {C.solution.blocks.map((b, i) => (
-              <div key={i} className={`lh-sol${i % 2 ? ' is-flip' : ''}`}>
-                <div className="lh-sol-copy" data-reveal data-amp={50}>
+              <div key={i} className="lh-sol">
+                <div className="lh-sol-copy" data-reveal data-amp={50}
+                     style={{ '--ac': GREEN }}>
                   <h3 className="p42 lh-sol-h"><Lines lines={b.head} /></h3>
-                  {b.body
-                    ? <p className="p26 w500 lh-sol-b">{para(b.body)}</p>
-                    : <Fill what="[FILL] one line" h={90} />}
+                  {b.body && <p className="p26 w500 lh-sol-b">{para(b.body)}</p>}
                 </div>
                 <div className="lh-sol-shot" data-reveal data-amp={76}>
                   <Screen shot={b.shot} alt={b.head.join(' ')} />

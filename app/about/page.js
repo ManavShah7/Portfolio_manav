@@ -85,16 +85,21 @@ export default function About() {
         {/* ---- and the rest of it ---- */}
         <section className="du-sec" style={{ '--pt': 179, '--pb': 0 }}>
           <h2 className="p80 center" style={{ color: PINK }} data-reveal>{C.life.head}</h2>
-          <div className="ab-collage" style={{ '--ch': C.life.height, '--mt': 153 }} data-stagger>
-            {C.life.shots.map(s => {
-              const [x, y, w, h] = s.r
-              return (
-                /* eslint-disable-next-line @next/next/no-img-element */
-                <img key={s.n} src={INK(s.n)} alt={s.alt} loading="lazy" data-reveal
-                     style={{ '--x': x, '--y': y, '--w': w, '--h': h,
-                              ...(s.pos ? { objectPosition: s.pos } : null) }} />
-              )
-            })}
+          <div className="ab-collage" style={{ '--mt': 153 }} data-stagger>
+            {C.life.rows.map((row, i) => (
+              <div key={i} className="ab-row">
+                {row.map(s => {
+                  const [w, h] = s.r
+                  return (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img key={s.n} src={INK(s.n)} alt={s.alt} loading="lazy" data-reveal
+                         width={w} height={h}
+                         style={{ '--a': (w / h).toFixed(4), '--w': w, '--h': h,
+                                  ...(s.pos ? { objectPosition: s.pos } : null) }} />
+                  )
+                })}
+              </div>
+            ))}
           </div>
         </section>
       </main>

@@ -1766,8 +1766,17 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
      same height. A flat basis does not - the leftover is shared by grow but
      the basis is not, and the pair ends up ragged. */
   .hm-wall{--wg:8px}
-  .hm-wall-row{flex-wrap:wrap}
-  .hm-wall-item{flex:var(--a) 1 calc(var(--a) * 34%);border-radius:6px}
+  /* The rows stop being rows here. A flex basis proportional to aspect put a
+     near-square tile on a line by itself, and its own ratio then made it the
+     height of the screen - DECORUS and OL-Hyge came out enormous and mostly
+     empty while their neighbours were thumbnails.
+     One column, not two: the desktop rows equalise height by varying WIDTH,
+     which two fixed columns cannot do, so pairing left a grey hole under
+     whichever tile was shorter. The alternative was cropping to a common
+     height, and these are screenshots of his work - cutting into them to tidy
+     a gap is the wrong trade. Longer, but every piece is whole and legible. */
+  .hm-wall-row{display:grid;grid-template-columns:1fr;align-items:start}
+  .hm-wall-item{flex:none;border-radius:6px}
 }
 
 /* ---- Lighthouse, held back for a rewrite ---------------------------------
@@ -2065,8 +2074,10 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 .lh-probs{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u))}
 .lh-prob{background:#FFFFFF;border-radius:calc(20*var(--u));
   padding:calc(54*var(--u)) calc(48*var(--u))}
+/* 460, not 620: at 620 the photo card stood 470px against two 232px cards
+   beneath it and dominated the row rather than leading it. */
 .lh-prob-lead{grid-column:1 / -1;position:relative;overflow:hidden;
-  min-height:calc(620*var(--u));padding:0;background:#141416;
+  min-height:calc(460*var(--u));padding:0;background:#141416;
   display:flex;align-items:flex-start}
 .lh-prob-lead > .fill{position:absolute;inset:0;border-radius:0;border-width:0 0 2px;
   background:rgba(2,147,34,.08)}
@@ -2081,11 +2092,16 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 
 /* personas */
 .lh-people{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+/* No photographs of these three exist, so the card is type: a green rule, the
+   archetype as the heading, the name as its caption, the line underneath. A
+   stock face would have been a lie about a persona in any case. */
 .lh-person{background:#F5F5F7;border-radius:calc(20*var(--u));
   padding:calc(48*var(--u)) calc(44*var(--u))}
-.lh-person-who{margin-top:calc(34*var(--u));font-weight:600;letter-spacing:-.014em}
-.lh-person-label{margin-top:calc(8*var(--u));font-weight:600}
-.lh-person-line{margin-top:calc(24*var(--u));color:#6E6E73;line-height:1.45}
+.lh-person-rule{display:block;width:calc(56*var(--u));height:calc(4*var(--u));
+  border-radius:2px}
+.lh-person-label{margin-top:calc(32*var(--u));font-weight:600;letter-spacing:-.016em}
+.lh-person-who{margin-top:calc(12*var(--u));color:#86868B;font-weight:500}
+.lh-person-line{margin-top:calc(26*var(--u));color:#6E6E73;line-height:1.45}
 
 /* the pattern cards, each closing on what it led to */
 .lh-pats{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
@@ -2113,14 +2129,15 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 .lh-step-b{margin-top:calc(14*var(--u));color:#6E6E73;line-height:1.45}
 
 /* the solution blocks: flat screens, copy alternating side */
-.lh-sols{display:flex;flex-direction:column;gap:calc(180*var(--u))}
-/* 560, not 460: "Everything you learn, saved" at p42 wants 504u and the
-   headings here carry his own line breaks, so the column holds them */
-.lh-sol{display:grid;grid-template-columns:calc(560*var(--u)) 1fr;
-  gap:calc(90*var(--u));align-items:center}
-.lh-sol.is-flip .lh-sol-copy{order:2}
+/* Stacked, heading centred over its screen, as his frame draws it - not the
+   text-left / screen-right alternation the written spec described. The column
+   that used to hold the heading is gone with it, and so is the 560 it needed. */
+.lh-sols{display:flex;flex-direction:column;gap:calc(170*var(--u))}
+.lh-sol{display:block}
+.lh-sol-copy{text-align:center;max-width:calc(1100*var(--u));
+  margin:0 auto calc(54*var(--u))}
 .lh-sol-h{letter-spacing:-.02em}
-.lh-sol-b{margin-top:calc(30*var(--u));color:#6E6E73;line-height:1.45}
+.lh-sol-b{margin-top:calc(26*var(--u));color:#6E6E73;line-height:1.45}
 /* flat and unframed, per the spec - and a long capture scrolls inside this
    box rather than being cropped to fit it */
 .lh-screen{border:1px solid rgba(0,0,0,.12);border-radius:calc(16*var(--u));
@@ -2158,9 +2175,8 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
   .lh-core-body{margin-top:24px;max-width:none}
   /* the spec: no pinned or scroll-jacked sections on a phone, stack it all */
   .lh-sols{gap:72px}
-  .lh-sol{grid-template-columns:1fr;gap:28px}
-  .lh-sol.is-flip .lh-sol-copy{order:0}
-  .lh-sol-b{margin-top:16px}
+  .lh-sol-copy{margin-bottom:24px;max-width:none}
+  .lh-sol-b{margin-top:14px}
   .lh-screen{max-height:70vh}
   .fill{min-height:120px;padding:18px}
 }
@@ -2233,8 +2249,11 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 .ab .ab-two{display:grid;grid-template-columns:calc(877*var(--u)) 1fr;
   align-items:start;padding-left:calc(178*var(--u));padding-right:var(--m)}
 /* the frame sets the lockup at x303, inset 125 into its own column */
-.ab-logo{width:calc(468*var(--u));height:auto;
-  margin:calc(94*var(--u)) 0 0 calc(125*var(--u))}
+/* 468 wide with a 125 indent left 309px of its 665px column empty, and the
+   lockup read as an afterthought next to the heading beside it. It fills its
+   column now and centres in it. */
+.ab-logo{width:calc(620*var(--u));height:auto;display:block;
+  margin:calc(60*var(--u)) auto 0}
 .ab-head{margin-bottom:calc(52*var(--u))}
 .ab-body{max-width:calc(840*var(--u))}
 /* It was body-sized dark text under a paragraph of body-sized dark text, so
@@ -2250,7 +2269,8 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 /* where it happened. Each card is one of his own ink washes, cut from a strip
    of the card that carried no type and scaled to cover - they are abstract, so
    nothing reads as stretched. */
-.ab-jobs{width:calc(657*var(--u))}
+/* the column is 877; 657 left 220 of it empty beside the cards */
+.ab-jobs{width:calc(820*var(--u))}
 .ab-job{border-radius:calc(20*var(--u));background-size:cover;background-position:center;
   color:#fff;position:relative;display:flex;flex-direction:column;justify-content:flex-end;
   padding:calc(32*var(--u));text-align:left;border:0;font:inherit;appearance:none}
@@ -2292,11 +2312,17 @@ html.no-touch .ab-job-pick:hover{transform:translateY(calc(-6*var(--u)));
    so each one carries its own rect in design px */
 /* --ch, not --h: each image sets its own --h inline and they would shadow the
    wrapper's inside it */
-.ab-collage{position:relative;width:100%;height:calc(var(--ch)*var(--u));
+/* Justified rows, the same mechanism the home wall uses: a tile's flex grow is
+   its own aspect, so width = k*a and every tile in a row lands on one height
+   with both ends flush. Replaces the frame's absolute coordinates, which came
+   out 2891px tall at 1440 with three bands that shared no height and met no
+   edge. */
+.ab-collage{display:flex;flex-direction:column;gap:calc(14*var(--u));
   margin-top:calc(var(--mt)*var(--u))}
-.ab-collage > img{position:absolute;object-fit:cover;
-  left:calc(var(--x)*var(--u));top:calc(var(--y)*var(--u));
-  width:calc(var(--w)*var(--u));height:calc(var(--h)*var(--u))}
+.ab-row{display:flex;gap:calc(14*var(--u));align-items:flex-start}
+.ab-collage img{flex:var(--a) 1 0;min-width:0;display:block;width:100%;
+  height:auto;aspect-ratio:var(--w) / var(--h);object-fit:cover;
+  border-radius:calc(12*var(--u))}
 
 @media (max-width:1068px){
   .ab-band{height:auto;min-height:62vh;padding:18vh var(--m)}
@@ -2329,13 +2355,11 @@ html.no-touch .ab-job-pick:hover{transform:translateY(calc(-6*var(--u)));
      it is the same justified-pair flex the home wall uses: a 40% basis puts
      two on a line and the aspect-proportional grow makes the pair one flush
      band. The F1 shot leads at full width. */
-  .ab-collage{height:auto;margin-top:40px;display:flex;flex-wrap:wrap;gap:8px;
-    align-items:flex-start}
-  .ab-collage > img{position:static;left:auto;top:auto;display:block;
-    width:auto;height:auto;min-width:0;
-    flex:calc(var(--w) / var(--h)) 1 calc(var(--w) / var(--h) * 34%);
-    aspect-ratio:var(--w) / var(--h)}
-  .ab-collage > img:first-child{flex-basis:100%}
+  .ab-collage{gap:8px;margin-top:40px}
+  /* four across is a thumbnail each at 390, so the row becomes two columns */
+  .ab-row{gap:8px;display:grid;grid-template-columns:1fr 1fr;align-items:start}
+  .ab-row:first-child{grid-template-columns:1fr}
+  .ab-collage img{border-radius:6px}
 }
 @media (max-width:734px){
   .ab-job-row{grid-template-columns:1fr;gap:10px}
