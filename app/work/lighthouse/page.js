@@ -3,6 +3,7 @@ import { CaseHero } from '@/components/Case'
 import OtherWork from '@/components/OtherWork'
 import Faq from '@/components/Faq'
 import Fill from '@/components/Fill'
+import Frame from '@/components/Frame'
 import Lockup from '@/components/Lockup'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
@@ -27,6 +28,14 @@ const V = n => media(`lighthouse-${n}`)
 // being cropped. With no asset yet it is a placeholder of the same size, so
 // the layout is already the real one.
 function Screen({ shot, alt }) {
+  if (!shot) return <Fill what="[ASSET] screen" h={620} />
+  // In a device, like every other case study on the site. The screens are
+  // 1.72-1.87 against the landscape iPad's screen aspect of 1.7556, so they
+  // fill it with almost nothing cropped.
+  return <Frame kind="ipad-h" w={1220} still={shot.src} alt={alt} />
+}
+
+function FlatScreen({ shot, alt }) {
   if (!shot) return <Fill what="[ASSET] screen" h={620} />
   return (
     <div className="lh-screen">
@@ -196,15 +205,13 @@ export default function Lighthouse() {
                 copy" in the spec, so they are holes, not drafts I shipped. ---- */}
         <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
-          {C.learned.head
-            ? <h2 className="p60 center lh-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
-            : <div className="du-w" style={{ '--mw': 900, '--mt': 20 }}><Fill what="[FILL] heading" h={110} /></div>}
-          <div className="du-w lh-learn" style={{ '--mw': 1560, '--mt': 96 }} data-stagger>
+          <h2 className="p60 center lh-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
+          <div className="du-w lh-learn" style={{ '--mw': 1560, '--mt': 110 }} data-stagger>
             {C.learned.cards.map((c, i) => (
-              <div key={i} data-reveal data-amp={[52, 76, 52][i]}>
-                <Fill what={C.learned.drafts[i]
-                  ? `[FILL] card - draft: "${C.learned.drafts[i]}"`
-                  : '[FILL] card'} h={420} />
+              <div key={c.n} className="lh-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
+                <span className="p23 w500 lh-learn-n" style={{ color: GREEN }}>{c.n}</span>
+                <h3 className="p32 lh-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p26 w500 lh-learn-b">{para(c.body)}</p>
               </div>
             ))}
           </div>
