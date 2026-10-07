@@ -5,9 +5,9 @@
 import { Lines, para } from './Chrome'
 import Fill from './Fill'
 
-export default function Faq({ eyebrow, head, items, x = 240, pt = 240, pb = 0, mw = 1180 }) {
+export default function Faq({ eyebrow, head, items, id, x = 240, pt = 240, pb = 0, mw = 1180 }) {
   return (
-    <section className="du-sec" style={{ '--pt': pt, '--pb': pb }}>
+    <section className="du-sec" id={id} style={{ '--pt': pt, '--pb': pb }}>
       <div className="du-x" style={{ '--x': x }}>
         <p className="p28 w500" data-reveal>{eyebrow}</p>
         <h2 className="p70" data-reveal><Lines lines={head} /></h2>

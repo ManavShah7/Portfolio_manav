@@ -271,6 +271,55 @@ html.no-touch .nav-back:hover .nav-back-chev{transform:translateX(-3px);opacity:
 .nav-links a:hover,.nav-links a[aria-current]{color:#1D1D1F}
 @media (max-width:1068px){ .nav-in{padding-inline:var(--m)} }
 
+/* ---- the case-study section bar -------------------------------------------
+   apple.com's local nav, which is what sits under the global bar on one of
+   their product pages: the project's name on the left, its sections on the
+   right, and a hairline under whichever one you are reading.
+
+   Fixed, not sticky, so it costs the page no layout - a 44px band opening up
+   in the middle of a case study would move every measured number below it -
+   and it slides down from behind the global bar once the first section
+   arrives, so a case study still opens on nothing but its film. It leaves
+   again over the outro, so the last line is read on a clean page.
+
+   With no JS it just stays put and visible: the bar is a jump list over
+   content that is all there in order, so the page is finished without the
+   spy ever running. */
+:root{--chrome:calc(max(52px,76*var(--u)) + max(44px,60*var(--u)))}
+main [id]{scroll-margin-top:calc(var(--chrome) + 14px)}
+
+.lnav{position:fixed;left:0;right:0;top:max(52px,calc(76*var(--u)));z-index:55;
+  height:max(44px,calc(60*var(--u)));color:#1D1D1F;
+  background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.08)}
+html.js .lnav{transform:translateY(-102%);opacity:0;pointer-events:none;
+  transition:transform .55s var(--ease-soft),opacity .3s linear}
+html.js .lnav.on{transform:none;opacity:1;pointer-events:auto}
+/* reduced motion keeps the fade and drops the slide */
+html.js.reduced-motion .lnav{transform:none;transition:opacity .3s linear}
+.lnav-in{height:100%;display:flex;align-items:center;justify-content:space-between;
+  gap:calc(40*var(--u));padding-inline:max(var(--m),calc(190*var(--u)))}
+.lnav-name{font-size:max(13px,calc(24*var(--u)));font-weight:500;
+  letter-spacing:-.002em;white-space:nowrap}
+/* the row scrolls rather than wraps - eight sections do not fit a phone, and
+   a second line would double the bar's height */
+.lnav-links{position:relative;display:flex;gap:max(18px,calc(40*var(--u)));
+  font-size:max(12px,calc(21*var(--u)));min-width:0;overflow-x:auto;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.lnav-links::-webkit-scrollbar{display:none}
+.lnav-links a{color:#6E6E73;white-space:nowrap;transition:color .25s var(--ease);
+  padding-block:max(10px,calc(14*var(--u)))}
+.lnav-links a[aria-current]{color:#1D1D1F}
+html.no-touch .lnav-links a:hover{color:#1D1D1F}
+.lnav-ink{position:absolute;bottom:max(5px,calc(7*var(--u)));height:1.5px;
+  border-radius:2px;background:#1D1D1F;
+  transition:left .45s var(--ease-soft),width .45s var(--ease-soft)}
+html.reduced-motion .lnav-ink{transition:none}
+@media (max-width:734px){
+  .lnav-name{display:none}
+  .lnav-in{padding-inline:0}
+  .lnav-links{width:100%;padding-inline:var(--m)}
+}
+
 .gnav{position:sticky;top:0;z-index:50;height:var(--nav);
   background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.08)}
 .gnav.dark{background:rgba(22,22,23,.72);border-bottom-color:rgba(255,255,255,.08);color:var(--on-dark)}

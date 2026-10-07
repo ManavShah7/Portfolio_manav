@@ -8,6 +8,7 @@ import Lockup from '@/components/Lockup'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/lighthouse-copy'
+import LocalNav from '@/components/LocalNav'
 
 export const metadata = {
   title: 'Lighthouse AI',
@@ -45,9 +46,23 @@ function FlatScreen({ shot, alt }) {
   )
 }
 
+// The section bar's list. It lives next to the page rather than in the copy
+// file because these are navigation labels, not his words - and each id below
+// is on a section in the JSX.
+const SECS = [
+  { id: 'problem', label: 'Problem' },
+  { id: 'research', label: 'Research' },
+  { id: 'insight', label: 'Insight' },
+  { id: 'the-idea', label: 'The idea' },
+  { id: 'product', label: 'Product' },
+  { id: 'learnings', label: 'Learnings' },
+  { id: 'faq', label: 'FAQ' },
+]
+
 export default function Lighthouse() {
   return (
     <Page title="Lighthouse AI" dark here="lighthouse">
+      <LocalNav name="Lighthouse AI" items={SECS} />
       <div className="lh du cine">
         <CaseHero clip={V('hero')} className="lh-hero" title={
           <Lockup eyebrow={C.hero.eyebrow} head={C.hero.head}
@@ -89,7 +104,7 @@ export default function Lighthouse() {
         )}
 
         {/* ---- 3c: the problem, on light ---- */}
-        <section className="du-sec bg-fill" style={{ '--pt': 200, '--pb': 200 }}>
+        <section className="du-sec bg-fill" id="problem" style={{ '--pt': 200, '--pb': 200 }}>
           <h2 className="p60 center du-w" style={{ '--mw': 1020 }} data-reveal>
             <Lines lines={C.problem.head} />
           </h2>
@@ -111,7 +126,7 @@ export default function Lighthouse() {
         </section>
 
         {/* ---- research ---- */}
-        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+        <section className="du-sec" id="research" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="du-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.research.head} /></h2>
@@ -133,7 +148,7 @@ export default function Lighthouse() {
         {/* the one section that does not stack a heading over a row of cards:
             the heading holds while the three patterns run past it, which is
             the mechanism Peak's five patterns use */}
-        <section className="du-sec bg-dark" style={{ '--pt': 240, '--pb': 240 }}>
+        <section className="du-sec bg-dark" id="insight" style={{ '--pt': 240, '--pb': 240 }}>
           <div className="lh-held">
             <div className="lh-held-head">
               <p className="p28 w500" data-reveal>{C.insight.eyebrow}</p>
@@ -155,7 +170,7 @@ export default function Lighthouse() {
         </section>
 
         {/* ---- the core idea, and the system behind it ---- */}
-        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+        <section className="du-sec" id="the-idea" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="du-x" style={{ '--x': 240, '--ac': GREEN }}>
             <h2 className="p70 ac-i" data-reveal><Lines lines={C.core.head} /></h2>
             <p className="p30 w500 lh-core-lead" data-reveal>{para(C.core.lead)}</p>
@@ -178,7 +193,7 @@ export default function Lighthouse() {
         </section>
 
         {/* ---- the solution, flat screens, text alternating side ---- */}
-        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+        <section className="du-sec" id="product" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="du-w lh-sols" style={{ '--mw': 1300 }} data-stagger>
             {C.solution.blocks.map((b, i) => (
               <div key={i} className="lh-sol">
@@ -197,7 +212,7 @@ export default function Lighthouse() {
 
         {/* ---- learnings. His three card directions are marked "not final
                 copy" in the spec, so they are holes, not drafts I shipped. ---- */}
-        <section className="du-sec" style={{ '--pt': 240, '--pb': 0 }}>
+        <section className="du-sec" id="learnings" style={{ '--pt': 240, '--pb': 0 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
           <h2 className="p60 center lh-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
           <div className="du-w lh-learn" style={{ '--mw': 1560, '--mt': 110 }} data-stagger>
@@ -211,7 +226,7 @@ export default function Lighthouse() {
         </section>
 
         {/* ---- FAQ. The questions are his; the answers are holes. ---- */}
-        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} x={240} pt={240} />
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} id="faq" x={240} pt={240} />
 
         <OtherWork slug="lighthouse" head={C.other} headX={240} other={{ pt: 240, pb: 0 }} />
         <Outro x={240} pt={164} pb={220} />

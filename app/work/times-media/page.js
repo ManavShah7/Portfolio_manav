@@ -8,6 +8,7 @@ import Lockup from '@/components/Lockup'
 import { Media, Video } from '@/components/Media'
 import { media, slots } from '@/lib/clips'
 import * as C from '@/lib/times-copy'
+import LocalNav from '@/components/LocalNav'
 
 export const metadata = {
   title: 'Times Media',
@@ -25,9 +26,24 @@ const RED = '#F5222D'
 // Figma's auto leading means size = pitch / 1.2.
 const cap = (lead, rest) => <><b>{lead}</b>{rest}</>
 
+// The section bar's list. It lives next to the page rather than in the copy
+// file because these are navigation labels, not his words - and each id below
+// is on a section in the JSX.
+const SECS = [
+  { id: 'research', label: 'Research' },
+  { id: 'problem', label: 'Problem' },
+  { id: 'solution', label: 'Solution' },
+  { id: 'in-the-field', label: 'In the field' },
+  { id: 'impact', label: 'Impact' },
+  { id: 'feedback', label: 'Feedback' },
+  { id: 'learnings', label: 'Learnings' },
+  { id: 'faq', label: 'FAQ' },
+]
+
 export default function TimesMedia() {
   return (
     <Page title="Times Media" dark here="times-media">
+      <LocalNav name="Times Media" items={SECS} />
       <div className="tm du cine">
         <CaseHero clip={media('times-court')} className="tm-hero" title={
           <Lockup eyebrow="Times Media" head={C.hero.line}
@@ -42,7 +58,7 @@ export default function TimesMedia() {
         </CaseHero>
 
         {/* ---- research ---- */}
-        <section className="du-sec" style={{ '--pt': 185, '--pb': 62 }}>
+        <section className="du-sec" id="research" style={{ '--pt': 185, '--pb': 62 }}>
           <div className="du-w" style={{ '--mw': 1400 }}>
             <h2 className="p60 center" style={{ '--ac': RED }} data-reveal data-swipe>
               <Lines lines={C.research.headline} swipe />
@@ -71,7 +87,7 @@ export default function TimesMedia() {
         {/* ---- the four ways it broke. The deck holds still while all four
                 scroll past it, across the white/black seam - one sticky frame
                 spanning both sections. ---- */}
-        <div className="tm-run">
+        <div className="tm-run" id="problem">
           <section className="du-sec" style={{ '--pt': 185, '--pb': 104 }}>
             <h2 className="p70 du-x" style={{ '--x': 237 }} data-reveal data-swipe>
               <Lines lines={C.problem.headline} swipe />
@@ -96,7 +112,7 @@ export default function TimesMedia() {
           </div>
         </div>
 
-        <section className="du-sec bg-dark" style={{ '--pt': 0, '--pb': 0 }}>
+        <section className="du-sec bg-dark" id="solution" style={{ '--pt': 0, '--pb': 0 }}>
           {/* ---- the solution ---- */}
           <div className="du-w" style={{ '--mw': 1400, '--mt': 445 }}>
             <h2 className="p70 center" style={{ '--ac': RED }} data-reveal data-swipe>
@@ -148,7 +164,7 @@ export default function TimesMedia() {
 
         {/* ---- 3D street view. The updated frame turns the ground back to
                 white here and keeps it white all the way to the foot. ---- */}
-        <section className="du-sec" style={{ '--pt': 437, '--pb': 240 }}>
+        <section className="du-sec" id="in-the-field" style={{ '--pt': 437, '--pb': 240 }}>
           <h2 className="p70 du-x" style={{ '--x': 256 }} data-reveal data-swipe>
             <Lines lines={C.street.headline} swipe />
           </h2>
@@ -170,7 +186,7 @@ export default function TimesMedia() {
         </section>
 
         {/* ---- impact ---- */}
-        <section className="du-sec" style={{ '--pt': 233, '--pb': 200 }}>
+        <section className="du-sec" id="impact" style={{ '--pt': 233, '--pb': 200 }}>
           <div className="du-w" style={{ '--mw': 1400 }}>
             <p className="p65 center" style={{ color: RED }} data-reveal data-swipe>
               <Lines lines={C.impact} swipe /></p>
@@ -181,7 +197,7 @@ export default function TimesMedia() {
                 changed because of it. The turn lives here and not on the
                 research quotes, because here there is a v1 and a v2 to turn
                 between. ---- */}
-        <section className="du-sec bg-fill tm-iter-sec" style={{ '--pt': 120, '--pb': 200 }}>
+        <section className="du-sec bg-fill tm-iter-sec" id="feedback" style={{ '--pt': 120, '--pb': 200 }}>
           <div className="du-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.iterate.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.iterate.head} /></h2>
@@ -240,7 +256,7 @@ export default function TimesMedia() {
         </section>
 
         {/* ---- learnings ---- */}
-        <section className="du-sec bg-fill" style={{ '--pt': 0, '--pb': 200 }}>
+        <section className="du-sec bg-fill" id="learnings" style={{ '--pt': 0, '--pb': 200 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
           <h2 className="p60 center tm-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
           <p className="p26 w500 center tm-learn-aside" data-reveal>{para(C.learned.aside)}</p>
@@ -255,7 +271,7 @@ export default function TimesMedia() {
         </section>
 
         {/* ---- FAQ ---- */}
-        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} x={240} pt={240} />
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} id="faq" x={240} pt={240} />
 
         <OtherWork slug="times-media" head={C.other} headX={403} other={{ pt: 164, pb: 0 }} />
         <Outro x={164} pt={225} pb={267} />

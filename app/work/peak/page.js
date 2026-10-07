@@ -16,6 +16,7 @@ import { WORK } from '@/lib/work'
 
 const ME = WORK.find(w => w.slug === 'peak')
 import * as C from '@/lib/peak-copy'
+import LocalNav from '@/components/LocalNav'
 
 export const metadata = {
   title: 'Peak',
@@ -67,12 +68,27 @@ function NextSlide({ w }) {
   )
 }
 
+// The section bar's list. It lives next to the page rather than in the copy
+// file because these are navigation labels, not his words - and each id below
+// is on a section in the JSX.
+const SECS = [
+  { id: 'problem', label: 'Problem' },
+  { id: 'research', label: 'Research' },
+  { id: 'competitors', label: 'Competitors' },
+  { id: 'patterns', label: 'Patterns' },
+  { id: 'solution', label: 'Solution' },
+  { id: 'testing', label: 'Testing' },
+  { id: 'learnings', label: 'Learnings' },
+  { id: 'faq', label: 'FAQ' },
+]
+
 export default function Peak() {
   const friends = [V('friends1'), V('friends2')]
   const others = WORK.filter(w => w.slug !== 'peak')
 
   return (
     <Page title="Peak" dark here="peak">
+      <LocalNav name="Peak" items={SECS} />
       <div className="pk du cine">
         {/* ---- the film, and the four opening lines on black ----
                 The updated frame drops the centred title card for a lockup on
@@ -88,7 +104,7 @@ export default function Peak() {
         </CaseHero>
 
         {/* ---- problems ---- */}
-        <section className="pk-sec pk-problems" style={{ '--pt': 150, '--pb': 140 }}>
+        <section className="pk-sec pk-problems" id="problem" style={{ '--pt': 150, '--pb': 140 }}>
           <h2 className="p60 center" data-reveal><Lines lines={C.problem.headline} /></h2>
           <div className="pk-w" style={{ '--mw': 886, '--mt': 60 }}>
             {/* three apps, three phones - the card said it in words and drew
@@ -120,7 +136,7 @@ export default function Peak() {
         </section>
 
         {/* ---- research ---- */}
-        <section className="pk-sec" style={{ '--pt': 200, '--pb': 0 }}>
+        <section className="pk-sec" id="research" style={{ '--pt': 200, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
             <h2 className="p70" style={{ '--ac': '#E01D85' }} data-reveal><Lines lines={C.research.headline} /></h2>
@@ -158,7 +174,7 @@ export default function Peak() {
         </section>
 
         {/* ---- competitive analysis ---- */}
-        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
+        <section className="pk-sec" id="competitors" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.compare.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.compare.head} /></h2>
@@ -174,7 +190,7 @@ export default function Peak() {
                 sticky inside a grid cell, so it is CSS and no script. The
                 chart card leads because it is the finding the other four sit
                 under. ---- */}
-        <section className="pk-sec bg-fill" style={{ '--pt': 200, '--pb': 200 }}>
+        <section className="pk-sec bg-fill" id="patterns" style={{ '--pt': 200, '--pb': 200 }}>
           <div className="pk-stages">
             <div className="pk-stages-head">
               <h2 className="p70" data-reveal><Lines lines={C.stages.head} /></h2>
@@ -211,7 +227,7 @@ export default function Peak() {
         </section>
 
         {/* ---- solution ---- */}
-        <section className="pk-sec bg-dark pk-solution" style={{ '--pt': 200, '--pb': 0 }}>
+        <section className="pk-sec bg-dark pk-solution" id="solution" style={{ '--pt': 200, '--pb': 0 }}>
           <h2 className="p70 center" data-reveal>
             <span className="ln">{C.solution.headline[0]}</span>
             <span className="ln">{C.solution.headline[1]}<span className="pk-orange">{C.solution.headAccent}</span></span>
@@ -309,7 +325,7 @@ export default function Peak() {
                 each one changed. The case study used to run finished screens
                 straight into "what's next", which read as a product launch
                 rather than a design process. ---- */}
-        <section className="pk-sec bg-fill" style={{ '--pt': 200, '--pb': 200 }}>
+        <section className="pk-sec bg-fill" id="testing" style={{ '--pt': 200, '--pb': 200 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.testing.eyebrow}</p>
             <h2 className="p70" data-reveal><Lines lines={C.testing.headline} /></h2>
@@ -358,7 +374,7 @@ export default function Peak() {
 
         {/* ---- what I learned: centred head, three black cards, as the
                 updated frame draws it ---- */}
-        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
+        <section className="pk-sec" id="learnings" style={{ '--pt': 240, '--pb': 0 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
           <h2 className="p60 center pk-learn-head" data-reveal>{C.learned.head}</h2>
           <p className="p26 w500 center pk-learn-aside" data-reveal>{para(C.learned.aside)}</p>
@@ -388,7 +404,7 @@ export default function Peak() {
         </section>
 
         {/* ---- FAQ ---- */}
-        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} x={240} pt={240} />
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} id="faq" x={240} pt={240} />
 
         <OtherWork slug="peak" head={C.whatsNext.other} headX={195} other={{ pt: 236, pb: 0 }} />
         <Outro x={195} pt={164} pb={220} />
