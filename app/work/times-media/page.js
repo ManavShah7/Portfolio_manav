@@ -68,7 +68,8 @@ export default function TimesMedia() {
             {/* no forced ratio: the column is 500 wide and the card 532 tall,
                 so a 1:1 square overflowed it by 32px and shoved the quote
                 across. It fills its own column and crops instead. */}
-            <Media clip={V('owner')} className="tm-owner-shot" />
+            <Media clip={V('owner')} className="tm-owner-shot"
+                   alt="Dipesh Shah, who runs Times Media, on a call at a client event" />
             <blockquote className="p34 tm-owner-quote">{para(C.research.quote)}</blockquote>
           </div>
           {/* plain cards again - the turn belongs further down the page, on
@@ -108,7 +109,8 @@ export default function TimesMedia() {
           </section>
 
           <div className="tm-run-pin" aria-hidden="true">
-            <Frame kind="ipad" w={703} clip={V('problem')} />
+            <Frame kind="ipad" w={703} clip={V('problem')}
+                   alt="The PowerPoint deck every board used to live in, scrolling slide by slide" />
           </div>
         </div>
 
@@ -132,7 +134,8 @@ export default function TimesMedia() {
           </h3>
           <div className="tm-site">
             <div className="tm-site-media" data-reveal>
-              <Frame kind="mac" w={905} clip={V('hero')} data-sv="rise" />
+              <Frame kind="mac" w={905} clip={V('hero')} data-sv="rise"
+                     alt="The new Times Media site, with its live board map and booking call to action" />
             </div>
             <p className="p38 tm-site-copy" data-reveal>{para(C.solution.site)}</p>
           </div>
@@ -169,12 +172,35 @@ export default function TimesMedia() {
             <Lines lines={C.street.headline} swipe />
           </h2>
           <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal>
-            <Frame kind="ipad" w={1221} clip={V('street')} data-sv="rise" />
+            <Frame kind="ipad" w={1221} clip={V('street')} data-sv="rise"
+                   alt="A board previewed in 3D Street View, from the road a driver would see it from" />
             <p className="p38 center tm-cap">{para(C.street.shots[0].line)}</p>
           </div>
-          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 342 }} data-reveal>
-            <Frame kind="ipad" w={1221} clip={V('reach')} data-sv="rise" />
-            <p className="p38 center tm-cap">{para(C.street.shots[1].line)}</p>
+          {/* the score the booking map puts on every board - the one piece of
+              original product thinking on this page the copy never named.
+              The screen that USES it holds on the left while the four inputs
+              behind it run past on the right, the same way the deck holds for
+              the four ways it broke further up the page. */}
+          <div className="du-w tm-score-run" style={{ '--mw': 1448, '--mt': 280 }}>
+            <div className="tm-score-pin">
+              <div className="tm-score-pin-in">
+                <Frame kind="ipad" w={703} clip={V('reach')}
+                       alt="The reach panel for a board, with the traffic around it" />
+                <p className="p23 w500 tm-score-cap">{para(C.street.shots[1].line)}</p>
+              </div>
+            </div>
+            <div className="tm-score-list" data-stagger>
+              <div className="tm-score-head">
+                <h3 className="p60" data-reveal><Lines lines={C.street.score.head} /></h3>
+                <p className="p26 w500 tm-score-lead" data-reveal>{para(C.street.score.lead)}</p>
+              </div>
+              {C.street.score.inputs.map((it, i) => (
+                <div key={it.label} className="tm-score-c" data-reveal data-amp={i % 2 ? 76 : 52}>
+                  <p className="p48 tm-score-h">{it.label}</p>
+                  <p className="p26 w500 tm-score-b">{it.body}</p>
+                </div>
+              ))}
+            </div>
           </div>
           <div className="du-w tm-field" style={{ '--mw': 1296, '--mt': 281 }} data-stagger>
             <div data-reveal><Frame kind="ipad" w={883} shot={C.shots.maint} alt="Maintenance requests in the admin panel" /></div>
@@ -185,11 +211,27 @@ export default function TimesMedia() {
           </p>
         </section>
 
-        {/* ---- impact ---- */}
+        {/* ---- impact. Four figures, each with the line that makes it true
+                underneath - his three slogans stay, but as the close rather
+                than as the whole section. ---- */}
         <section className="du-sec" id="impact" style={{ '--pt': 233, '--pb': 200 }}>
-          <div className="du-w" style={{ '--mw': 1400 }}>
-            <p className="p65 center" style={{ color: RED }} data-reveal data-swipe>
-              <Lines lines={C.impact} swipe /></p>
+          <p className="p28 w500 center" data-reveal>{C.impact.eyebrow}</p>
+          <h2 className="p60 center tm-learn-head" data-reveal><Lines lines={C.impact.head} /></h2>
+          <div className="du-w tm-metrics" style={{ '--mw': 1448, '--mt': 130 }} data-stagger>
+            {C.impact.figures.map((f, i) => (
+              <div key={f.label} className="tm-metric" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <p className="p70 tm-metric-n">{f.n}</p>
+                <p className="p28 tm-metric-l">{f.label}</p>
+                <p className="p23 w500 tm-metric-b">{para(f.note)}</p>
+              </div>
+            ))}
+          </div>
+          {/* inside its own measure, like every other swipe headline here -
+              the clip's -.06em bleed hangs 2px off the viewport otherwise */}
+          <div className="du-w tm-impact-close" style={{ '--mw': 1400 }}>
+            <p className="p48 center" style={{ color: RED }} data-reveal data-swipe>
+              <Lines lines={C.impact.close} swipe />
+            </p>
           </div>
         </section>
 
@@ -210,12 +252,14 @@ export default function TimesMedia() {
                   front={
                     <div className="tm-iter">
                       <div className="tm-iter-copy">
+                        <p className="p23 w500 tm-iter-tag">{`${C.iterate.problem} 0${i + 1}`}</p>
                         <blockquote className="p34 tm-iter-quote">{para(c.quote)}</blockquote>
                         <p className="p24 c-2 tm-iter-who">{c.who}</p>
+                        <p className="p23 w500 tm-iter-turn" aria-hidden="true">{C.iterate.turn}</p>
                       </div>
                       <figure className="tm-iter-shot">
                         <Frame kind={c.dev} w={c.dev === 'phone' ? 290 : 620}
-                               clip={media(`times-${c.slot}v1`)} />
+                               clip={media(`times-${c.slot}v1`)} alt={`Before: ${c.v1.replace(/^v1 /, '')}`} />
                         <figcaption className="p23 w500 tm-iter-cap">{c.v1}</figcaption>
                       </figure>
                     </div>
@@ -223,12 +267,13 @@ export default function TimesMedia() {
                   back={
                     <div className="tm-iter tm-iter-fix">
                       <div className="tm-iter-copy">
-                        <p className="p24 tm-iter-label">{C.iterate.changed}</p>
+                        <p className="p23 w500 tm-iter-tag tm-iter-tag-fix">{`${C.iterate.changed} 0${i + 1}`}</p>
                         <p className="p34 tm-iter-body">{para(c.body)}</p>
                       </div>
                       <figure className="tm-iter-shot">
                         <Frame kind={c.dev} w={c.dev === 'phone' ? 290 : 620}
-                               clip={media(`times-${c.slot}v2`)} />
+                               clip={media(`times-${c.slot}v2`)}
+                               alt={`After: ${c.v2.join(' ').replace(/^v2 /, '')}`} />
                         <figcaption className="p23 w500 tm-iter-cap"><Lines lines={c.v2} /></figcaption>
                       </figure>
                     </div>
@@ -241,11 +286,16 @@ export default function TimesMedia() {
         {/* ---- hearing it back: the heading takes the first cell of the
                 grid and the three quotes take the other three ---- */}
         <section className="du-sec bg-fill" style={{ '--pt': 0, '--pb': 200 }}>
-          <div className="du-w tm-heard" style={{ '--mw': 1448 }} data-stagger>
-            <div className="tm-heard-head" data-reveal>
-              <h2 className="p55"><Lines lines={C.heard.head} /></h2>
-              <p className="p25 w500 tm-heard-aside"><Lines lines={C.heard.aside} /></p>
-            </div>
+          <p className="p28 w500 center" data-reveal>{C.heard.eyebrow}</p>
+          <h2 className="p60 center tm-learn-head" data-reveal><Lines lines={C.heard.head} /></h2>
+          {/* the owner's is the lead - the only one carrying a number - and the
+              two people who use it every day sit under it, so this reads as
+              testimony with a shape rather than three equal boxes */}
+          <figure className="du-w tm-lead-q" style={{ '--mw': 1300, '--mt': 130 }} data-reveal>
+            <blockquote className="p55 center"><Lines lines={C.heard.lead.lines} /></blockquote>
+            <figcaption className="p24 center tm-lead-who">{C.heard.lead.who}</figcaption>
+          </figure>
+          <div className="du-w tm-heard" style={{ '--mw': 1300, '--mt': 130 }} data-stagger>
             {C.heard.quotes.map((q, i) => (
               <figure key={i} className="tm-heard-card" data-reveal data-amp={i % 2 ? 76 : 52}>
                 <blockquote className="p34"><Lines lines={q.lines} /></blockquote>
@@ -263,8 +313,8 @@ export default function TimesMedia() {
           <div className="du-w tm-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
             {C.learned.cards.map((c, i) => (
               <div key={i} className="tm-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
-                <h3 className="p32 tm-learn-h"><Lines lines={c.head} /></h3>
-                <p className="p26 w500 tm-learn-b">{para(c.body)}</p>
+                <h3 className="p28 tm-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p24 tm-learn-b">{para(c.body)}</p>
               </div>
             ))}
           </div>

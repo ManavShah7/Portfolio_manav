@@ -752,6 +752,7 @@ html.reduced-motion video.loop{display:none}
    negative again below 19 - the same ramp as `.t-*` above, measured off
    apple.com. Set at 0 the headlines read loose and soft, which is what made
    the page look like it was set in something other than SF Pro. */
+.du .p96{font-size:calc(96*var(--u));line-height:1.12;font-weight:600;letter-spacing:-.019em}
 .du .p80{font-size:calc(80*var(--u));line-height:1.19;font-weight:600;letter-spacing:-.015em}
 .du .p70{font-size:calc(70*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.011em}
 .du .p65{font-size:calc(65*var(--u));line-height:1.2;font-weight:600;letter-spacing:-.009em}
@@ -779,14 +780,14 @@ html.reduced-motion video.loop{display:none}
 .du .w500{font-weight:500}
 .du .p28 b,.du .p32 b{font-weight:600}
 @media (max-width:1068px){
-  .du .p80{font-size:56px} .du .p70{font-size:48px} .du .p65{font-size:44px} .du .p60{font-size:40px}
+  .du .p96{font-size:60px} .du .p80{font-size:56px} .du .p70{font-size:48px} .du .p65{font-size:44px} .du .p60{font-size:40px}
   .du .p59{font-size:40px} .du .p46{font-size:32px} .du .p30{font-size:19px}
   .du .p64{font-size:44px} .du .p50{font-size:36px}
   .du .p55{font-size:40px} .du .p48{font-size:34px} .du .p45{font-size:32px} .du .p34{font-size:22px} .du .p42{font-size:30px} .du .p40{font-size:28px}
   .du .p38{font-size:28px} .du .p32{font-size:21px} .du .p28,.du .p27{font-size:21px} .du .p26,.du .p25{font-size:19px}
   .du .p24,.du .p23{font-size:17px} .du .p20{font-size:15px}
   .du .p64{letter-spacing:-.002em} .du .p50{letter-spacing:.002em}
-  .du .p80{letter-spacing:-.005em} .du .p70{letter-spacing:-.003em} .du .p65{letter-spacing:-.002em}
+  .du .p96{letter-spacing:-.008em} .du .p80{letter-spacing:-.005em} .du .p70{letter-spacing:-.003em} .du .p65{letter-spacing:-.002em}
   .du .p60,.du .p59,.du .p55{letter-spacing:0em} .du .p48{letter-spacing:.003em}
   .du .p46,.du .p45{letter-spacing:.004em} .du .p42{letter-spacing:.005em}
   .du .p40,.du .p38{letter-spacing:.007em} .du .p34{letter-spacing:.01em}
@@ -794,14 +795,14 @@ html.reduced-motion video.loop{display:none}
   .du .p24,.du .p23{letter-spacing:-.022em} .du .p20{letter-spacing:-.016em}
 }
 @media (max-width:734px){
-  .du .p80{font-size:40px} .du .p70{font-size:34px} .du .p65{font-size:32px} .du .p60{font-size:30px}
+  .du .p96{font-size:44px} .du .p80{font-size:40px} .du .p70{font-size:34px} .du .p65{font-size:32px} .du .p60{font-size:30px}
   .du .p59{font-size:32px} .du .p46{font-size:26px} .du .p30{font-size:17px}
   .du .p64{font-size:32px} .du .p50{font-size:27px}
   .du .p55{font-size:30px} .du .p48{font-size:28px} .du .p45{font-size:26px} .du .p34{font-size:19px} .du .p42{font-size:24px} .du .p40{font-size:24px}
   .du .p38{font-size:24px} .du .p32{font-size:19px} .du .p28,.du .p27{font-size:19px} .du .p26,.du .p25{font-size:17px}
   .du .p24,.du .p23{font-size:16px} .du .p20{font-size:14px}
   .du .p64{letter-spacing:.004em} .du .p50{letter-spacing:.008em}
-  .du .p80{letter-spacing:0em} .du .p70,.du .p65,.du .p59{letter-spacing:.004em}
+  .du .p96{letter-spacing:-.003em} .du .p80{letter-spacing:0em} .du .p70,.du .p65,.du .p59{letter-spacing:.004em}
   .du .p60,.du .p55{letter-spacing:.005em} .du .p48{letter-spacing:.007em}
   .du .p46,.du .p45{letter-spacing:.008em} .du .p42,.du .p40,.du .p38{letter-spacing:.009em}
   .du .p34,.du .p32,.du .p28,.du .p27{letter-spacing:.012em}
@@ -1539,8 +1540,11 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
    The heading occupies the first cell of a 2x2, so the three quotes fill the
    other three - which is how the frame lays it out. */
 .tm-heard{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
-.tm-heard-head{padding:calc(36*var(--u)) calc(10*var(--u)) 0}
-.tm-heard-aside{margin-top:calc(34*var(--u));color:#6E6E73;line-height:1.45}
+/* the owner's quote leads: no card, set at display size on the section's own
+   ground, with a hairline under it to close the testimony */
+.tm-lead-q{margin-inline:auto}
+.tm-lead-q blockquote{margin:0;color:#1D1D1F;letter-spacing:-.012em}
+.tm-lead-who{margin-top:calc(40*var(--u));color:#6E6E73;font-weight:500}
 .tm-heard-card{background:#FFFFFF;border-radius:calc(20*var(--u));
   padding:calc(60*var(--u)) calc(64*var(--u));display:flex;flex-direction:column}
 .tm-heard-card blockquote{margin:0;color:#1D1D1F;letter-spacing:-.016em}
@@ -1551,14 +1555,68 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .tm-learn-aside{margin:calc(30*var(--u)) auto 0;max-width:calc(1000*var(--u));color:#6E6E73}
 .tm-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
 .tm-learn-c{background:#0A0A0A;color:#F5F5F7;border-radius:calc(20*var(--u));
-  padding:calc(54*var(--u)) calc(44*var(--u))}
-.tm-learn-h{letter-spacing:-.014em}
-.tm-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
+  padding:calc(46*var(--u)) calc(40*var(--u))}
+.tm-learn-h{letter-spacing:-.008em}
+.tm-learn-b{margin-top:calc(24*var(--u));color:#A1A1A6;line-height:1.5}
+
+/* ---- impact figures ---------------------------------------------------------
+   The same card the learnings row above is built from, four up instead of
+   three and on the fill rather than on black: the figure in the display size,
+   its label under it, and the line that makes it true in grey. Nothing new -
+   p70 / p28 / p23 straight off the ramp. */
+.tm-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(28*var(--u))}
+.tm-metric{background:#F5F5F7;border-radius:calc(20*var(--u));
+  padding:calc(48*var(--u)) calc(38*var(--u))}
+.tm-metric-n{letter-spacing:-.018em}
+.tm-metric-l{margin-top:calc(20*var(--u));letter-spacing:-.004em}
+.tm-metric-b{margin-top:calc(22*var(--u));color:#6E6E73;line-height:1.45}
+.tm-impact-close{margin-top:calc(160*var(--u))}
+
+/* ---- the four inputs behind a board's visibility score -----------------------
+   The heading holds while the four run past it and down into the screen that
+   uses them - the same sticky-in-a-grid-cell mechanism as Peak's patterns
+   row (.pk-stages), so it is CSS and no script, and it degrades to an
+   ordinary two-column read wherever sticky is ignored.
+   580 for the held column: "a visibility score." at p60 wants 547. */
+.tm-score-lead{margin-top:calc(30*var(--u));max-width:calc(480*var(--u));
+  color:#6E6E73;line-height:1.45}
+.tm-score-run{display:grid;grid-template-columns:calc(703*var(--u)) 1fr;
+  gap:calc(110*var(--u))}
+/* the screen holds; `.fr` sets position:relative later in this file at the
+   same specificity, so the sticky lives on a wrapper rather than on the frame */
+.tm-score-pin{align-self:start;position:sticky;top:calc(50vh - 270*var(--u))}
+.tm-score-cap{margin-top:calc(26*var(--u));color:#6E6E73;line-height:1.45;
+  max-width:calc(620*var(--u))}
+.tm-score-head{margin-bottom:calc(16*var(--u))}
+.tm-score-list{display:flex;flex-direction:column;gap:calc(80*var(--u));min-width:0}
+.tm-score-list .tm-score-c{padding:calc(60*var(--u)) 0 calc(64*var(--u))}
+.tm-score-list .tm-score-b{margin-top:calc(22*var(--u));max-width:calc(640*var(--u))}
+.tm-score-c{border-top:1px solid var(--line);padding-top:calc(26*var(--u))}
+.tm-score-h{letter-spacing:-.004em}
+.tm-score-b{margin-top:calc(16*var(--u));color:#6E6E73;line-height:1.45}
+
+@media (max-width:1068px){
+  .tm-score-run{grid-template-columns:1fr;gap:32px}
+  .tm-score-pin{position:static}
+  .tm-score-cap{margin-top:14px;max-width:none}
+  .tm-score-lead{max-width:none}
+  .tm-score-list{gap:24px}
+  .tm-score-list .tm-score-c{padding:20px 0 4px}
+  .tm-score-list .tm-score-b{max-width:none}
+  .tm-metrics{grid-template-columns:1fr 1fr;gap:18px}
+  .tm-metric{padding:26px}
+  .tm-impact-close{margin-top:64px}
+  .tm-score-lead{margin-top:16px}
+}
+@media (max-width:734px){
+  .tm-metrics{grid-template-columns:1fr}
+}
 
 @media (max-width:1068px){
   .tm-heard{grid-template-columns:1fr;gap:16px}
-  .tm-heard-head{padding:0}
-  .tm-heard-aside{margin-top:16px}
+  .tm-lead-who{margin-top:20px}
+  .tm-iter-tag{margin-bottom:14px}
+  .tm-iter-turn{margin-top:18px}
   .tm-heard-card{padding:26px}
   .tm-heard-who{margin-top:20px;padding-top:0}
   .tm-learn{grid-template-columns:1fr;gap:16px}
@@ -1592,7 +1650,12 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
   gap:calc(26*var(--u))}
 .tm-iter-cap{color:#6E6E73;text-align:center}
 .tm-iter-fix{background:#0A0A0A;color:#F5F5F7}
-.tm-iter-label{color:#0A84FF;font-weight:600;letter-spacing:-.006em}
+.tm-iter-tag{color:#6E6E73;text-transform:uppercase;letter-spacing:.06em;
+  margin-bottom:calc(26*var(--u))}
+.tm-iter-tag-fix{color:#0A84FF}
+/* the only hint that the card turns, and it is on the front only */
+.tm-iter-turn{margin-top:calc(30*var(--u));color:#86868B}
+html.no-touch .flip:hover .tm-iter-turn{color:#1D1D1F}
 .tm-iter-body{margin-top:calc(26*var(--u));color:#F5F5F7;letter-spacing:-.014em}
 .tm-iter-fix .tm-iter-cap{color:#A1A1A6}
 
@@ -2083,6 +2146,11 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(calc(260*var(--u)),1fr));
   gap:calc(40*var(--u));justify-content:start}
 .lock-meta .pin-credit-value{white-space:normal}
+/* the live product reads as somewhere you can go */
+.pin-credit-link{text-decoration:underline;text-underline-offset:.22em;
+  text-decoration-thickness:1px;text-decoration-color:rgba(255,255,255,.45);
+  transition:text-decoration-color .25s var(--ease)}
+html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
 /* every hero film gets the same left-weighted scrim, so white type on it is
    never a bet on which frame you happened to stop at */
 .pin .pin-first::before{content:'';position:absolute;inset:0;z-index:0;
@@ -2174,18 +2242,21 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 .lh-prob-h{letter-spacing:-.014em}
 .lh-prob-b{margin-top:calc(28*var(--u));color:#6E6E73;line-height:1.45}
 
-/* personas */
-.lh-people{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
-/* No photographs of these three exist, so the card is type: a green rule, the
-   archetype as the heading, the name as its caption, the line underneath. A
-   stock face would have been a lie about a persona in any case. */
-.lh-person{background:#F5F5F7;border-radius:calc(20*var(--u));
-  padding:calc(48*var(--u)) calc(44*var(--u))}
-.lh-person-rule{display:block;width:calc(56*var(--u));height:calc(4*var(--u));
-  border-radius:2px}
-.lh-person-label{margin-top:calc(32*var(--u));font-weight:600;letter-spacing:-.016em}
-.lh-person-who{margin-top:calc(12*var(--u));color:#86868B;font-weight:500}
-.lh-person-line{margin-top:calc(26*var(--u));color:#6E6E73;line-height:1.45}
+/* ---- personas -------------------------------------------------------------
+   Three grey boxes abreast gave each archetype a third of a row and a 32px
+   heading, which is the smallest a person on this page is ever drawn. They
+   are rows now: the archetype at display size on the left, the name under it
+   in the page's green, and what they are stuck on in the measure beside it.
+   No photographs of these three exist, and a stock face would have been a lie
+   about a persona in any case. */
+.lh-people{display:flex;flex-direction:column}
+.lh-person{display:grid;grid-template-columns:calc(640*var(--u)) 1fr;
+  gap:calc(80*var(--u));align-items:start;
+  border-top:1px solid var(--line);padding:calc(60*var(--u)) 0 calc(66*var(--u))}
+.lh-person:last-child{border-bottom:1px solid var(--line)}
+.lh-person-label{letter-spacing:-.018em}
+.lh-person-who{margin-top:calc(18*var(--u));font-weight:500}
+.lh-person-line{color:#6E6E73;line-height:1.42;max-width:calc(680*var(--u))}
 
 /* the pattern cards, each closing on what it led to */
 /* The held heading, the way Peak's five patterns do it: sticky inside a grid
@@ -2210,20 +2281,14 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 
 /* the three questions, and the four steps under them */
 .lh-core-lead{margin-top:calc(54*var(--u));color:#6E6E73}
-.lh-qs{list-style:none;margin-top:calc(26*var(--u));display:flex;
-  flex-direction:column;gap:calc(14*var(--u))}
-.lh-q{position:relative;padding-left:calc(34*var(--u));letter-spacing:-.014em}
-.lh-q::before{content:'';position:absolute;left:0;top:.62em;
-  width:calc(12*var(--u));height:calc(12*var(--u));border-radius:50%;
+.lh-qs{list-style:none;margin-top:calc(44*var(--u));display:flex;
+  flex-direction:column;gap:calc(30*var(--u))}
+.lh-q{position:relative;padding-left:calc(54*var(--u));letter-spacing:-.016em}
+.lh-q::before{content:'';position:absolute;left:0;top:.56em;
+  width:calc(16*var(--u));height:calc(16*var(--u));border-radius:50%;
   background:#029322}
 .lh-core-body{margin-top:calc(46*var(--u));color:#6E6E73;
   max-width:calc(1000*var(--u))}
-.lh-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(28*var(--u))}
-.lh-step{border-top:2px solid rgba(2,147,34,.3);padding-top:calc(28*var(--u))}
-.lh-step-n{display:block;font-weight:600;letter-spacing:.04em}
-.lh-step-h{margin-top:calc(12*var(--u));letter-spacing:-.012em}
-.lh-step-b{margin-top:calc(14*var(--u));color:#6E6E73;line-height:1.45}
-
 /* the solution blocks: flat screens, copy alternating side */
 /* Stacked, heading centred over its screen, as his frame draws it - not the
    text-left / screen-right alternation the written spec described. The column
@@ -2267,17 +2332,23 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
   .lh-bleed-line{top:50%}
   .lh-held{grid-template-columns:1fr;gap:32px;padding-inline:var(--m)}
   .lh-held-head{position:static;top:auto}
-  .lh-probs,.lh-people,.lh-learn{grid-template-columns:1fr;gap:16px}
+  .lh-probs,.lh-learn{grid-template-columns:1fr;gap:16px}
+  /* the persona rows stack: a 640 design-px column is wider than the screen */
+  .lh-person{grid-template-columns:1fr;gap:12px;padding:24px 0 28px}
+  .lh-person-who{margin-top:10px}
+  .lh-person-line{max-width:none}
   .lh-learn-c{padding:28px}
   .lh-learn-b{margin-top:18px}
   .lh-pats{gap:16px}
   .lh-prob-lead{min-height:300px}
   .lh-prob-lead .lh-prob-h{margin:24px}
-  .lh-prob,.lh-person,.lh-pat{padding:28px}
-  .lh-prob-b,.lh-person-line,.lh-pat-b{margin-top:16px}
+  .lh-prob,.lh-pat{padding:28px}
+  .lh-prob-b,.lh-pat-b{margin-top:16px}
   .lh-pat-led{margin-top:22px;padding-top:20px}
-  .lh-flow{grid-template-columns:1fr;gap:24px}
   .lh-core-lead{margin-top:26px}
+  .lh-qs{margin-top:24px;gap:16px}
+  .lh-q{padding-left:26px}
+  .lh-q::before{width:9px;height:9px}
   .lh-core-body{margin-top:24px;max-width:none}
   /* the spec: no pinned or scroll-jacked sections on a phone, stack it all */
   .lh-sols{gap:72px}

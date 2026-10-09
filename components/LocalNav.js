@@ -38,7 +38,10 @@ export default function LocalNav({ name, items }) {
       let cur = -1
       items.forEach((it, n) => {
         const el = document.getElementById(it.id)
-        if (el && el.getBoundingClientRect().top <= chrome + 8) cur = n
+        // +24, not +8: `main [id]` carries a scroll-margin of the chrome plus
+        // 14px, so a section landed by its own link sits just below the line
+        // a tighter threshold draws
+        if (el && el.getBoundingClientRect().top <= chrome + 24) cur = n
       })
       // and it goes away again over the foot, so the last line and the
       // contact band are read on a clean page

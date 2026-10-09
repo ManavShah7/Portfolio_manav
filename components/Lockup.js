@@ -25,7 +25,13 @@ export default function Lockup({ eyebrow, head, tags, meta, accent }) {
           {meta.filter(m => m.value).map(m => (
             <div key={m.label} className="pin-credit">
               <span className="p20 pin-credit-label">{m.label}</span>
-              <span className="p30 pin-credit-value">{m.value}</span>
+              {/* a credit with an href is a place you can actually go - the
+                  live product, which is the one claim on a case study that
+                  anybody can check for themselves */}
+              {m.href
+                ? <a className="p30 pin-credit-value pin-credit-link" href={m.href}
+                     target="_blank" rel="noreferrer">{m.value}</a>
+                : <span className="p30 pin-credit-value">{m.value}</span>}
             </div>
           ))}
         </div>

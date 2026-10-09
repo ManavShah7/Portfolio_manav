@@ -27,7 +27,7 @@ function Screen({ shot, alt }) {
   // In a device, like every other case study on the site. The screens are
   // 1.72-1.87 against the landscape iPad's screen aspect of 1.7556, so they
   // fill it with almost nothing cropped.
-  return <Frame kind="ipad-h" w={1220} still={shot.src} alt={alt} />
+  return <Frame kind="ipad-h" w={1220} still={shot.src} alt={alt} data-sv="tilt" />
 }
 
 function FlatScreen({ shot, alt }) {
@@ -105,7 +105,7 @@ export default function Lighthouse() {
 
         {/* ---- 3c: the problem, on light ---- */}
         <section className="du-sec bg-fill" id="problem" style={{ '--pt': 200, '--pb': 200 }}>
-          <h2 className="p60 center du-w" style={{ '--mw': 1020 }} data-reveal>
+          <h2 className="p96 center du-w" style={{ '--mw': 1300 }} data-reveal>
             <Lines lines={C.problem.head} />
           </h2>
           <div className="du-w lh-probs" style={{ '--mw': 1020, '--mt': 110 }} data-stagger>
@@ -129,16 +129,17 @@ export default function Lighthouse() {
         <section className="du-sec" id="research" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="du-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
-            <h2 className="p70" data-reveal><Lines lines={C.research.head} /></h2>
+            <h2 className="p96" data-reveal><Lines lines={C.research.head} /></h2>
             <p className="p25 w500 lh-aside" data-reveal>{para(C.research.aside)}</p>
           </div>
           <div className="du-w lh-people" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
             {C.research.personas.map((pp, i) => (
               <div key={pp.who} className="lh-person" data-reveal data-amp={i % 2 ? 76 : 52}>
-                <span className="lh-person-rule" style={{ background: GREEN }} aria-hidden="true" />
-                <p className="p32 lh-person-label">{pp.label}</p>
-                <p className="p23 w500 lh-person-who">{pp.who}</p>
-                <p className="p26 w500 lh-person-line">{para(pp.line)}</p>
+                <div>
+                  <p className="p55 lh-person-label">{pp.label}</p>
+                  <p className="p24 lh-person-who" style={{ color: GREEN }}>{pp.who}</p>
+                </div>
+                <p className="p30 w500 lh-person-line">{para(pp.line)}</p>
               </div>
             ))}
           </div>
@@ -172,23 +173,14 @@ export default function Lighthouse() {
         {/* ---- the core idea, and the system behind it ---- */}
         <section className="du-sec" id="the-idea" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="du-x" style={{ '--x': 240, '--ac': GREEN }}>
-            <h2 className="p70 ac-i" data-reveal><Lines lines={C.core.head} /></h2>
+            <h2 className="p96 ac-i" data-reveal><Lines lines={C.core.head} /></h2>
             <p className="p30 w500 lh-core-lead" data-reveal>{para(C.core.lead)}</p>
             <ul className="lh-qs" data-stagger>
               {C.core.questions.map(q => (
-                <li key={q} className="p32 lh-q" data-reveal>{q}</li>
+                <li key={q} className="p48 lh-q" data-reveal>{q}</li>
               ))}
             </ul>
             <p className="p30 w500 lh-core-body" data-reveal>{para(C.core.body)}</p>
-          </div>
-          <div className="du-w lh-flow" style={{ '--mw': 1448, '--mt': 120 }} data-stagger>
-            {C.core.steps.map((st, i) => (
-              <div key={st.head} className="lh-step" data-reveal data-amp={i % 2 ? 70 : 50}>
-                <span className="p20 lh-step-n" style={{ color: GREEN }}>{`0${i + 1}`}</span>
-                <h3 className="p28 lh-step-h">{st.head}</h3>
-                <p className="p23 w500 lh-step-b">{para(st.body)}</p>
-              </div>
-            ))}
           </div>
         </section>
 
@@ -199,7 +191,7 @@ export default function Lighthouse() {
               <div key={i} className="lh-sol">
                 <div className="lh-sol-copy" data-reveal data-amp={50}
                      style={{ '--ac': GREEN }}>
-                  <h3 className="p42 lh-sol-h"><Lines lines={b.head} /></h3>
+                  <h3 className="p70 lh-sol-h"><Lines lines={b.head} /></h3>
                   {b.body && <p className="p26 w500 lh-sol-b">{para(b.body)}</p>}
                 </div>
                 <div className="lh-sol-shot" data-reveal data-amp={76}>
@@ -214,7 +206,7 @@ export default function Lighthouse() {
                 copy" in the spec, so they are holes, not drafts I shipped. ---- */}
         <section className="du-sec" id="learnings" style={{ '--pt': 240, '--pb': 0 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
-          <h2 className="p60 center lh-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
+          <h2 className="p80 center lh-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
           <div className="du-w lh-learn" style={{ '--mw': 1560, '--mt': 110 }} data-stagger>
             {C.learned.cards.map((c, i) => (
               <div key={c.n} className="lh-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
