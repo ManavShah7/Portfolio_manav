@@ -5,6 +5,7 @@ import Faq from '@/components/Faq'
 import Fill from '@/components/Fill'
 import Frame from '@/components/Frame'
 import Lockup from '@/components/Lockup'
+import { SameRoadmap, Everywhere } from '@/components/LighthouseProblem'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/lighthouse-copy'
@@ -52,9 +53,10 @@ function FlatScreen({ shot, alt }) {
 const SECS = [
   { id: 'problem', label: 'Problem' },
   { id: 'research', label: 'Research' },
-  { id: 'insight', label: 'Insight' },
   { id: 'the-idea', label: 'The idea' },
   { id: 'product', label: 'Product' },
+  { id: 'what-didnt-work', label: 'What didn\u2019t work' },
+  { id: 'team', label: 'Team' },
   { id: 'learnings', label: 'Learnings' },
   { id: 'faq', label: 'FAQ' },
 ]
@@ -120,6 +122,8 @@ export default function Lighthouse() {
                   : <Fill what="[ASSET] photo" />)}
                 <h3 className="p32 lh-prob-h"><Lines lines={c.head} /></h3>
                 {i > 0 && <p className="p26 w500 lh-prob-b">{para(c.body)}</p>}
+                {c.steps && <SameRoadmap steps={c.steps} />}
+                {c.sources && <Everywhere sources={c.sources} />}
               </div>
             ))}
           </div>
@@ -134,54 +138,36 @@ export default function Lighthouse() {
           </div>
           <div className="du-w lh-people" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
             {C.research.personas.map((pp, i) => (
-              <div key={pp.who} className="lh-person" data-reveal data-amp={i % 2 ? 76 : 52}>
-                <div>
-                  <p className="p55 lh-person-label">{pp.label}</p>
-                  <p className="p24 lh-person-who" style={{ color: GREEN }}>{pp.who}</p>
-                </div>
-                <p className="p30 w500 lh-person-line">{para(pp.line)}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ---- key insight, on black ---- */}
-        {/* the one section that does not stack a heading over a row of cards:
-            the heading holds while the three patterns run past it, which is
-            the mechanism Peak's five patterns use */}
-        <section className="du-sec bg-dark" id="insight" style={{ '--pt': 240, '--pb': 240 }}>
-          <div className="lh-held">
-            <div className="lh-held-head">
-              <p className="p28 w500" data-reveal>{C.insight.eyebrow}</p>
-              <h2 className="p65" data-reveal><Lines lines={C.insight.head} /></h2>
-              <p className="p25 w500 lh-aside" data-reveal>{para(C.insight.aside)}</p>
-            </div>
-          <div className="lh-pats" data-stagger>
-            {C.insight.cards.map((c, i) => (
-              <div key={i} className="lh-pat" data-reveal data-amp={i % 2 ? 76 : 52}>
-                <h3 className="p32 lh-pat-h"><Lines lines={c.head} /></h3>
-                <p className="p26 w500 lh-pat-b">{para(c.body)}</p>
-                <p className="p23 w500 lh-pat-led">
-                  <span style={{ color: GREEN }}>{C.insight.ledTo} &rarr;</span> {para(c.led)}
+              <div key={pp.who} className="lh-person" data-reveal data-in="side" data-amp={i % 2 ? 76 : 52}>
+                <p className="p42 lh-person-label">
+                  {pp.label}
+                  <span className="p24 lh-person-who">{pp.who}</span>
                 </p>
+                <p className="p26 w500 lh-person-line">{para(pp.line)}</p>
               </div>
             ))}
-          </div>
           </div>
         </section>
 
         {/* ---- the core idea, and the system behind it ---- */}
         <section className="du-sec" id="the-idea" style={{ '--pt': 240, '--pb': 0 }}>
-          <div className="du-x" style={{ '--x': 240, '--ac': GREEN }}>
-            <h2 className="p96 ac-i" data-reveal><Lines lines={C.core.head} /></h2>
-            <p className="p30 w500 lh-core-lead" data-reveal>{para(C.core.lead)}</p>
-            <ul className="lh-qs" data-stagger>
-              {C.core.questions.map(q => (
-                <li key={q} className="p48 lh-q" data-reveal>{q}</li>
-              ))}
-            </ul>
-            <p className="p30 w500 lh-core-body" data-reveal>{para(C.core.body)}</p>
+          {/* centred, like every other section head on the site, and the three
+              questions are the section now rather than a bulleted list under
+              it - each one a column with a green rule over it */}
+          <div className="du-w" style={{ '--mw': 1400, '--ac': GREEN }}>
+            <h2 className="p96 center ac-i" data-reveal><Lines lines={C.core.head} /></h2>
+            <p className="p30 w500 center lh-core-lead" data-reveal>{para(C.core.lead)}</p>
           </div>
+          <ul className="du-w lh-qs" style={{ '--mw': 1400, '--mt': 110 }} data-stagger>
+            {C.core.questions.map(q => (
+              <li key={q} className="lh-q" data-reveal data-in="lift">
+                <span className="lh-q-rule" style={{ background: GREEN }} aria-hidden="true" />
+                <span className="p42 lh-q-t">{q}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="p30 w500 center du-w lh-core-body" style={{ '--mw': 1100, '--mt': 110 }}
+             data-reveal>{para(C.core.body)}</p>
         </section>
 
         {/* ---- the solution, flat screens, text alternating side ---- */}
@@ -194,9 +180,49 @@ export default function Lighthouse() {
                   <h3 className="p70 lh-sol-h"><Lines lines={b.head} /></h3>
                   {b.body && <p className="p26 w500 lh-sol-b">{para(b.body)}</p>}
                 </div>
-                <div className="lh-sol-shot" data-reveal data-amp={76}>
+                <div className="lh-sol-shot" data-reveal data-in="lift" data-amp={76}>
                   <Screen shot={b.shot} alt={b.head.join(' ')} />
                 </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ---- where it fell short. Renders only once Manav has written the
+                reasons - an empty section is not a section (rule 4). ---- */}
+        {C.failed.reasons.length > 0 && (
+          <section className="du-sec bg-dark" id="what-didnt-work" style={{ '--pt': 240, '--pb': 240 }}>
+            <div className="du-x" style={{ '--x': 240 }}>
+              <p className="p28 w500" data-reveal>{C.failed.eyebrow}</p>
+              <h2 className="p96" data-reveal><Lines lines={C.failed.head} /></h2>
+              <p className="p25 w500 lh-aside" data-reveal>{para(C.failed.aside)}</p>
+            </div>
+            <div className="du-w lh-fails" style={{ '--mw': 1448, '--mt': 110 }} data-stagger>
+              {C.failed.reasons.map((r, i) => (
+                <div key={i} className="lh-fail" data-reveal data-in="side" data-amp={i % 2 ? 76 : 52}>
+                  <h3 className="p32 lh-fail-h"><Lines lines={r.head} /></h3>
+                  <p className="p26 w500 lh-fail-b">{para(r.body)}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* ---- the people. Short on purpose: it was an internship on a small
+                team, and saying so is better than inflating it. ---- */}
+        <section className="du-sec" id="team" style={{ '--pt': 240, '--pb': 0 }}>
+          <div className="du-x" style={{ '--x': 240 }}>
+            <p className="p28 w500" data-reveal>{C.team.eyebrow}</p>
+            <h2 className="p80" data-reveal><Lines lines={C.team.head} /></h2>
+          </div>
+          <div className="du-w lh-team" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
+            {C.team.people.map((t, i) => (
+              <div key={t.who} className="lh-team-c" data-reveal data-in="lift"
+                   data-amp={i % 2 ? 76 : 52}>
+                <span className="lh-team-rule" style={{ background: GREEN }} aria-hidden="true" />
+                <p className="p32 lh-team-who">{t.who}</p>
+                <p className="p23 w500 lh-team-role">{t.role}</p>
+                <p className="p24 lh-team-line">{para(t.line)}</p>
               </div>
             ))}
           </div>
@@ -210,8 +236,8 @@ export default function Lighthouse() {
           <div className="du-w lh-learn" style={{ '--mw': 1560, '--mt': 110 }} data-stagger>
             {C.learned.cards.map((c, i) => (
               <div key={c.n} className="lh-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
-                <h3 className="p32 lh-learn-h"><Lines lines={c.head} /></h3>
-                <p className="p26 w500 lh-learn-b">{para(c.body)}</p>
+                <h3 className="p28 lh-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p24 lh-learn-b">{para(c.body)}</p>
               </div>
             ))}
           </div>

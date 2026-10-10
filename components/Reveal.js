@@ -52,6 +52,30 @@ const AMP = [60, 80]   // travel, alternating down a group
 const PHONE = 734
 const softness = () => (innerWidth <= PHONE ? 0.45 : 1)
 
+// ---------------------------------------------------------------- the modes
+// One damped value, several ways of spending it. Every mode below is driven by
+// the SAME `cur` the follower already computes, so none of them is a second
+// animation: they stay attached to the scroll exactly as the rise does, and a
+// flick overshoots them all the same way.
+//
+// `data-in` on the element picks one. Without it a block rises, which is what
+// the whole site did before and still does wherever nothing else is better.
+//   lift  - rises half as far and settles out of a slight scale: for devices
+//           and screens, where a long travel reads as the picture sliding
+//   side  - comes in from its own side of a row, alternating down the group
+//   blur  - the defocus apple.com uses on a held frame; t^1.7, measured
+//   scale - no travel at all, just opens out. For something already centred.
+//   mask  - wipes up behind its own edge. Theatrical, so: full-bleed only.
+const MODES = {
+  lift: (u, amp) => ({ tf: `translate3d(0,${(u * amp * 0.5).toFixed(2)}px,0) scale(${(1 - 0.05 * u).toFixed(4)})` }),
+  side: (u, amp, dir) => ({ tf: `translate3d(${(u * amp * 0.8 * dir).toFixed(2)}px,0,0)` }),
+  blur: (u, amp) => ({ tf: `translate3d(0,${(u * amp * 0.55).toFixed(2)}px,0)`,
+                       filter: `blur(${(Math.pow(u, 1.7) * 11).toFixed(2)}px)` }),
+  scale: u => ({ tf: `scale(${(1 - 0.075 * u).toFixed(4)})` }),
+  mask: (u, amp) => ({ tf: `translate3d(0,${(u * amp * 0.3).toFixed(2)}px,0)`,
+                       clip: `inset(0 0 ${(u * 100).toFixed(1)}% 0)` }),
+}
+
 export default function Reveal() {
   useEffect(() => {
     const root = document.documentElement
@@ -70,11 +94,14 @@ export default function Reveal() {
         const sibs = [...el.parentElement.children].filter(n => n.hasAttribute('data-reveal'))
         const i = Math.max(0, sibs.indexOf(el))
         const amp = (Number(el.dataset.amp) || AMP[i % AMP.length]) * softness()
+        // which way a `side` block comes from: its own side of the row
+        const dir = i % 2 ? 1 : -1
+        const mode = MODES[el.dataset.in] ? el.dataset.in : null
         // will-change is NOT set here. The reference switches it on only while
         // the element is near and off again when it has arrived; setting it on
         // every tracked element at load promoted 40 layers at once on Peak,
         // which costs GPU memory and causes the jank it is meant to avoid.
-        return { el, amp, cur: 0, live: false, done: false, forced: false }
+        return { el, amp, dir, mode, cur: 0, live: false, done: false, forced: false }
       })
 
       // Arrive outright if the element is already past. The frame loop only
@@ -97,6 +124,8 @@ export default function Reveal() {
       const arrive = t => {
         t.done = true; t.cur = 1
         t.el.style.opacity = ''; t.el.style.transform = ''; t.el.style.willChange = ''
+        // every mode's own property, cleared with the rest
+        t.el.style.filter = ''; t.el.style.clipPath = ''
         t.el.classList.add('in')
       }
       const byEl = new Map(tracked.map(t => [t.el, t]))
@@ -106,7 +135,8 @@ export default function Reveal() {
           if (!t || t.done) continue
           t.live = e.isIntersecting
           // on only while it is near, off the moment it is not
-          t.el.style.willChange = e.isIntersecting ? 'opacity, transform' : ''
+          t.el.style.willChange = e.isIntersecting
+            ? (t.mode === 'blur' ? 'opacity, transform, filter' : 'opacity, transform') : ''
           if (!e.isIntersecting && e.boundingClientRect.bottom < 0) arrive(t)
         }
         schedule()
@@ -145,7 +175,15 @@ export default function Reveal() {
           // guard's "entrance never played" check reads this path too.
           if (t.cur > 0.999) { arrive(t); continue }
           t.el.style.opacity = String(t.cur)
-          t.el.style.transform = `translate3d(0,${((1 - t.cur) * t.amp).toFixed(2)}px,0)`
+          const u = 1 - t.cur
+          if (t.mode) {
+            const m = MODES[t.mode](u, t.amp, t.dir)
+            t.el.style.transform = m.tf
+            if (m.filter) t.el.style.filter = m.filter
+            if (m.clip) t.el.style.clipPath = m.clip
+          } else {
+            t.el.style.transform = `translate3d(0,${(u * t.amp).toFixed(2)}px,0)`
+          }
           if (!settled) busy = true
         }
         if (busy) { last = now; raf = requestAnimationFrame(tick) }

@@ -4,6 +4,7 @@ import OtherWork from '@/components/OtherWork'
 import Frame from '@/components/Frame'
 import Faq from '@/components/Faq'
 import Lockup from '@/components/Lockup'
+import PillarMark from '@/components/LiveasyPillar'
 import { Video } from '@/components/Media'
 import { media } from '@/lib/clips'
 import * as C from '@/lib/liveasy-copy'
@@ -56,7 +57,7 @@ export default function Liveasy() {
                 all four points run past it, across the white/black seam. ---- */}
         <div className="lv-run" id="why">
           <section className="du-sec" style={{ '--pt': 264, '--pb': 155 }}>
-            <h2 className="p70 center du-w" style={{ '--mw': 1400 }} data-reveal>
+            <h2 className="p96 center du-w" style={{ '--mw': 1400 }} data-reveal>
               <Lines lines={C.problem.headline} />
             </h2>
             <div className="lv-points">
@@ -93,14 +94,15 @@ export default function Liveasy() {
         <section className="du-sec bg-dark" id="pillars" style={{ '--pt': 0, '--pb': 150 }}>
           <div className="du-x lv-res-head" style={{ '--x': 261 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
-            <h2 className="p64" data-reveal><Lines lines={C.research.headline} /></h2>
+            <h2 className="p80" data-reveal><Lines lines={C.research.headline} /></h2>
             <p className="p26 w500 lv-res-aside" data-reveal>{para(C.research.aside)}</p>
           </div>
           <div className="lv-cards" data-stagger>
             {C.research.cards.map((c, i) => (
-              <div key={i} className="lv-card" data-reveal>
-                <p className="p38"><Lines lines={c.title} /></p>
-                <p className="p32 w500 lv-card-body">{para(c.body)}</p>
+              <div key={i} className="lv-card" data-reveal data-in="lift">
+                <p className="p28"><Lines lines={c.title} /></p>
+                <p className="p24 lv-card-body">{para(c.body)}</p>
+                <PillarMark kind={c.mark} />
               </div>
             ))}
           </div>
@@ -130,11 +132,17 @@ export default function Liveasy() {
         <section className="du-sec" id="redesign" style={{ '--pt': 200, '--pb': 0 }}>
           <div className="du-w lv-screens" style={{ '--mw': 1300 }} data-stagger>
             {C.screens.map((sc, i) => (
-              <figure key={i} className="lv-screen" data-reveal data-amp={i % 2 ? 76 : 52}>
-                <Frame kind="mac" w={1300} shot={C.shots[sc.shot]} />
-                <figcaption className="p32 w500 lv-screen-cap">
-                  <Lines lines={sc.lines} />
+              <figure key={i} className="lv-screen">
+                {/* the pillar this screen answers, over it - the shape
+                    Lighthouse's product section uses */}
+                <figcaption className="lv-screen-head" data-reveal>
+                  <h3 className="p70 lv-screen-h"><Lines lines={sc.head} /></h3>
+                  <p className="p26 w500 lv-screen-b">{para(sc.lines)}</p>
                 </figcaption>
+                <div data-reveal data-in="lift" data-amp={i % 2 ? 76 : 52}>
+                  <Frame kind="mac" w={1300} shot={C.shots[sc.shot]} alt={sc.alt}
+                         data-sv="tilt" />
+                </div>
               </figure>
             ))}
           </div>
@@ -143,13 +151,13 @@ export default function Liveasy() {
         {/* ---- learnings ---- */}
         <section className="du-sec" id="learnings" style={{ '--pt': 240, '--pb': 0 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
-          <h2 className="p60 center lv-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
+          <h2 className="p80 center lv-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
           <p className="p26 w500 center lv-learn-aside" data-reveal>{para(C.learned.aside)}</p>
           <div className="du-w lv-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
             {C.learned.cards.map((c, i) => (
               <div key={i} className="lv-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
-                <h3 className="p32 lv-learn-h"><Lines lines={c.head} /></h3>
-                <p className="p26 w500 lv-learn-b">{para(c.body)}</p>
+                <h3 className="p28 lv-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p24 lv-learn-b">{para(c.body)}</p>
               </div>
             ))}
           </div>

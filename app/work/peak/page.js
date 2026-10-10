@@ -105,7 +105,7 @@ export default function Peak() {
 
         {/* ---- problems ---- */}
         <section className="pk-sec pk-problems" id="problem" style={{ '--pt': 150, '--pb': 140 }}>
-          <h2 className="p60 center" data-reveal><Lines lines={C.problem.headline} /></h2>
+          <h2 className="p80 center" data-reveal><Lines lines={C.problem.headline} /></h2>
           <div className="pk-w" style={{ '--mw': 886, '--mt': 60 }}>
             {/* three apps, three phones - the card said it in words and drew
                 nothing, so it says it with the devices */}
@@ -139,7 +139,7 @@ export default function Peak() {
         <section className="pk-sec" id="research" style={{ '--pt': 200, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
-            <h2 className="p70" style={{ '--ac': '#E01D85' }} data-reveal><Lines lines={C.research.headline} /></h2>
+            <h2 className="p96" style={{ '--ac': '#E01D85' }} data-reveal><Lines lines={C.research.headline} /></h2>
             <p className="p25 w500 pk-aside" data-reveal><Lines lines={C.research.aside} /></p>
           </div>
           <div className="pk-w pk-trio-voices" style={{ '--mw': 1420, '--mt': 96 }} data-stagger>
@@ -177,7 +177,7 @@ export default function Peak() {
         <section className="pk-sec" id="competitors" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.compare.eyebrow}</p>
-            <h2 className="p70" data-reveal><Lines lines={C.compare.head} /></h2>
+            <h2 className="p96" data-reveal><Lines lines={C.compare.head} /></h2>
             <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.compare.aside} /></p>
           </div>
           <div className="pk-w" style={{ '--mw': 1320, '--mt': 96 }}>
@@ -193,6 +193,8 @@ export default function Peak() {
         <section className="pk-sec bg-fill" id="patterns" style={{ '--pt': 200, '--pb': 200 }}>
           <div className="pk-stages">
             <div className="pk-stages-head">
+              {/* stays at p70: this heading is held in a 540-unit column and
+                  the budget across that row has no give (see .pk-stages) */}
               <h2 className="p70" data-reveal><Lines lines={C.stages.head} /></h2>
               <p className="p25 w500 pk-stages-aside" data-reveal><Lines lines={C.stages.aside} /></p>
             </div>
@@ -208,7 +210,7 @@ export default function Peak() {
               </div>
               <div className="pk-stages-grid">
                 {C.stages.cards.map((c, i) => (
-                  <div key={i} className="pk-card white pk-stage" data-reveal
+                  <div key={i} className="pk-card white pk-stage" data-reveal data-in="lift"
                        data-amp={i % 2 ? 76 : 52}>
                     <p className="p32 pk-stage-h"><Lines lines={c.head} /></p>
                     <p className="p26 w500 pk-stage-b">{para(c.body)}</p>
@@ -228,7 +230,7 @@ export default function Peak() {
 
         {/* ---- solution ---- */}
         <section className="pk-sec bg-dark pk-solution" id="solution" style={{ '--pt': 200, '--pb': 0 }}>
-          <h2 className="p70 center" data-reveal>
+          <h2 className="p96 center" data-reveal>
             <span className="ln">{C.solution.headline[0]}</span>
             <span className="ln">{C.solution.headline[1]}<span className="pk-orange">{C.solution.headAccent}</span></span>
           </h2>
@@ -328,12 +330,12 @@ export default function Peak() {
         <section className="pk-sec bg-fill" id="testing" style={{ '--pt': 200, '--pb': 200 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.testing.eyebrow}</p>
-            <h2 className="p70" data-reveal><Lines lines={C.testing.headline} /></h2>
+            <h2 className="p96" data-reveal><Lines lines={C.testing.headline} /></h2>
             <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.testing.aside} /></p>
           </div>
           <div className="pk-w pk-tests" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
             {C.testing.notes.map((n, i) => (
-              <div key={i} className="pk-card white pk-test" data-reveal data-amp={i % 2 ? 76 : 52}>
+              <div key={i} className="pk-card white pk-test" data-reveal data-in="blur" data-amp={i % 2 ? 76 : 52}>
                 <div className="pk-test-copy">
                   <blockquote className="p38 pk-test-quote"><Lines lines={n.quote} /></blockquote>
                   <p className="p23 w500 pk-test-label">{C.testing.changed}</p>
@@ -357,7 +359,7 @@ export default function Peak() {
 
         {/* ---- the same two testers, on the other side of the changes ---- */}
         <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
-          <h2 className="p60 center" style={{ '--ac': '#E01D85' }} data-reveal>
+          <h2 className="p80 center" style={{ '--ac': '#E01D85' }} data-reveal>
             <Lines lines={C.progress.head} />
           </h2>
           <p className="p26 w500 center pk-prog-aside" data-reveal>{para(C.progress.aside)}</p>
@@ -376,14 +378,14 @@ export default function Peak() {
                 updated frame draws it ---- */}
         <section className="pk-sec" id="learnings" style={{ '--pt': 240, '--pb': 0 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
-          <h2 className="p60 center pk-learn-head" data-reveal>{C.learned.head}</h2>
+          <h2 className="p80 center pk-learn-head" data-reveal>{C.learned.head}</h2>
           <p className="p26 w500 center pk-learn-aside" data-reveal>{para(C.learned.aside)}</p>
           <div className="pk-w pk-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
             {C.learned.cards.map((c, i) => (
-              <div key={i} className="pk-card black pk-learn-c" data-reveal
+              <div key={i} className="pk-card black pk-learn-c" data-reveal data-in="lift"
                    data-amp={[52, 76, 52][i]}>
-                <h3 className="p32 pk-learn-h"><Lines lines={c.head} /></h3>
-                <p className="p26 w500 pk-learn-b">{para(c.body)}</p>
+                <h3 className="p28 pk-learn-h"><Lines lines={c.head} /></h3>
+                <p className="p24 pk-learn-b">{para(c.body)}</p>
               </div>
             ))}
           </div>
@@ -391,7 +393,7 @@ export default function Peak() {
 
         {/* ---- what's next ---- */}
         <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
-          <h2 className="p55 pk-x" style={{ '--x': 148 }} data-reveal><Lines lines={C.whatsNext.headline} /></h2>
+          <h2 className="p70 pk-x" style={{ '--x': 148 }} data-reveal><Lines lines={C.whatsNext.headline} /></h2>
           <Gallery label="What's next" className="pk-gallery pk-light-paddles pk-next-cards" always
                    style={{ '--inset': 'calc(149 * var(--u))' }}>
             {C.whatsNext.cards.map(c => (

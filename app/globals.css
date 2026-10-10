@@ -379,6 +379,25 @@ html.js.no-reduced-motion [data-reveal].moving{will-change:opacity,transform}
 [data-reveal="fade"]{--ry:0px}
 [data-reveal="far"]{--ry:96px}
 
+/* ---- the same modes, on the one-shot path -------------------------------
+   Inside `.cine` these are driven per frame by components/Reveal.js, which
+   is where the case studies live. Home and About are one-shot, so the same
+   five arrivals are written here as transitions - one vocabulary, two
+   mechanisms, the way the rest of this file already splits them. */
+html.js.no-reduced-motion [data-reveal][data-in="lift"]{transform:translate3d(0,14px,0) scale(.955)}
+html.js.no-reduced-motion [data-reveal][data-in="scale"]{transform:scale(.94)}
+html.js.no-reduced-motion [data-reveal][data-in="side"]{transform:translate3d(-30px,0,0)}
+html.js.no-reduced-motion [data-reveal][data-in="side"]:nth-child(even){transform:translate3d(30px,0,0)}
+html.js.no-reduced-motion [data-reveal][data-in="blur"]{transform:translate3d(0,16px,0);filter:blur(10px)}
+html.js.no-reduced-motion [data-reveal][data-in="blur"].in{filter:blur(0);
+  transition:opacity .6s ease var(--d,0s),transform .6s ease var(--d,0s),
+             filter .75s ease var(--d,0s)}
+html.js.no-reduced-motion [data-reveal][data-in="mask"]{transform:none;
+  clip-path:inset(0 0 100% 0)}
+html.js.no-reduced-motion [data-reveal][data-in="mask"].in{clip-path:inset(0 0 0 0);
+  transition:opacity .5s ease var(--d,0s),
+             clip-path .9s var(--ease-soft) var(--d,0s)}
+
 /* ---- the follower ----------------------------------------------------------
    Inside `.cine` the entrance is driven per frame instead of transitioned
    (components/Reveal.js). The driver writes opacity and transform inline, so
@@ -899,15 +918,16 @@ html.reduced-motion video.loop{display:none}
    Three posts drawn as posts: where it was said, what was said with the half
    he highlighted, and what it scored. */
 .pk-posts{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(34*var(--u))}
-.pk-post{background:#F5F5F7;border-radius:calc(22*var(--u));
+.pk-post{background:#F5F5F7;border-radius:calc(20*var(--u));
   padding:calc(44*var(--u)) calc(44*var(--u)) calc(38*var(--u));
   display:flex;flex-direction:column}
-.pk-post-sub{color:#86868B;font-weight:400;letter-spacing:-.008em}
+.pk-post-sub{color:#6E6E73;font-weight:400;letter-spacing:-.008em}
 .pk-post-sub i{font-style:normal;margin:0 calc(10*var(--u))}
 .pk-post-body{margin-top:calc(30*var(--u));color:#1D1D1F;font-weight:600;
   letter-spacing:-.012em;line-height:1.3}
 /* the page's own orange, on the clause that carries the complaint */
-.pk-post-hi{color:#E8842A}
+/* the accent at 21px on the fill is 2.48:1; this cut of it is 4.6 */
+.pk-post-hi{color:#9A5300}
 .pk-post-votes{display:flex;align-items:center;gap:calc(12*var(--u));
   margin-top:auto;padding-top:calc(40*var(--u));color:#6E6E73;font-weight:500}
 .pk-post-votes svg{width:calc(20*var(--u));height:calc(17*var(--u));fill:#6E6E73}
@@ -946,7 +966,7 @@ html.reduced-motion video.loop{display:none}
 /* the labels carry the reading, so they get the width and the type */
 .pk-cmp-t th:first-child,.pk-cmp-row{width:32%;text-align:left}
 .pk-cmp-col{display:block;font-weight:600;color:#F5F5F7;letter-spacing:-.01em}
-.pk-cmp-eg{display:block;margin-top:calc(6*var(--u));color:#86868B;font-weight:400;
+.pk-cmp-eg{display:block;margin-top:calc(6*var(--u));color:#6E6E73;font-weight:400;
   letter-spacing:-.006em}
 .pk-cmp-t thead th{padding-bottom:calc(28*var(--u));vertical-align:bottom}
 .pk-cmp-row{font-weight:500;color:#F5F5F7;letter-spacing:-.014em}
@@ -1062,7 +1082,7 @@ html.js.no-reduced-motion .pk-cmp-key .pk-cmp-mark{opacity:1;transform:none}
 .pk-chart-base{stroke:#C7C7CC;stroke-width:3}
 .pk-chart-axis{display:flex;justify-content:space-between;
   margin-top:calc(14*var(--u))}
-.pk-chart-tick{font-size:max(13px,calc(24*var(--u)));font-weight:500;color:#8A8A8E;
+.pk-chart-tick{font-size:max(13px,calc(24*var(--u)));font-weight:500;color:#6E6E73;
   letter-spacing:-.01em;white-space:nowrap;line-height:1}
 /* Each series is named at its OWN end of the plot and aligned inwards -
    left-aligned at the start, right-aligned at the finish. Centring a label on
@@ -1153,7 +1173,7 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 /* the label is the hinge between what was said and what was done, so it gets
    the rule rather than a heading weight */
 .pk-test-label{margin-top:auto;padding-top:calc(34*var(--u));
-  border-top:1px solid rgba(0,0,0,.1);color:#86868B;
+  border-top:1px solid rgba(0,0,0,.1);color:#6E6E73;
   text-transform:uppercase;letter-spacing:.07em}
 .pk-test-body{margin-top:calc(14*var(--u));color:#1D1D1F}
 
@@ -1162,8 +1182,8 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 /* 44 of side padding, not 52: three cards abreast leave each heading about
    400u and "Emotions shape behavior." wants 376 - with the px type floor at
    1100 eating the rest of the margin. */
-.pk-learn-c{padding:calc(54*var(--u)) calc(44*var(--u))}
-.pk-learn-h{letter-spacing:-.014em}
+.pk-learn-c{padding:calc(48*var(--u)) calc(42*var(--u))}
+.pk-learn-h{letter-spacing:-.008em}
 .pk-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
 
 .faq-item{border-top:1px solid rgba(0,0,0,.12)}
@@ -1219,7 +1239,7 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
    number scales the whole graphic. */
 .pq{font-size:max(13px,calc(18*var(--u)));margin-top:calc(40*var(--u));position:relative;
   color:#F5F5F7;line-height:1.3}
-.pq-q{color:#86868B}
+.pq-q{color:#6E6E73}
 
 /* the onboarding form, with two more sheets behind it */
 .pq-sheet{position:absolute;left:50%;translate:-50% 0;border:1px solid rgba(255,255,255,.1);
@@ -1234,14 +1254,14 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
   padding:.5em 0;border-bottom:1px solid rgba(255,255,255,.06)}
 .pq-row:last-child{border-bottom:0;padding-bottom:.1em}
 .pq-a{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
-.pq-a i{font-style:normal;font-weight:400;color:#86868B;margin-left:.3em}
+.pq-a i{font-style:normal;font-weight:400;color:#6E6E73;margin-left:.3em}
 
 /* the streak: one miss and it is back to zero */
 .pq-streak{display:flex;justify-content:space-between;align-items:baseline;gap:1em}
 .pq-count{font-size:1.5em;font-weight:600;font-variant-numeric:tabular-nums;color:#FF383C}
 .pq-count s{color:#6E6E73;text-decoration-thickness:.06em;margin-right:.45em;font-weight:500}
 .pq-week{display:grid;grid-template-columns:repeat(7,1fr);gap:.4em;margin-top:1.1em;
-  text-align:center;color:#86868B;font-size:max(13px,.82em)}
+  text-align:center;color:#6E6E73;font-size:max(13px,.82em)}
 .pq-day{display:flex;flex-direction:column;align-items:center;gap:.5em}
 .pq-day i{width:1.9em;height:1.9em;border-radius:50%;display:grid;place-items:center;
   border:1px solid rgba(255,255,255,.14)}
@@ -1422,7 +1442,7 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .pk-next-cards{margin-top:calc(188*var(--u))}
 .pk-wn{width:calc(538*var(--u));height:calc(441*var(--u));display:flex;flex-direction:column;justify-content:flex-end;
   padding:0 calc(51*var(--u)) calc(44*var(--u))}
-.pk-wn .p26{margin-top:calc(14*var(--u));color:#000C32}
+.pk-wn .p26{margin-top:calc(14*var(--u));color:#6E6E73}
 .pk-wn .p28{color:#000}
 .pk-next-cards .paddles{margin:calc(44*var(--u)) calc(269*var(--u)) 0 0}
 @media (max-width:734px){ .pk-wn{width:78vw;height:auto;min-height:240px;padding:28px} }
@@ -1540,23 +1560,21 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
    The heading occupies the first cell of a 2x2, so the three quotes fill the
    other three - which is how the frame lays it out. */
 .tm-heard{display:grid;grid-template-columns:1fr 1fr;gap:calc(31*var(--u))}
-/* the owner's quote leads: no card, set at display size on the section's own
-   ground, with a hairline under it to close the testimony */
-.tm-lead-q{margin-inline:auto}
-.tm-lead-q blockquote{margin:0;color:#1D1D1F;letter-spacing:-.012em}
-.tm-lead-who{margin-top:calc(40*var(--u));color:#6E6E73;font-weight:500}
+.tm-heard-head{padding:calc(36*var(--u)) calc(10*var(--u)) 0}
 .tm-heard-card{background:#FFFFFF;border-radius:calc(20*var(--u));
-  padding:calc(60*var(--u)) calc(64*var(--u));display:flex;flex-direction:column}
-.tm-heard-card blockquote{margin:0;color:#1D1D1F;letter-spacing:-.016em}
+  padding:calc(48*var(--u)) calc(42*var(--u));display:flex;flex-direction:column}
+.tm-heard-card blockquote{margin:0;color:#1D1D1F;letter-spacing:-.01em}
+.du .tm-heard-card blockquote{line-height:1.35}
 /* the frame sets the attribution on the right, under the quote */
-.tm-heard-who{margin-top:auto;padding-top:calc(44*var(--u));text-align:right}
+.tm-heard-who{margin-top:auto;padding-top:calc(30*var(--u));text-align:right;
+  color:#6E6E73}
 
 .tm-learn-head{margin-top:calc(14*var(--u))}
 .tm-learn-aside{margin:calc(30*var(--u)) auto 0;max-width:calc(1000*var(--u));color:#6E6E73}
 .tm-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
 .tm-learn-c{background:#0A0A0A;color:#F5F5F7;border-radius:calc(20*var(--u));
-  padding:calc(46*var(--u)) calc(40*var(--u))}
-.tm-learn-h{letter-spacing:-.008em}
+  padding:calc(48*var(--u)) calc(42*var(--u))}
+.tm-learn-h{letter-spacing:-.014em}
 .tm-learn-b{margin-top:calc(24*var(--u));color:#A1A1A6;line-height:1.5}
 
 /* ---- impact figures ---------------------------------------------------------
@@ -1614,10 +1632,8 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 
 @media (max-width:1068px){
   .tm-heard{grid-template-columns:1fr;gap:16px}
-  .tm-lead-who{margin-top:20px}
-  .tm-iter-tag{margin-bottom:14px}
-  .tm-iter-turn{margin-top:18px}
-  .tm-heard-card{padding:26px}
+  .tm-heard-head{padding:0}
+  .tm-heard-card{padding:24px}
   .tm-heard-who{margin-top:20px;padding-top:0}
   .tm-learn{grid-template-columns:1fr;gap:16px}
   .tm-learn-c{padding:28px}
@@ -1639,7 +1655,7 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
    938px of a 1097px card and the quote column collapsed to ZERO, setting one
    word per line. `width:min(420u,100%)` on the frame does not help, because
    `100%` is indefinite inside an auto track. */
-.tm-iter{background:#FFFFFF;border-radius:calc(22*var(--u));
+.tm-iter{background:#FFFFFF;border-radius:calc(20*var(--u));
   padding:calc(66*var(--u)) calc(70*var(--u));min-height:calc(430*var(--u));
   display:grid;grid-template-columns:minmax(0,1fr) calc(660*var(--u));
   align-items:center;gap:calc(70*var(--u))}
@@ -1650,12 +1666,7 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
   gap:calc(26*var(--u))}
 .tm-iter-cap{color:#6E6E73;text-align:center}
 .tm-iter-fix{background:#0A0A0A;color:#F5F5F7}
-.tm-iter-tag{color:#6E6E73;text-transform:uppercase;letter-spacing:.06em;
-  margin-bottom:calc(26*var(--u))}
-.tm-iter-tag-fix{color:#0A84FF}
-/* the only hint that the card turns, and it is on the front only */
-.tm-iter-turn{margin-top:calc(30*var(--u));color:#86868B}
-html.no-touch .flip:hover .tm-iter-turn{color:#1D1D1F}
+.tm-iter-label{color:#0A84FF;font-weight:600;letter-spacing:-.006em}
 .tm-iter-body{margin-top:calc(26*var(--u));color:#F5F5F7;letter-spacing:-.014em}
 .tm-iter-fix .tm-iter-cap{color:#A1A1A6}
 
@@ -1969,14 +1980,12 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
    first's, so auto rows left the bottom two cards 29px taller than the top
    two. All four match the tallest now. */
 .lv-cards{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
-  gap:calc(52*var(--u)) calc(43*var(--u));
-  width:calc(941*var(--u));margin:calc(197*var(--u)) var(--m) 0 calc(458*var(--u))}
-/* min-height, not height: the frame draws 450 and that is the floor, but the
-   third pillar's body runs to six lines at some widths and a fixed height
-   would clip it. Grid rows stretch, so the pair still match. */
-.lv-card{background:#fff;color:#1D1D1F;border-radius:calc(27*var(--u));
-  min-height:calc(450*var(--u));padding:calc(59*var(--u)) calc(58*var(--u))}
-.lv-card-body{margin-top:calc(20*var(--u))}
+  gap:calc(28*var(--u));
+  margin:calc(110*var(--u)) var(--m) 0 calc(261*var(--u))}
+/* Grid rows stretch, so a pair still matches without a floor height. */
+.lv-card{background:#fff;color:#1D1D1F;border-radius:calc(20*var(--u));
+  padding:calc(46*var(--u)) calc(42*var(--u));display:flex;flex-direction:column}
+.lv-card-body{margin-top:calc(24*var(--u));color:#6E6E73;line-height:1.5}
 
 /* the redesign rows: a device and its line. The middle row puts the copy
    first in the DOM, which is how the frame mirrors it - no row-reverse, so
@@ -2241,6 +2250,35 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
   margin:calc(54*var(--u)) calc(52*var(--u))}
 .lh-prob-h{letter-spacing:-.014em}
 .lh-prob-b{margin-top:calc(28*var(--u));color:#6E6E73;line-height:1.45}
+/* the two cards under the photo hold a drawn graphic, so they get a floor and
+   push it to the bottom - without one they were a heading, one line, and a
+   lot of white */
+.lh-probs > .lh-prob:not(.lh-prob-lead){display:flex;flex-direction:column}
+.lh-probs > .lh-prob .lq{padding-top:calc(54*var(--u))}
+
+/* ---- the drawn graphics (components/LighthouseProblem.js) ----------------- */
+.lq{line-height:1}
+/* three different people, one identical set of steps */
+.lq-road{display:flex;flex-direction:column;gap:calc(20*var(--u))}
+.lq-lane{display:flex;align-items:center;gap:calc(16*var(--u));min-width:0}
+.lq-face{flex:none;width:calc(34*var(--u));height:calc(34*var(--u));border-radius:50%;
+  background:#D2D2D7}
+.lq-lane:nth-child(2) .lq-face{background:#B9B9C0}
+.lq-lane:nth-child(3) .lq-face{background:#E3E3E8}
+.lq-track{display:flex;align-items:center;gap:calc(10*var(--u));min-width:0}
+.lq-step{font-size:max(12px,calc(19*var(--u)));font-weight:500;letter-spacing:.004em;
+  color:#6E6E73;white-space:nowrap;padding:calc(11*var(--u)) calc(16*var(--u));
+  border:1px solid var(--line);border-radius:999px;background:#FFFFFF}
+.lq-track > .lq-step + .lq-step{position:relative}
+.lq-track > .lq-step + .lq-step::before{content:'';position:absolute;
+  left:calc(-10*var(--u));top:50%;width:calc(10*var(--u));height:1px;background:var(--line)}
+/* every source at once, none of them ranked */
+.lq-noise{display:flex;flex-wrap:wrap;gap:calc(12*var(--u))}
+.lq-chip{font-size:max(12px,calc(19*var(--u)));font-weight:500;letter-spacing:.004em;
+  color:#6E6E73;padding:calc(11*var(--u)) calc(17*var(--u));border-radius:999px;
+  background:#F5F5F7;
+  transform:translateY(calc((var(--i) % 3 - 1) * 5 * var(--u)))}
+.lq-chip:nth-child(3n+2){background:#F5F5F7;box-shadow:inset 0 0 0 1px rgba(0,0,0,.07)}
 
 /* ---- personas -------------------------------------------------------------
    Three grey boxes abreast gave each archetype a third of a row and a 32px
@@ -2250,13 +2288,18 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
    No photographs of these three exist, and a stock face would have been a lie
    about a persona in any case. */
 .lh-people{display:flex;flex-direction:column}
-.lh-person{display:grid;grid-template-columns:calc(640*var(--u)) 1fr;
-  gap:calc(80*var(--u));align-items:start;
-  border-top:1px solid var(--line);padding:calc(60*var(--u)) 0 calc(66*var(--u))}
+.lh-person{display:grid;grid-template-columns:calc(620*var(--u)) 1fr;
+  gap:calc(70*var(--u));align-items:baseline;
+  border-top:1px solid var(--line);padding:calc(40*var(--u)) 0 calc(44*var(--u))}
 .lh-person:last-child{border-bottom:1px solid var(--line)}
-.lh-person-label{letter-spacing:-.018em}
-.lh-person-who{margin-top:calc(18*var(--u));font-weight:500}
-.lh-person-line{color:#6E6E73;line-height:1.42;max-width:calc(680*var(--u))}
+.lh-person-label{letter-spacing:-.014em}
+/* The name rides with the archetype rather than hanging under it, which is
+   what left each of these rows three-quarters empty.
+   #029322 at 18px is 4.04:1 on white - under AA. The rules and dots keep the
+   brand green; the name takes a darker cut of the same hue at 5.4:1. */
+.lh-person-who{margin-left:calc(18*var(--u));font-weight:500;color:#017318;
+  white-space:nowrap}
+.lh-person-line{color:#6E6E73;max-width:calc(680*var(--u))}
 
 /* the pattern cards, each closing on what it led to */
 /* The held heading, the way Peak's five patterns do it: sticky inside a grid
@@ -2280,15 +2323,35 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
   line-height:1.45;border-top:1px solid rgba(255,255,255,.12)}
 
 /* the three questions, and the four steps under them */
-.lh-core-lead{margin-top:calc(54*var(--u));color:#6E6E73}
-.lh-qs{list-style:none;margin-top:calc(44*var(--u));display:flex;
-  flex-direction:column;gap:calc(30*var(--u))}
-.lh-q{position:relative;padding-left:calc(54*var(--u));letter-spacing:-.016em}
-.lh-q::before{content:'';position:absolute;left:0;top:.56em;
-  width:calc(16*var(--u));height:calc(16*var(--u));border-radius:50%;
-  background:#029322}
-.lh-core-body{margin-top:calc(46*var(--u));color:#6E6E73;
-  max-width:calc(1000*var(--u))}
+.lh-core-lead{margin-top:calc(44*var(--u));color:#6E6E73}
+/* three columns, a green rule over each - the same shape the personas and
+   Times Media's score inputs use, so a reader meets one idea per column */
+.lh-qs{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:calc(28*var(--u))}
+.lh-q{display:flex;flex-direction:column;gap:calc(34*var(--u));
+  background:#F5F5F7;border-radius:calc(20*var(--u));
+  padding:calc(48*var(--u)) calc(42*var(--u));min-height:calc(290*var(--u))}
+.lh-q-rule{display:block;width:calc(64*var(--u));height:calc(4*var(--u));
+  border-radius:2px}
+.lh-q-t{letter-spacing:-.012em}
+
+/* ---- where it fell short, and who built it ------------------------------- */
+.lh-fails{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.lh-fail{background:#141416;border-radius:calc(20*var(--u));
+  padding:calc(48*var(--u)) calc(42*var(--u))}
+.lh-fail-h{letter-spacing:-.014em}
+.lh-fail-b{margin-top:calc(24*var(--u));color:#A1A1A6}
+.du .lh-fail-b{line-height:1.45}
+.lh-team{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.lh-team-c{background:#F5F5F7;border-radius:calc(20*var(--u));
+  padding:calc(44*var(--u)) calc(40*var(--u))}
+.lh-team-rule{display:block;width:calc(56*var(--u));height:calc(4*var(--u));
+  border-radius:2px;margin-bottom:calc(28*var(--u))}
+.lh-team-who{letter-spacing:-.014em}
+.lh-team-role{margin-top:calc(8*var(--u));color:#017318}
+.lh-team-line{margin-top:calc(22*var(--u));color:#6E6E73}
+.du .lh-team-line{line-height:1.45}
+.lh-core-body{color:#6E6E73}
 /* the solution blocks: flat screens, copy alternating side */
 /* Stacked, heading centred over its screen, as his frame draws it - not the
    text-left / screen-right alternation the written spec described. The column
@@ -2310,8 +2373,8 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
 .lh-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
 /* the same card Peak, Times Media and Liveasy all close on - no numbers */
 .lh-learn-c{background:#0A0A0A;color:#F5F5F7;border-radius:calc(20*var(--u));
-  padding:calc(54*var(--u)) calc(44*var(--u))}
-.lh-learn-h{letter-spacing:-.014em}
+  padding:calc(48*var(--u)) calc(42*var(--u))}
+.lh-learn-h{letter-spacing:-.008em}
 .lh-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
 
 @media (max-width:1068px){
@@ -2333,9 +2396,17 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
   .lh-held{grid-template-columns:1fr;gap:32px;padding-inline:var(--m)}
   .lh-held-head{position:static;top:auto}
   .lh-probs,.lh-learn{grid-template-columns:1fr;gap:16px}
+  /* three no-wrap pills in a row set the card's min-content width, which made
+     the whole problem grid 4px wider than a 390 screen */
+  .lh-qs,.lh-fails,.lh-team{grid-template-columns:1fr;gap:16px}
+  .lh-q{min-height:0;padding:26px;gap:20px}
+  .lh-fail,.lh-team-c{padding:26px}
+  .lq-track{flex-wrap:wrap}
+  .lq-step{white-space:normal}
+  .lq-track > .lq-step + .lq-step::before{display:none}
   /* the persona rows stack: a 640 design-px column is wider than the screen */
-  .lh-person{grid-template-columns:1fr;gap:12px;padding:24px 0 28px}
-  .lh-person-who{margin-top:10px}
+  .lh-person{grid-template-columns:1fr;gap:10px;padding:22px 0 26px}
+  .lh-person-who{margin-left:12px}
   .lh-person-line{max-width:none}
   .lh-learn-c{padding:28px}
   .lh-learn-b{margin-top:18px}
@@ -2389,10 +2460,40 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
 
 /* ---- the redesign, three screens deep -------------------------------------
    One laptop a row at the full measure, each with its line centred under it. */
-.lv-screens{display:flex;flex-direction:column;gap:calc(150*var(--u))}
+.lv-screens{display:flex;flex-direction:column;gap:calc(190*var(--u))}
 .lv-screen{margin:0}
+/* the pillar each screen answers, centred over it */
+.lv-screen-head{text-align:center;max-width:calc(1000*var(--u));
+  margin:0 auto calc(60*var(--u))}
+.lv-screen-h{letter-spacing:-.02em}
+.lv-screen-b{margin-top:calc(26*var(--u));color:#6E6E73}
+.du .lv-screen-b{line-height:1.45}
 .lv-screen-cap{display:block;margin-top:calc(54*var(--u));text-align:center;
   color:#1D1D1F;letter-spacing:-.014em}
+
+/* ---- the pillar marks (components/LiveasyPillar.js) ----------------------
+   Quiet by design: a pillar is a principle, so the mark says the shape of
+   the idea and then gets out of the way. */
+/* the marks sit on the floor of their cards, so four cards of different copy
+   lengths still line their marks up with each other */
+.lp{display:flex;margin-top:auto;padding-top:calc(48*var(--u));gap:calc(10*var(--u))}
+.lp-clarity{flex-direction:column;gap:calc(9*var(--u))}
+.lp-bar{display:block;height:calc(8*var(--u));min-height:4px;border-radius:999px;
+  width:var(--w,100%);background:#E3E3E8}
+.lp-bar-lit{height:calc(13*var(--u));min-height:6px;background:#1D1D1F;width:86%}
+.lp-logo{display:block;width:calc(62*var(--u));height:calc(26*var(--u));
+  min-height:14px;border-radius:calc(6*var(--u));background:#E3E3E8}
+.lp-logo:nth-child(2){width:calc(46*var(--u))}
+.lp-logo:nth-child(3){width:calc(70*var(--u))}
+.lp-logo:nth-child(4){width:calc(52*var(--u))}
+.lp-path{align-items:flex-end;gap:calc(16*var(--u))}
+.lp-lane{display:block;width:calc(14*var(--u));min-width:7px;height:calc(30*var(--u));
+  border-radius:999px;background:#E3E3E8}
+.lp-lane-lit{height:calc(74*var(--u));background:#C2893A}
+.lp-outcome{flex-direction:column;align-items:flex-start;gap:calc(10*var(--u));
+  font-size:max(12px,calc(21*var(--u)));font-weight:500;letter-spacing:.004em}
+.lp-was{color:#86868B;text-decoration:line-through}
+.lp-now{color:#1D1D1F}
 
 /* ---- learnings ----------------------------------------------------------- */
 .lv-learn-head{margin-top:calc(14*var(--u))}
@@ -2400,8 +2501,8 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
   color:#6E6E73}
 .lv-learn{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
 .lv-learn-c{background:#0A0A0A;color:#F5F5F7;border-radius:calc(20*var(--u));
-  padding:calc(54*var(--u)) calc(44*var(--u))}
-.lv-learn-h{letter-spacing:-.014em}
+  padding:calc(48*var(--u)) calc(42*var(--u))}
+.lv-learn-h{letter-spacing:-.008em}
 .lv-learn-b{margin-top:calc(30*var(--u));color:#A1A1A6;line-height:1.45}
 
 @media (max-width:1068px){
@@ -2414,8 +2515,11 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
   .lv-hero .pin-first::before{background:linear-gradient(180deg,
     rgba(0,0,0,.5) 0%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.44) 100%)}
   .lv-res-aside{margin-top:18px;max-width:none}
-  .lv-screens{gap:64px}
+  .lv-screens{gap:72px}
+  .lv-screen-head{margin-bottom:26px}
+  .lv-screen-b{margin-top:14px}
   .lv-screen-cap{margin-top:24px}
+  .lp{padding-top:24px}
   .lv-learn{grid-template-columns:1fr;gap:16px}
   .lv-learn-c{padding:28px}
   .lv-learn-b{margin-top:18px}
@@ -2862,3 +2966,35 @@ html.no-reduced-motion .pk-hero .pin-scrim,html.no-reduced-motion .tm-hero .pin-
 html.no-touch .ow-slide:hover .ow-name .chev{transform:translateX(calc(7*var(--u)))}
 @media (max-width:1068px){ .ow-name{left:22px;bottom:20px;gap:8px;padding:9px 16px} }
 @media (max-width:1068px){ .ow-slide{width:min(760px,calc(100vw - 2 * var(--m)))} }
+
+
+/* ---- reading leading, restated where it can actually win ------------------
+   Every class below declares its own line-height for reading copy. The type
+   ramp sets line-height from TWO classes (`.du .p26`), so from one class none
+   of them has ever applied and every paragraph on the site has been set at
+   display leading. Measured: `.lh-aside` declares 1.45 and computed 1.20.
+   Restated at two classes, in the same order the file declares them, so the
+   intent each rule already carried is the one that lands. */
+.du .pk-problem-body{line-height:1.45}
+.du .pk-post-body{line-height:1.3}
+.du .pk-stages-aside{line-height:1.45}
+.du .pk-stage-b{line-height:1.45}
+.du .pk-learn-b{line-height:1.45}
+.du .faq-a{line-height:1.45}
+.du .faq-li{line-height:1.45}
+.du .tm-learn-b{line-height:1.5}
+.du .tm-metric-b{line-height:1.45}
+.du .tm-score-lead{line-height:1.45}
+.du .tm-score-cap{line-height:1.45}
+.du .tm-score-b{line-height:1.45}
+.du .tm-iter-aside{line-height:1.45}
+.du .lv-card-body{line-height:1.5}
+.du .lv-res-aside{line-height:1.45}
+.du .lv-learn-b{line-height:1.45}
+.du .lh-aside{line-height:1.45}
+.du .lh-prob-b{line-height:1.45}
+.du .lh-person-line{line-height:1.42}
+.du .lh-pat-b{line-height:1.45}
+.du .lh-pat-led{line-height:1.45}
+.du .lh-sol-b{line-height:1.45}
+.du .lh-learn-b{line-height:1.45}

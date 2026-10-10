@@ -60,7 +60,7 @@ export default function TimesMedia() {
         {/* ---- research ---- */}
         <section className="du-sec" id="research" style={{ '--pt': 185, '--pb': 62 }}>
           <div className="du-w" style={{ '--mw': 1400 }}>
-            <h2 className="p60 center" style={{ '--ac': RED }} data-reveal data-swipe>
+            <h2 className="p80 center" style={{ '--ac': RED }} data-reveal data-swipe>
               <Lines lines={C.research.headline} swipe />
             </h2>
           </div>
@@ -77,7 +77,7 @@ export default function TimesMedia() {
               between */}
           <div className="du-w tm-voices" style={{ '--mw': 1161, '--mt': 97 }} data-stagger>
             {C.research.voices.map((v, i) => (
-              <figure key={i} className="tm-voice" data-reveal data-amp={i % 2 ? 76 : 52}>
+              <figure key={i} className="tm-voice" data-reveal data-in="blur" data-amp={i % 2 ? 76 : 52}>
                 <blockquote className="p34">{para(v.lines)}</blockquote>
                 <figcaption className="p24 c-2"><Lines lines={v.who} /></figcaption>
               </figure>
@@ -90,7 +90,7 @@ export default function TimesMedia() {
                 spanning both sections. ---- */}
         <div className="tm-run" id="problem">
           <section className="du-sec" style={{ '--pt': 185, '--pb': 104 }}>
-            <h2 className="p70 du-x" style={{ '--x': 237 }} data-reveal data-swipe>
+            <h2 className="p96 du-x" style={{ '--x': 237 }} data-reveal data-swipe>
               <Lines lines={C.problem.headline} swipe />
             </h2>
             <div className="tm-broke-copy" data-stagger>
@@ -117,7 +117,7 @@ export default function TimesMedia() {
         <section className="du-sec bg-dark" id="solution" style={{ '--pt': 0, '--pb': 0 }}>
           {/* ---- the solution ---- */}
           <div className="du-w" style={{ '--mw': 1400, '--mt': 445 }}>
-            <h2 className="p70 center" style={{ '--ac': RED }} data-reveal data-swipe>
+            <h2 className="p96 center" style={{ '--ac': RED }} data-reveal data-swipe>
               <Lines lines={C.solution.headline} swipe />
             </h2>
           </div>
@@ -168,10 +168,10 @@ export default function TimesMedia() {
         {/* ---- 3D street view. The updated frame turns the ground back to
                 white here and keeps it white all the way to the foot. ---- */}
         <section className="du-sec" id="in-the-field" style={{ '--pt': 437, '--pb': 240 }}>
-          <h2 className="p70 du-x" style={{ '--x': 256 }} data-reveal data-swipe>
+          <h2 className="p96 du-x" style={{ '--x': 256 }} data-reveal data-swipe>
             <Lines lines={C.street.headline} swipe />
           </h2>
-          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal>
+          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal data-in="lift">
             <Frame kind="ipad" w={1221} clip={V('street')} data-sv="rise"
                    alt="A board previewed in 3D Street View, from the road a driver would see it from" />
             <p className="p38 center tm-cap">{para(C.street.shots[0].line)}</p>
@@ -195,7 +195,7 @@ export default function TimesMedia() {
                 <p className="p26 w500 tm-score-lead" data-reveal>{para(C.street.score.lead)}</p>
               </div>
               {C.street.score.inputs.map((it, i) => (
-                <div key={it.label} className="tm-score-c" data-reveal data-amp={i % 2 ? 76 : 52}>
+                <div key={it.label} className="tm-score-c" data-reveal data-in="side" data-amp={i % 2 ? 76 : 52}>
                   <p className="p48 tm-score-h">{it.label}</p>
                   <p className="p26 w500 tm-score-b">{it.body}</p>
                 </div>
@@ -216,10 +216,10 @@ export default function TimesMedia() {
                 than as the whole section. ---- */}
         <section className="du-sec" id="impact" style={{ '--pt': 233, '--pb': 200 }}>
           <p className="p28 w500 center" data-reveal>{C.impact.eyebrow}</p>
-          <h2 className="p60 center tm-learn-head" data-reveal><Lines lines={C.impact.head} /></h2>
+          <h2 className="p80 center tm-learn-head" data-reveal><Lines lines={C.impact.head} /></h2>
           <div className="du-w tm-metrics" style={{ '--mw': 1448, '--mt': 130 }} data-stagger>
             {C.impact.figures.map((f, i) => (
-              <div key={f.label} className="tm-metric" data-reveal data-amp={i % 2 ? 76 : 52}>
+              <div key={f.label} className="tm-metric" data-reveal data-in="scale" data-amp={i % 2 ? 76 : 52}>
                 <p className="p70 tm-metric-n">{f.n}</p>
                 <p className="p28 tm-metric-l">{f.label}</p>
                 <p className="p23 w500 tm-metric-b">{para(f.note)}</p>
@@ -242,7 +242,7 @@ export default function TimesMedia() {
         <section className="du-sec bg-fill tm-iter-sec" id="feedback" style={{ '--pt': 120, '--pb': 200 }}>
           <div className="du-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.iterate.eyebrow}</p>
-            <h2 className="p70" data-reveal><Lines lines={C.iterate.head} /></h2>
+            <h2 className="p96" data-reveal><Lines lines={C.iterate.head} /></h2>
             <p className="p25 w500 tm-iter-aside" data-reveal><Lines lines={C.iterate.aside} /></p>
           </div>
           <div className="du-w tm-iters" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
@@ -252,10 +252,8 @@ export default function TimesMedia() {
                   front={
                     <div className="tm-iter">
                       <div className="tm-iter-copy">
-                        <p className="p23 w500 tm-iter-tag">{`${C.iterate.problem} 0${i + 1}`}</p>
                         <blockquote className="p34 tm-iter-quote">{para(c.quote)}</blockquote>
                         <p className="p24 c-2 tm-iter-who">{c.who}</p>
-                        <p className="p23 w500 tm-iter-turn" aria-hidden="true">{C.iterate.turn}</p>
                       </div>
                       <figure className="tm-iter-shot">
                         <Frame kind={c.dev} w={c.dev === 'phone' ? 290 : 620}
@@ -267,7 +265,7 @@ export default function TimesMedia() {
                   back={
                     <div className="tm-iter tm-iter-fix">
                       <div className="tm-iter-copy">
-                        <p className="p23 w500 tm-iter-tag tm-iter-tag-fix">{`${C.iterate.changed} 0${i + 1}`}</p>
+                        <p className="p24 tm-iter-label">{C.iterate.changed}</p>
                         <p className="p34 tm-iter-body">{para(c.body)}</p>
                       </div>
                       <figure className="tm-iter-shot">
@@ -286,31 +284,25 @@ export default function TimesMedia() {
         {/* ---- hearing it back: the heading takes the first cell of the
                 grid and the three quotes take the other three ---- */}
         <section className="du-sec bg-fill" style={{ '--pt': 0, '--pb': 200 }}>
-          <p className="p28 w500 center" data-reveal>{C.heard.eyebrow}</p>
-          <h2 className="p60 center tm-learn-head" data-reveal><Lines lines={C.heard.head} /></h2>
-          {/* the owner's is the lead - the only one carrying a number - and the
-              two people who use it every day sit under it, so this reads as
-              testimony with a shape rather than three equal boxes */}
-          <figure className="du-w tm-lead-q" style={{ '--mw': 1300, '--mt': 130 }} data-reveal>
-            <blockquote className="p55 center"><Lines lines={C.heard.lead.lines} /></blockquote>
-            <figcaption className="p24 center tm-lead-who">{C.heard.lead.who}</figcaption>
-          </figure>
-          <div className="du-w tm-heard" style={{ '--mw': 1300, '--mt': 130 }} data-stagger>
+          <div className="du-w tm-heard" style={{ '--mw': 1448 }} data-stagger>
+            <div className="tm-heard-head" data-reveal>
+              <h2 className="p70"><Lines lines={C.heard.head} /></h2>
+            </div>
             {C.heard.quotes.map((q, i) => (
-              <figure key={i} className="tm-heard-card" data-reveal data-amp={i % 2 ? 76 : 52}>
-                <blockquote className="p34"><Lines lines={q.lines} /></blockquote>
-                <figcaption className="p24 c-2 tm-heard-who"><Lines lines={q.who} /></figcaption>
+              <figure key={i} className="tm-heard-card" data-reveal data-in="blur" data-amp={i % 2 ? 76 : 52}>
+                <blockquote className="p28"><Lines lines={q.lines} /></blockquote>
+                <figcaption className="p23 w500 tm-heard-who"><Lines lines={q.who} /></figcaption>
               </figure>
             ))}
           </div>
         </section>
 
         {/* ---- learnings ---- */}
-        <section className="du-sec bg-fill" id="learnings" style={{ '--pt': 0, '--pb': 200 }}>
+        <section className="du-sec bg-fill" id="learnings" style={{ '--pt': 0, '--pb': 120 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
-          <h2 className="p60 center tm-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
+          <h2 className="p80 center tm-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
           <p className="p26 w500 center tm-learn-aside" data-reveal>{para(C.learned.aside)}</p>
-          <div className="du-w tm-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
+          <div className="du-w tm-learn" style={{ '--mw': 1560, '--mt': 96 }} data-stagger>
             {C.learned.cards.map((c, i) => (
               <div key={i} className="tm-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
                 <h3 className="p28 tm-learn-h"><Lines lines={c.head} /></h3>
@@ -321,7 +313,7 @@ export default function TimesMedia() {
         </section>
 
         {/* ---- FAQ ---- */}
-        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} id="faq" x={240} pt={240} />
+        <Faq eyebrow={C.faq.eyebrow} head={C.faq.head} items={C.faq.items} id="faq" x={240} pt={190} />
 
         <OtherWork slug="times-media" head={C.other} headX={403} other={{ pt: 164, pb: 0 }} />
         <Outro x={164} pt={225} pb={267} />
