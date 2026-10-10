@@ -235,7 +235,7 @@ export default function Lighthouse() {
           <h2 className="p80 center lh-learn-head" data-reveal><Lines lines={C.learned.head} /></h2>
           <div className="du-w lh-learn" style={{ '--mw': 1560, '--mt': 110 }} data-stagger>
             {C.learned.cards.map((c, i) => (
-              <div key={c.n} className="lh-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
+              <div key={c.n} className="lh-learn-c" data-reveal data-in="lift" data-amp={[52, 76, 52][i]}>
                 <h3 className="p28 lh-learn-h"><Lines lines={c.head} /></h3>
                 <p className="p24 lh-learn-b">{para(c.body)}</p>
               </div>

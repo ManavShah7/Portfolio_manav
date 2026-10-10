@@ -64,7 +64,7 @@ export default function TimesMedia() {
               <Lines lines={C.research.headline} swipe />
             </h2>
           </div>
-          <div className="du-w tm-owner" style={{ '--mw': 1161, '--mt': 229 }} data-reveal>
+          <div className="du-w tm-owner" style={{ '--mw': 1161, '--mt': 229 }} data-reveal data-in="scale">
             {/* no forced ratio: the column is 500 wide and the card 532 tall,
                 so a 1:1 square overflowed it by 32px and shoved the quote
                 across. It fills its own column and crops instead. */}
@@ -123,7 +123,7 @@ export default function TimesMedia() {
           </div>
 
           <div className="du-w" style={{ '--mw': 1230, '--mt': 202 }} data-reveal>
-            <Frame kind="ipad" w={1300} shot={C.shots.admin} alt="The admin panel" data-sv="rise" />
+            <Frame kind="ipad" w={1300} shot={C.shots.admin} alt="The admin panel" data-sv="tilt" />
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.solution.admin.lead, C.solution.admin.line)}
@@ -133,8 +133,8 @@ export default function TimesMedia() {
             <Lines lines={C.solution.siteHead} />
           </h3>
           <div className="tm-site">
-            <div className="tm-site-media" data-reveal>
-              <Frame kind="mac" w={905} clip={V('hero')} data-sv="rise"
+            <div className="tm-site-media" data-reveal data-in="lift">
+              <Frame kind="mac" w={905} clip={V('hero')} data-sv="tilt"
                      alt="The new Times Media site, with its live board map and booking call to action" />
             </div>
             <p className="p38 tm-site-copy" data-reveal>{para(C.solution.site)}</p>
@@ -171,8 +171,8 @@ export default function TimesMedia() {
           <h2 className="p96 du-x" style={{ '--x': 256 }} data-reveal data-swipe>
             <Lines lines={C.street.headline} swipe />
           </h2>
-          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal data-in="lift">
-            <Frame kind="ipad" w={1221} clip={V('street')} data-sv="rise"
+          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal data-in="mask">
+            <Frame kind="ipad" w={1221} clip={V('street')} data-sv="tilt"
                    alt="A board previewed in 3D Street View, from the road a driver would see it from" />
             <p className="p38 center tm-cap">{para(C.street.shots[0].line)}</p>
           </div>
@@ -203,8 +203,8 @@ export default function TimesMedia() {
             </div>
           </div>
           <div className="du-w tm-field" style={{ '--mw': 1296, '--mt': 281 }} data-stagger>
-            <div data-reveal><Frame kind="ipad" w={883} shot={C.shots.maint} alt="Maintenance requests in the admin panel" /></div>
-            <div data-reveal><Frame kind="phone" w={251} shot={C.shots.maintPhone} alt="The field agent raising a request" /></div>
+            <div data-reveal data-in="lift"><Frame kind="ipad" w={883} shot={C.shots.maint} alt="Maintenance requests in the admin panel" data-sv="tilt" /></div>
+            <div data-reveal data-in="lift"><Frame kind="phone" w={251} shot={C.shots.maintPhone} alt="The field agent raising a request" data-sv="tilt" /></div>
           </div>
           <p className="p38 lit center du-w" style={{ '--mw': 1100, '--mt': 116 }} data-reveal>
             {cap(C.street.field.lead, C.street.field.line)}
@@ -247,7 +247,7 @@ export default function TimesMedia() {
           </div>
           <div className="du-w tm-iters" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
             {C.iterate.cards.map((c, i) => (
-              <div key={i} data-reveal data-amp={i % 2 ? 76 : 52}>
+              <div key={i} data-reveal data-in="lift" data-amp={i % 2 ? 76 : 52}>
                 <Flip label={`what changed for ${c.who}`}
                   front={
                     <div className="tm-iter">
@@ -304,7 +304,7 @@ export default function TimesMedia() {
           <p className="p26 w500 center tm-learn-aside" data-reveal>{para(C.learned.aside)}</p>
           <div className="du-w tm-learn" style={{ '--mw': 1560, '--mt': 96 }} data-stagger>
             {C.learned.cards.map((c, i) => (
-              <div key={i} className="tm-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
+              <div key={i} className="tm-learn-c" data-reveal data-in="lift" data-amp={[52, 76, 52][i]}>
                 <h3 className="p28 tm-learn-h"><Lines lines={c.head} /></h3>
                 <p className="p24 tm-learn-b">{para(c.body)}</p>
               </div>

@@ -119,7 +119,7 @@ export default function Peak() {
             </div>
             <div className="pk-two" data-stagger>
               {C.problem.cards.map((c, i) => (
-                <div key={i} className="pk-card black pk-problem-card" data-reveal>
+                <div key={i} className="pk-card black pk-problem-card" data-reveal data-in="lift">
                   <p className="p27"><Lines lines={c.head} /></p>
                   {/* the frame leaves these cards empty under the heading;
                       each graphic says what its heading claims */}
@@ -144,7 +144,7 @@ export default function Peak() {
           </div>
           <div className="pk-w pk-trio-voices" style={{ '--mw': 1420, '--mt': 96 }} data-stagger>
             {C.research.quotes.map((q, i) => (
-              <figure key={i} className="pk-voice" data-reveal data-amp={i % 2 ? 76 : 52}>
+              <figure key={i} className="pk-voice" data-reveal data-in="blur" data-amp={i % 2 ? 76 : 52}>
                 <Media clip={V(`voice${i + 1}`)} className="pk-voice-photo" alt={q.who} />
                 <figcaption className="p23 w500">{q.who}</figcaption>
                 <blockquote className="p28"><Lines lines={q.lines} /></blockquote>
@@ -270,7 +270,7 @@ export default function Peak() {
           <Gallery label="Four ways to log food" className="pk-gallery pk-dark-paddles" always
                    style={{ '--inset': 'calc(298 * var(--u))' }}>
             {C.solution.cards.map((c, i) => (
-              <article key={i} className="pk-cat" data-reveal>
+              <article key={i} className="pk-cat" data-reveal data-in="lift">
                 <div className="pk-card black pk-cat-card">
                   <Phone w={206} h={420} slot={['catalog', 'food', 'disambig', 'integrations'][i]} />
                 </div>
@@ -365,7 +365,7 @@ export default function Peak() {
           <p className="p26 w500 center pk-prog-aside" data-reveal>{para(C.progress.aside)}</p>
           <div className="pk-w pk-prog" style={{ '--mw': 1180, '--mt': 96 }} data-stagger>
             {C.progress.quotes.map((q, i) => (
-              <figure key={q.who} className="pk-voice" data-reveal data-amp={i % 2 ? 76 : 52}>
+              <figure key={q.who} className="pk-voice" data-reveal data-in="blur" data-amp={i % 2 ? 76 : 52}>
                 <Media clip={V(q.ink)} className="pk-voice-photo" alt={q.who} />
                 <figcaption className="p23 w500">{q.who}</figcaption>
                 <blockquote className="p28"><Lines lines={q.lines} /></blockquote>
@@ -397,7 +397,7 @@ export default function Peak() {
           <Gallery label="What's next" className="pk-gallery pk-light-paddles pk-next-cards" always
                    style={{ '--inset': 'calc(149 * var(--u))' }}>
             {C.whatsNext.cards.map(c => (
-              <div key={c.title} className="pk-card pk-wn" data-reveal>
+              <div key={c.title} className="pk-card pk-wn" data-reveal data-in="side">
                 <h3 className="p28">{c.title}</h3>
                 <p className="p26 w500">{para(c.body)}</p>
               </div>

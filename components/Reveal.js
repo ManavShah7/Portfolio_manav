@@ -44,7 +44,11 @@ const WINDOW = 0.40    // and completes over the next 40%
 // to 80 or 60 and back), so the damping changed speed mid-move, which is what
 // made the motion look broken. Measured here: the whole decay finished in
 // 143ms against the reference's ~690ms. So decay against real elapsed time.
-const TAU = 0.1        // seconds; the reference's ~100ms, now actually that
+// The reference measures ~100ms. 125 is a deliberate step past it: the extra
+// 25ms is all tail, so a block settles rather than stops, which is the whole
+// difference between "it moved" and "it arrived". Anything past ~150 starts
+// to read as drift - the thing the time-based rewrite was done to kill.
+const TAU = 0.125
 const DT_MAX = 0.05    // a tab-switch must not arrive as one enormous step
 const AMP = [60, 80]   // travel, alternating down a group
 // A phone is a fifth of the width and the travel was written for a laptop, so

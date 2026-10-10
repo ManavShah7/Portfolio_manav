@@ -32,7 +32,7 @@ export default function About() {
             {band?.poster && <span style={{ backgroundImage: `url(${band.poster})` }} />}
             {band?.video && <Video src={band.src} poster={band.poster} eager />}
           </div>
-          <p className="p50 center ab-quote" data-reveal><Lines lines={C.quote} /></p>
+          <p className="p50 center ab-quote" data-reveal data-in="blur"><Lines lines={C.quote} /></p>
         </section>
 
         {/* ---- about, beside the university ---- */}
@@ -66,7 +66,7 @@ export default function About() {
           </h2>
           <Gallery label="Design pillars" className="ab-gallery pk-light-paddles" paddles="right" always>
             {C.pillars.cards.map((c, i) => (
-              <article key={c.title.join(' ')} className="ab-pillar" data-reveal>
+              <article key={c.title.join(' ')} className="ab-pillar" data-reveal data-in="lift">
                 {/* the ink is the fallback; a clip at about-pillar-N takes its
                     place the moment the file is there (lib/about-copy.js) */}
                 <span className="ab-pillar-ink" style={{ backgroundImage: `url(${pillarClip(i)?.poster || INK(c.ink)})` }}>

@@ -82,7 +82,7 @@ export default function Liveasy() {
           {/* the page it replaced, scrolling past inside the laptop while the
               four points that describe it scroll past on the right */}
           <div className="lv-run-pin" aria-hidden="true">
-            <Frame kind="mac" w={760} shot={C.shots.old} />
+            <Frame kind="mac" w={760} shot={C.shots.old} alt="The Liveasy homepage before the redesign" />
           </div>
         </div>
 
@@ -155,7 +155,7 @@ export default function Liveasy() {
           <p className="p26 w500 center lv-learn-aside" data-reveal>{para(C.learned.aside)}</p>
           <div className="du-w lv-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
             {C.learned.cards.map((c, i) => (
-              <div key={i} className="lv-learn-c" data-reveal data-amp={[52, 76, 52][i]}>
+              <div key={i} className="lv-learn-c" data-reveal data-in="lift" data-amp={[52, 76, 52][i]}>
                 <h3 className="p28 lv-learn-h"><Lines lines={c.head} /></h3>
                 <p className="p24 lv-learn-b">{para(c.body)}</p>
               </div>

@@ -429,13 +429,17 @@ html.js.no-reduced-motion .cine [data-reveal]:not([data-swipe]).in{
    most, and it is what put a third claimant on this element's `transform`. */
 html.js.no-reduced-motion [data-reveal][data-swipe]{transform:none}
 html.js.no-reduced-motion [data-swipe] .ln{overflow:hidden}
+/* Each line is slower and they overlap: at .5s/300ms apart a four-line
+   headline took 1.45s to finish and read as four separate events. At
+   .68s/190ms the next line is already moving while the one above it settles,
+   which is one move instead of four - and the whole thing finishes sooner. */
 html.js.no-reduced-motion [data-swipe] .ln > span{display:inline-block;
-  transform:translateY(100%);transition:transform .5s ease}
+  transform:translateY(100%);transition:transform .68s var(--ease-soft)}
 html.js.no-reduced-motion [data-swipe].in .ln > span{transform:none}
-html.js.no-reduced-motion [data-swipe] .ln:nth-child(1) > span{transition-delay:.05s}
-html.js.no-reduced-motion [data-swipe] .ln:nth-child(2) > span{transition-delay:.35s}
-html.js.no-reduced-motion [data-swipe] .ln:nth-child(3) > span{transition-delay:.65s}
-html.js.no-reduced-motion [data-swipe] .ln:nth-child(4) > span{transition-delay:.95s}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(1) > span{transition-delay:.04s}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(2) > span{transition-delay:.23s}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(3) > span{transition-delay:.42s}
+html.js.no-reduced-motion [data-swipe] .ln:nth-child(4) > span{transition-delay:.61s}
 /* the mask would otherwise crop descenders and any accent's overshoot */
 html.js.no-reduced-motion [data-swipe] .ln{padding:0 .06em .1em;margin:0 -.06em -.1em}
 

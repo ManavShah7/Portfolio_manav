@@ -108,7 +108,7 @@ export default function Home() {
         {/* ---- purpose ---- */}
         <section className="hm-purpose">
           <h2 className="p59 hm-pink hm-purpose-head" data-reveal><Lines lines={C.purpose.head} /></h2>
-          <p className="p45 hm-purpose-body" data-reveal><Lines lines={C.purpose.body} /></p>
+          <p className="p45 hm-purpose-body" data-reveal data-in="blur"><Lines lines={C.purpose.body} /></p>
         </section>
 
         {/* ---- the wall: three justified rows of the UI work. Inside a row
@@ -119,7 +119,7 @@ export default function Home() {
           {C.wall.map((row, i) => (
             <div key={i} className="hm-wall-row">
               {row.map(({ n, r: [w, h], d }) => (
-                <figure key={n} className="hm-wall-item" data-reveal
+                <figure key={n} className="hm-wall-item" data-reveal data-in="scale"
                         style={{ '--w': w, '--h': h, '--a': (w / h).toFixed(4) }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={IMG(n)} alt="" loading="lazy" data-sv="drift"
