@@ -1443,13 +1443,25 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 }
 
 /* what's next */
-.pk-next-cards{margin-top:calc(188*var(--u))}
-.pk-wn{width:calc(538*var(--u));height:calc(441*var(--u));display:flex;flex-direction:column;justify-content:flex-end;
-  padding:0 calc(51*var(--u)) calc(44*var(--u))}
-.pk-wn .p26{margin-top:calc(14*var(--u));color:#6E6E73}
+/* three cards that all fit are a row, not a carousel - nobody should have to
+   find a paddle to read a list of three things */
+.pk-next{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(28*var(--u))}
+.pk-wn{display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:calc(330*var(--u));padding:calc(44*var(--u)) calc(40*var(--u))}
+.pk-wn-b{margin-top:calc(16*var(--u));color:#6E6E73}
+.du .pk-wn-b{line-height:1.45}
 .pk-wn .p28{color:#000}
-.pk-next-cards .paddles{margin:calc(44*var(--u)) calc(269*var(--u)) 0 0}
-@media (max-width:734px){ .pk-wn{width:78vw;height:auto;min-height:240px;padding:28px} }
+/* a release moving along: three ticks, one of them live */
+.pw{display:flex;align-items:center;gap:calc(10*var(--u));margin-bottom:auto;
+  padding-bottom:calc(34*var(--u))}
+.pw i{display:block;width:calc(34*var(--u));min-width:16px;height:calc(6*var(--u));
+  min-height:3px;border-radius:999px;background:#D8D8DD}
+.pw .pw-lit{background:#E8842A;width:calc(58*var(--u))}
+@media (max-width:1068px){
+  .pk-next{grid-template-columns:1fr;gap:16px}
+  .pk-wn{min-height:0;padding:28px}
+  .pw{padding-bottom:24px}
+}
 
 /* the other projects, one iPad at a time */
 /* one iPad at a time, as the frame draws it: the track is exactly one slide wide */
@@ -1592,7 +1604,8 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
 .tm-metric-n{letter-spacing:-.018em}
 .tm-metric-l{margin-top:calc(20*var(--u));letter-spacing:-.004em}
 .tm-metric-b{margin-top:calc(22*var(--u));color:#6E6E73;line-height:1.45}
-.tm-impact-close{margin-top:calc(160*var(--u))}
+/* now leads the figures, so the air goes above it, not below */
+.tm-impact-close{margin-top:calc(90*var(--u))}
 
 /* ---- the four inputs behind a board's visibility score -----------------------
    The heading holds while the four run past it and down into the screen that
@@ -1627,7 +1640,7 @@ html.js.no-reduced-motion .in .pk-chart-band{opacity:1;transform:none;
   .tm-score-list .tm-score-b{max-width:none}
   .tm-metrics{grid-template-columns:1fr 1fr;gap:18px}
   .tm-metric{padding:26px}
-  .tm-impact-close{margin-top:64px}
+  .tm-impact-close{margin-top:32px}
   .tm-score-lead{margin-top:16px}
 }
 @media (max-width:734px){
@@ -1983,12 +1996,15 @@ html.js.no-reduced-motion [data-reveal].hm-band-line.in{
 /* `1fr` rows, not auto: the second pair's body runs a line longer than the
    first's, so auto rows left the bottom two cards 29px taller than the top
    two. All four match the tallest now. */
+/* Back to the frame's own geometry - a 941 block offset to the right of the
+   heading, cards with a floor - with the type on the card ramp the rest of
+   the site uses, which is what the old pair was actually wrong about. */
 .lv-cards{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;
-  gap:calc(28*var(--u));
-  margin:calc(110*var(--u)) var(--m) 0 calc(261*var(--u))}
-/* Grid rows stretch, so a pair still matches without a floor height. */
-.lv-card{background:#fff;color:#1D1D1F;border-radius:calc(20*var(--u));
-  padding:calc(46*var(--u)) calc(42*var(--u));display:flex;flex-direction:column}
+  gap:calc(52*var(--u)) calc(43*var(--u));
+  width:calc(941*var(--u));margin:calc(150*var(--u)) var(--m) 0 calc(458*var(--u))}
+.lv-card{background:#fff;color:#1D1D1F;border-radius:calc(27*var(--u));
+  min-height:calc(450*var(--u));padding:calc(52*var(--u)) calc(50*var(--u));
+  display:flex;flex-direction:column}
 .lv-card-body{margin-top:calc(24*var(--u));color:#6E6E73;line-height:1.5}
 
 /* the redesign rows: a device and its line. The middle row puts the copy
@@ -2236,7 +2252,10 @@ html.no-touch .pin-credit-link:hover{text-decoration-color:#fff}
 /* the three problem cards */
 /* The format he picked out: one large image card across the top with its
    heading laid over the picture, and two plain cards beneath it. */
-.lh-probs{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u))}
+/* align-items:start, so a card with a three-pill graphic is not stretched to
+   the height of the one with nine chips and left holding the difference */
+.lh-probs{display:grid;grid-template-columns:1fr 1fr;gap:calc(28*var(--u));
+  align-items:start}
 .lh-prob{background:#FFFFFF;border-radius:calc(20*var(--u));
   padding:calc(54*var(--u)) calc(48*var(--u))}
 /* 460, not 620: at 620 the photo card stood 470px against two 232px cards

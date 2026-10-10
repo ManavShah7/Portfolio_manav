@@ -133,7 +133,7 @@ export default function Lighthouse() {
         <section className="du-sec" id="research" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="du-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
-            <h2 className="p96" data-reveal><Lines lines={C.research.head} /></h2>
+            <h2 className="p80" data-reveal><Lines lines={C.research.head} /></h2>
             <p className="p25 w500 lh-aside" data-reveal>{para(C.research.aside)}</p>
           </div>
           <div className="du-w lh-people" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>

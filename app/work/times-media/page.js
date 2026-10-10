@@ -64,7 +64,7 @@ export default function TimesMedia() {
               <Lines lines={C.research.headline} swipe />
             </h2>
           </div>
-          <div className="du-w tm-owner" style={{ '--mw': 1161, '--mt': 229 }} data-reveal data-in="scale">
+          <div className="du-w tm-owner" style={{ '--mw': 1161, '--mt': 150 }} data-reveal data-in="scale">
             {/* no forced ratio: the column is 500 wide and the card 532 tall,
                 so a 1:1 square overflowed it by 32px and shoved the quote
                 across. It fills its own column and crops instead. */}
@@ -90,7 +90,7 @@ export default function TimesMedia() {
                 spanning both sections. ---- */}
         <div className="tm-run" id="problem">
           <section className="du-sec" style={{ '--pt': 185, '--pb': 104 }}>
-            <h2 className="p96 du-x" style={{ '--x': 237 }} data-reveal data-swipe>
+            <h2 className="p80 du-x" style={{ '--x': 237 }} data-reveal data-swipe>
               <Lines lines={C.problem.headline} swipe />
             </h2>
             <div className="tm-broke-copy" data-stagger>
@@ -168,10 +168,12 @@ export default function TimesMedia() {
         {/* ---- 3D street view. The updated frame turns the ground back to
                 white here and keeps it white all the way to the foot. ---- */}
         <section className="du-sec" id="in-the-field" style={{ '--pt': 437, '--pb': 240 }}>
-          <h2 className="p96 du-x" style={{ '--x': 256 }} data-reveal data-swipe>
-            <Lines lines={C.street.headline} swipe />
-          </h2>
-          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 225 }} data-reveal data-in="mask">
+          <div className="du-w" style={{ '--mw': 1400 }}>
+            <h2 className="p80 center" data-reveal data-swipe>
+              <Lines lines={C.street.headline} swipe />
+            </h2>
+          </div>
+          <div className="du-w tm-shot" style={{ '--mw': 1221, '--mt': 150 }} data-reveal data-in="mask">
             <Frame kind="ipad" w={1221} clip={V('street')} data-sv="tilt"
                    alt="A board previewed in 3D Street View, from the road a driver would see it from" />
             <p className="p38 center tm-cap">{para(C.street.shots[0].line)}</p>
@@ -217,7 +219,14 @@ export default function TimesMedia() {
         <section className="du-sec" id="impact" style={{ '--pt': 233, '--pb': 200 }}>
           <p className="p28 w500 center" data-reveal>{C.impact.eyebrow}</p>
           <h2 className="p80 center tm-learn-head" data-reveal><Lines lines={C.impact.head} /></h2>
-          <div className="du-w tm-metrics" style={{ '--mw': 1448, '--mt': 130 }} data-stagger>
+          {/* the slogans lead the figures rather than closing them - they are
+              the claim, and the four numbers under them are the evidence */}
+          <div className="du-w tm-impact-close" style={{ '--mw': 1400 }}>
+            <p className="p48 center" style={{ color: RED }} data-reveal data-swipe>
+              <Lines lines={C.impact.close} swipe />
+            </p>
+          </div>
+          <div className="du-w tm-metrics" style={{ '--mw': 1448, '--mt': 110 }} data-stagger>
             {C.impact.figures.map((f, i) => (
               <div key={f.label} className="tm-metric" data-reveal data-in="scale" data-amp={i % 2 ? 76 : 52}>
                 <p className="p70 tm-metric-n">{f.n}</p>
@@ -225,13 +234,6 @@ export default function TimesMedia() {
                 <p className="p23 w500 tm-metric-b">{para(f.note)}</p>
               </div>
             ))}
-          </div>
-          {/* inside its own measure, like every other swipe headline here -
-              the clip's -.06em bleed hangs 2px off the viewport otherwise */}
-          <div className="du-w tm-impact-close" style={{ '--mw': 1400 }}>
-            <p className="p48 center" style={{ color: RED }} data-reveal data-swipe>
-              <Lines lines={C.impact.close} swipe />
-            </p>
           </div>
         </section>
 
@@ -242,10 +244,10 @@ export default function TimesMedia() {
         <section className="du-sec bg-fill tm-iter-sec" id="feedback" style={{ '--pt': 120, '--pb': 200 }}>
           <div className="du-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.iterate.eyebrow}</p>
-            <h2 className="p96" data-reveal><Lines lines={C.iterate.head} /></h2>
+            <h2 className="p80" data-reveal><Lines lines={C.iterate.head} /></h2>
             <p className="p25 w500 tm-iter-aside" data-reveal><Lines lines={C.iterate.aside} /></p>
           </div>
-          <div className="du-w tm-iters" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
+          <div className="du-w tm-iters" style={{ '--mw': 1448, '--mt': 80 }} data-stagger>
             {C.iterate.cards.map((c, i) => (
               <div key={i} data-reveal data-in="lift" data-amp={i % 2 ? 76 : 52}>
                 <Flip label={`what changed for ${c.who}`}

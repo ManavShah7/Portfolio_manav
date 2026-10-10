@@ -4,6 +4,19 @@ import { Page, Lines, para, EMAIL, Outro } from '@/components/Chrome'
 import { CaseHero } from '@/components/Case'
 import { Media, Video } from '@/components/Media'
 import Gallery from '@/components/Gallery'
+
+// Three small marks for what's next - a bug being closed, a signal going out,
+// a release shipping. Drawn in the page's own greys, like every other graphic
+// on this site (components/PeakProblem.js).
+function NextMark({ n }) {
+  return (
+    <span className={`pw pw-${n}`} aria-hidden="true">
+      {n === 0 && <><i className="pw-lit" /><i /><i /></>}
+      {n === 1 && <><i /><i className="pw-lit" /><i /></>}
+      {n === 2 && <><i /><i /><i className="pw-lit" /></>}
+    </span>
+  )
+}
 import Frame from '@/components/Frame'
 import OtherWork from '@/components/OtherWork'
 import MotivationChart from '@/components/MotivationChart'
@@ -139,8 +152,7 @@ export default function Peak() {
         <section className="pk-sec" id="research" style={{ '--pt': 200, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
-            <h2 className="p96" style={{ '--ac': '#E01D85' }} data-reveal><Lines lines={C.research.headline} /></h2>
-            <p className="p25 w500 pk-aside" data-reveal><Lines lines={C.research.aside} /></p>
+            <h2 className="p80" style={{ '--ac': '#E01D85' }} data-reveal><Lines lines={C.research.headline} /></h2>
           </div>
           <div className="pk-w pk-trio-voices" style={{ '--mw': 1420, '--mt': 96 }} data-stagger>
             {C.research.quotes.map((q, i) => (
@@ -177,8 +189,7 @@ export default function Peak() {
         <section className="pk-sec" id="competitors" style={{ '--pt': 240, '--pb': 0 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.compare.eyebrow}</p>
-            <h2 className="p96" data-reveal><Lines lines={C.compare.head} /></h2>
-            <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.compare.aside} /></p>
+            <h2 className="p80" data-reveal><Lines lines={C.compare.head} /></h2>
           </div>
           <div className="pk-w" style={{ '--mw': 1320, '--mt': 96 }}>
             <Compare cols={C.compare.cols} rows={C.compare.rows} keys={C.compare.key} />
@@ -223,7 +234,7 @@ export default function Peak() {
             <div className="pk-card pk-ceiling" data-reveal
                  style={V('ceiling')?.poster ? { background: `url(${V('ceiling').poster}) center/cover` } : undefined}>
               {V('ceiling')?.video && <Video src={V('ceiling').src} poster={V('ceiling').poster} />}
-              <p className="p42 center"><Lines lines={C.findings.ceiling} /></p>
+              <p className="p38 center"><Lines lines={C.findings.ceiling} /></p>
             </div>
           </div>
         </section>
@@ -330,8 +341,7 @@ export default function Peak() {
         <section className="pk-sec bg-fill" id="testing" style={{ '--pt': 200, '--pb': 200 }}>
           <div className="pk-x" style={{ '--x': 240 }}>
             <p className="p28 w500" data-reveal>{C.testing.eyebrow}</p>
-            <h2 className="p96" data-reveal><Lines lines={C.testing.headline} /></h2>
-            <p className="p25 w500 pk-aside pk-aside-wide" data-reveal><Lines lines={C.testing.aside} /></p>
+            <h2 className="p80" data-reveal><Lines lines={C.testing.headline} /></h2>
           </div>
           <div className="pk-w pk-tests" style={{ '--mw': 1448, '--mt': 96 }} data-stagger>
             {C.testing.notes.map((n, i) => (
@@ -362,7 +372,6 @@ export default function Peak() {
           <h2 className="p80 center" style={{ '--ac': '#E01D85' }} data-reveal>
             <Lines lines={C.progress.head} />
           </h2>
-          <p className="p26 w500 center pk-prog-aside" data-reveal>{para(C.progress.aside)}</p>
           <div className="pk-w pk-prog" style={{ '--mw': 1180, '--mt': 96 }} data-stagger>
             {C.progress.quotes.map((q, i) => (
               <figure key={q.who} className="pk-voice" data-reveal data-in="blur" data-amp={i % 2 ? 76 : 52}>
@@ -374,12 +383,27 @@ export default function Peak() {
           </div>
         </section>
 
+        {/* ---- what's next. Three cards is not a carousel: they all fit, so
+                they are a row and nobody has to find a paddle. ---- */}
+        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
+          <h2 className="p70 pk-x" style={{ '--x': 148 }} data-reveal><Lines lines={C.whatsNext.headline} /></h2>
+          <div className="pk-w pk-next" style={{ '--mw': 1560, '--mt': 96 }} data-stagger>
+            {C.whatsNext.cards.map((c, i) => (
+              <div key={c.title} className="pk-card pk-wn" data-reveal data-in="lift"
+                   data-amp={[52, 76, 52][i]}>
+                <NextMark n={i} />
+                <h3 className="p28">{c.title}</h3>
+                <p className="p24 pk-wn-b">{para(c.body)}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* ---- what I learned: centred head, three black cards, as the
                 updated frame draws it ---- */}
         <section className="pk-sec" id="learnings" style={{ '--pt': 240, '--pb': 0 }}>
           <p className="p28 w500 center" data-reveal>{C.learned.eyebrow}</p>
           <h2 className="p80 center pk-learn-head" data-reveal>{C.learned.head}</h2>
-          <p className="p26 w500 center pk-learn-aside" data-reveal>{para(C.learned.aside)}</p>
           <div className="pk-w pk-learn" style={{ '--mw': 1560, '--mt': 120 }} data-stagger>
             {C.learned.cards.map((c, i) => (
               <div key={i} className="pk-card black pk-learn-c" data-reveal data-in="lift"
@@ -389,20 +413,6 @@ export default function Peak() {
               </div>
             ))}
           </div>
-        </section>
-
-        {/* ---- what's next ---- */}
-        <section className="pk-sec" style={{ '--pt': 240, '--pb': 0 }}>
-          <h2 className="p70 pk-x" style={{ '--x': 148 }} data-reveal><Lines lines={C.whatsNext.headline} /></h2>
-          <Gallery label="What's next" className="pk-gallery pk-light-paddles pk-next-cards" always
-                   style={{ '--inset': 'calc(149 * var(--u))' }}>
-            {C.whatsNext.cards.map(c => (
-              <div key={c.title} className="pk-card pk-wn" data-reveal data-in="side">
-                <h3 className="p28">{c.title}</h3>
-                <p className="p26 w500">{para(c.body)}</p>
-              </div>
-            ))}
-          </Gallery>
         </section>
 
         {/* ---- FAQ ---- */}

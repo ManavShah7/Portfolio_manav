@@ -57,7 +57,7 @@ export default function Liveasy() {
                 all four points run past it, across the white/black seam. ---- */}
         <div className="lv-run" id="why">
           <section className="du-sec" style={{ '--pt': 264, '--pb': 155 }}>
-            <h2 className="p96 center du-w" style={{ '--mw': 1400 }} data-reveal>
+            <h2 className="p80 center du-w" style={{ '--mw': 1400 }} data-reveal>
               <Lines lines={C.problem.headline} />
             </h2>
             <div className="lv-points">
@@ -95,7 +95,6 @@ export default function Liveasy() {
           <div className="du-x lv-res-head" style={{ '--x': 261 }}>
             <p className="p28 w500" data-reveal>{C.research.eyebrow}</p>
             <h2 className="p80" data-reveal><Lines lines={C.research.headline} /></h2>
-            <p className="p26 w500 lv-res-aside" data-reveal>{para(C.research.aside)}</p>
           </div>
           <div className="lv-cards" data-stagger>
             {C.research.cards.map((c, i) => (
